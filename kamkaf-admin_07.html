@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Admin — Kampüs Kafası</title>
+<link rel="icon" type="image/jpeg" href="logo.jpg">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ═══════ RESET & TOKENS ═══════ */
+:root{
+  --cl:#2DDDD4;--cm:#1BBAB2;--cd:#0D8A85;
+  --cg:rgba(45,221,212,.11);--cg2:rgba(45,221,212,.06);
+  --black:#07090b;--dark:#0d1117;--card:#111820;
+  --card2:#131c26;--bd:rgba(255,255,255,.07);
+  --muted:#5e7080;--muted2:#7a8b98;--white:#fff;
+  --r:14px;--r2:10px;
+  --danger:#ef4444;--dangerBg:rgba(239,68,68,.08);
+  --warn:#f59e0b;--ok:#22c55e;--okBg:rgba(34,197,94,.08);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{height:100%;-webkit-text-size-adjust:100%}
+body{min-height:100%;font-family:'Outfit',sans-serif;background:var(--black);color:var(--white);-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-track{background:var(--dark)}::-webkit-scrollbar-thumb{background:var(--cd);border-radius:4px}
+a{text-decoration:none;color:inherit}
+button{font-family:'Outfit',sans-serif;cursor:pointer;border:none;background:none}
+input,textarea,select{font-family:'Outfit',sans-serif;color:var(--white)}
+img{max-width:100%;display:block}
+
+/* ═══════ LOGIN ═══════ */
+#login-screen{
+  position:fixed;inset:0;background:var(--black);
+  display:flex;align-items:center;justify-content:center;
+  z-index:9999;padding:20px;
+  background-image:
+    linear-gradient(rgba(45,221,212,.03) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(45,221,212,.03) 1px,transparent 1px);
+  background-size:48px 48px;
+}
+.lbox{
+  background:var(--dark);border:1px solid rgba(45,221,212,.12);
+  border-radius:24px;padding:44px 36px;width:100%;max-width:360px;
+  position:relative;overflow:hidden;
+}
+.lbox::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at 50% 0,rgba(45,221,212,.09),transparent 65%);
+  pointer-events:none;
+}
+.lbox-logo{
+  font-family:'Dancing Script',cursive;font-size:1.9rem;font-weight:700;
+  background:linear-gradient(135deg,var(--cl),var(--cd));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-align:center;margin-bottom:4px;
+}
+.lbox-sub{text-align:center;font-size:.75rem;color:var(--muted2);margin-bottom:32px;
+  font-weight:600;text-transform:uppercase;letter-spacing:.1em}
+.lbox-lbl{display:block;font-size:.68rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:7px}
+.lbox-inp{
+  width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);
+  border-radius:10px;padding:13px 14px;font-size:.92rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;margin-bottom:14px;
+}
+.lbox-inp:focus{border-color:rgba(45,221,212,.45);box-shadow:0 0 0 3px rgba(45,221,212,.07)}
+.lbox-btn{
+  width:100%;background:linear-gradient(135deg,var(--cl),var(--cd));
+  color:var(--black);border:none;padding:13px;border-radius:10px;
+  font-weight:800;font-size:.95rem;transition:opacity .2s,transform .15s;
+  position:relative;overflow:hidden;
+}
+.lbox-btn:hover{opacity:.88;transform:translateY(-1px)}
+.lbox-btn:active{transform:translateY(0)}
+.lbox-btn.loading::after{
+  content:'';position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.2),transparent);
+  animation:shimmer 1s infinite;
+}
+@keyframes shimmer{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
+.lbox-err{
+  color:#fca5a5;font-size:.8rem;margin-top:12px;text-align:center;
+  padding:10px;background:rgba(239,68,68,.08);border-radius:8px;display:none;
+}
+.lbox-attempts{font-size:.72rem;color:var(--muted2);text-align:center;margin-top:10px}
+.lbox-lock{
+  display:none;flex-direction:column;align-items:center;gap:10px;
+  padding:20px;text-align:center;
+}
+.lbox-lock .ico{font-size:2.5rem}
+.lbox-lock p{font-size:.85rem;color:var(--muted2);line-height:1.6}
+.lbox-lock strong{color:var(--danger)}
+.lbox-security-note{
+  font-size:.7rem;color:var(--muted);text-align:center;margin-top:20px;
+  padding-top:16px;border-top:1px solid var(--bd);line-height:1.7;
+}
+
+/* ═══════ APP SHELL ═══════ */
+#app{display:none;min-height:100vh;flex-direction:row}
+#app.on{display:flex}
+
+/* ═══════ SIDEBAR ═══════ */
+#sidebar{
+  width:220px;min-width:220px;background:var(--dark);
+  border-right:1px solid var(--bd);display:flex;flex-direction:column;
+  height:100vh;position:sticky;top:0;overflow-y:auto;overflow-x:hidden;
+}
+.sb-head{padding:22px 18px 18px;border-bottom:1px solid var(--bd)}
+.sb-logo{
+  font-family:'Dancing Script',cursive;font-size:1.05rem;font-weight:700;
+  background:linear-gradient(135deg,var(--cl),var(--cd));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:6px;
+}
+.sb-badge{
+  display:inline-block;font-size:.6rem;font-weight:700;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--cl);background:var(--cg);
+  border:1px solid rgba(45,221,212,.2);padding:2px 9px;border-radius:100px;
+}
+.sb-user{
+  margin-top:8px;font-size:.7rem;color:var(--muted2);overflow:hidden;
+  text-overflow:ellipsis;white-space:nowrap;
+}
+.sb-nav{padding:10px 10px;flex:1;display:flex;flex-direction:column;gap:1px}
+.sb-item{
+  display:flex;align-items:center;gap:10px;padding:10px 12px;
+  border-radius:10px;font-size:.84rem;font-weight:600;
+  color:rgba(255,255,255,.45);transition:background .15s,color .15s;cursor:pointer;
+}
+.sb-item:hover{background:rgba(255,255,255,.04);color:rgba(255,255,255,.8)}
+.sb-item.on{background:var(--cg);color:var(--cl)}
+.sb-item .ico{font-size:.95rem;width:20px;text-align:center;flex-shrink:0}
+.sb-foot{padding:12px 10px;border-top:1px solid var(--bd)}
+.sb-logout{
+  display:flex;align-items:center;gap:9px;padding:10px 12px;
+  border-radius:10px;font-size:.82rem;font-weight:600;
+  color:rgba(239,68,68,.55);width:100%;
+  transition:background .15s,color .15s;
+}
+.sb-logout:hover{background:rgba(239,68,68,.07);color:#f87171}
+
+/* ═══════ MOBİL BOTTOM NAV ═══════ */
+#mob-nav{
+  display:none;position:fixed;bottom:0;left:0;right:0;
+  background:var(--dark);border-top:1px solid var(--bd);
+  z-index:500;padding:0 4px 4px;
+}
+#mob-nav-inner{display:flex;gap:0;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#mob-nav-inner::-webkit-scrollbar{display:none}
+.mob-item{
+  display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:8px 12px;border-radius:10px;font-size:.58rem;font-weight:700;
+  color:rgba(255,255,255,.4);cursor:pointer;white-space:nowrap;
+  transition:color .15s,background .15s;flex-shrink:0;min-width:60px;
+}
+.mob-item .ico{font-size:1.2rem;line-height:1}
+.mob-item.on{color:var(--cl);background:var(--cg)}
+.mob-logout-btn{
+  padding:6px 14px;border-radius:8px;background:rgba(239,68,68,.1);
+  border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:.72rem;
+  font-weight:700;margin:10px 16px 4px;display:flex;align-items:center;
+  justify-content:center;gap:7px;
+}
+
+/* ═══════ MAIN ═══════ */
+#main{flex:1;overflow-y:auto;overflow-x:hidden;min-height:100vh}
+.sec{display:none;padding:30px 28px 80px;max-width:1100px}
+.sec.on{display:block}
+.pg-title{font-size:1.5rem;font-weight:800;color:var(--white);margin-bottom:3px}
+.pg-sub{font-size:.82rem;color:var(--muted2);margin-bottom:24px}
+
+/* ═══════ DASHBOARD CARDS ═══════ */
+.dash-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px}
+.dash-card{
+  background:var(--card);border:1px solid var(--bd);border-radius:var(--r);
+  padding:20px;position:relative;overflow:hidden;
+}
+.dash-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(ellipse at top left,rgba(45,221,212,.04),transparent 65%);
+  pointer-events:none;
+}
+.dc-num{
+  font-size:1.9rem;font-weight:900;
+  background:linear-gradient(135deg,var(--cl),var(--cm));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  line-height:1;
+}
+.dc-lbl{font-size:.7rem;color:var(--muted2);font-weight:700;margin-top:5px;text-transform:uppercase;letter-spacing:.05em}
+.dc-ico{position:absolute;right:14px;top:14px;font-size:1.4rem;opacity:.2}
+
+/* ═══════ CARDS ═══════ */
+.card{background:var(--card);border:1px solid var(--bd);border-radius:var(--r);padding:22px}
+.card+.card{margin-top:14px}
+.card-title{font-size:.9rem;font-weight:800;color:var(--white);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.card-title .ico{font-size:1rem}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+
+/* ═══════ FORM ═══════ */
+.fg{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}
+.fg label{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.09em;color:rgba(255,255,255,.3)}
+.fg input,.fg textarea,.fg select{
+  background:rgba(255,255,255,.04);border:1px solid var(--bd);
+  border-radius:9px;padding:10px 12px;font-size:.87rem;outline:none;
+  transition:border-color .2s,box-shadow .2s;width:100%;
+}
+.fg input:focus,.fg textarea:focus,.fg select:focus{
+  border-color:rgba(45,221,212,.4);box-shadow:0 0 0 3px rgba(45,221,212,.06)
+}
+.fg textarea{min-height:80px;resize:vertical;line-height:1.6}
+.fg select option{background:var(--dark)}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+/* ═══════ BUTTONS ═══════ */
+.btn{
+  display:inline-flex;align-items:center;gap:7px;
+  padding:9px 18px;border-radius:8px;font-size:.83rem;font-weight:700;
+  transition:opacity .15s,transform .12s;white-space:nowrap;cursor:pointer;
+}
+.btn:hover{opacity:.85;transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn-p{background:linear-gradient(135deg,var(--cl),var(--cd));color:var(--black);border:none}
+.btn-o{background:transparent;border:1px solid rgba(45,221,212,.28);color:var(--cl)}
+.btn-o:hover{background:var(--cg)}
+.btn-d{background:var(--dangerBg);border:1px solid rgba(239,68,68,.2);color:#f87171}
+.btn-d:hover{background:rgba(239,68,68,.15)}
+.btn-sm{padding:6px 13px;font-size:.76rem}
+.btn-xs{padding:4px 9px;font-size:.7rem}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
+
+/* ═══════ TABLE ═══════ */
+.tbl-wrap{overflow-x:auto;border-radius:12px;border:1px solid var(--bd)}
+.tbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.tbl th{
+  background:rgba(255,255,255,.03);color:var(--muted2);
+  font-size:.67rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;
+  padding:11px 14px;text-align:left;border-bottom:1px solid var(--bd);white-space:nowrap;
+}
+.tbl td{
+  padding:12px 14px;border-bottom:1px solid rgba(255,255,255,.03);
+  vertical-align:middle;color:rgba(255,255,255,.8);
+}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:rgba(255,255,255,.015)}
+.tbl .acts{display:flex;gap:6px;justify-content:flex-end}
+.badge{
+  display:inline-flex;align-items:center;padding:2px 8px;
+  border-radius:100px;font-size:.65rem;font-weight:700;
+  background:var(--cg);color:var(--cl);border:1px solid rgba(45,221,212,.18);
+}
+.badge.past{background:rgba(255,255,255,.04);color:var(--muted2);border-color:var(--bd)}
+.badge.feat{background:rgba(251,191,36,.08);color:#fcd34d;border-color:rgba(251,191,36,.2)}
+
+/* ═══════ LIST ITEMS ═══════ */
+.li{
+  background:rgba(255,255,255,.025);border:1px solid var(--bd);
+  border-radius:11px;padding:14px 16px;display:flex;align-items:flex-start;
+  gap:12px;margin-bottom:8px;transition:border-color .15s;
+}
+.li:hover{border-color:rgba(45,221,212,.15)}
+.li-body{flex:1;min-width:0}
+.li-title{font-size:.86rem;font-weight:700;color:var(--white);margin-bottom:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-sub{font-size:.75rem;color:var(--muted2);display:-webkit-box;
+  -webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;line-height:1.5}
+.li-acts{display:flex;gap:6px;flex-shrink:0;align-items:flex-start}
+.empty{text-align:center;padding:48px 20px;color:var(--muted2);font-size:.85rem;line-height:2}
+.empty .ico{font-size:2rem;margin-bottom:8px;opacity:.4}
+
+/* ═══════ SWITCH ═══════ */
+.sw{position:relative;width:40px;height:22px;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw-track{
+  position:absolute;inset:0;background:rgba(255,255,255,.1);
+  border-radius:100px;cursor:pointer;transition:background .2s;
+}
+.sw input:checked+.sw-track{background:var(--cl)}
+.sw-track::before{
+  content:'';position:absolute;width:16px;height:16px;background:#fff;
+  border-radius:50%;top:3px;left:3px;transition:transform .2s;
+}
+.sw input:checked+.sw-track::before{transform:translateX(18px)}
+
+/* ═══════ MODAL ═══════ */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:800;
+  background:rgba(0,0,0,.78);backdrop-filter:blur(8px);
+  align-items:center;justify-content:center;padding:16px;
+}
+.modal-bg.on{display:flex}
+.modal{
+  background:var(--dark);border:1px solid rgba(45,221,212,.15);
+  border-radius:20px;width:100%;max-width:520px;
+  max-height:90vh;overflow-y:auto;padding:26px;
+  position:relative;animation:mIn .25s cubic-bezier(.34,1.46,.64,1) both;
+}
+.modal.wide{max-width:640px}
+@keyframes mIn{from{opacity:0;transform:scale(.9) translateY(8px)}to{opacity:1;transform:scale(1) translateY(0)}}
+.modal-title{font-size:1.05rem;font-weight:800;color:var(--white);margin-bottom:20px;display:flex;align-items:center;gap:8px}
+.modal-close{
+  position:absolute;top:14px;right:14px;background:rgba(255,255,255,.06);
+  color:rgba(255,255,255,.4);width:28px;height:28px;border-radius:7px;
+  font-size:.88rem;cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:background .15s;border:1px solid rgba(255,255,255,.06);
+}
+.modal-close:hover{background:rgba(255,255,255,.12);color:var(--white)}
+.modal-foot{
+  display:flex;gap:10px;justify-content:flex-end;margin-top:20px;
+  padding-top:16px;border-top:1px solid var(--bd);flex-wrap:wrap;
+}
+.img-preview{
+  width:100%;max-height:140px;object-fit:cover;border-radius:9px;
+  margin-top:8px;border:1px solid var(--bd);display:none;
+}
+
+/* ═══════ TABS ═══════ */
+.tab-bar{
+  display:flex;gap:4px;background:rgba(255,255,255,.03);
+  border:1px solid var(--bd);border-radius:10px;padding:4px;
+  margin-bottom:20px;width:fit-content;
+}
+.tab-btn{
+  padding:7px 18px;border-radius:7px;background:none;
+  color:rgba(255,255,255,.4);font-size:.83rem;font-weight:700;
+  cursor:pointer;transition:background .15s,color .15s;border:none;
+}
+.tab-btn.on{background:var(--cg);color:var(--cl)}
+.tab-pane{display:none}.tab-pane.on{display:block}
+
+/* ═══════ TOAST ═══════ */
+#toast{position:fixed;bottom:80px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;pointer-events:none;max-width:300px}
+.toast-el{
+  background:var(--card);border:1px solid var(--bd);border-radius:10px;
+  padding:11px 16px;font-size:.82rem;font-weight:600;color:var(--white);
+  animation:tIn .25s ease both;display:flex;align-items:center;gap:7px;
+  box-shadow:0 4px 24px rgba(0,0,0,.4);
+}
+.toast-el.ok{border-color:rgba(34,197,94,.3);color:#86efac}
+.toast-el.err{border-color:rgba(239,68,68,.3);color:#fca5a5}
+.toast-el.warn{border-color:rgba(245,158,11,.3);color:#fcd34d}
+@keyframes tIn{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:translateX(0)}}
+
+/* ═══════ QUICK ACTIONS ═══════ */
+.qa-grid{display:flex;flex-wrap:wrap;gap:10px}
+
+/* ═══════ SECTION DIVIDER ═══════ */
+.divider{height:1px;background:var(--bd);margin:22px 0}
+
+/* ═══════ IMG URL ROW ═══════ */
+.img-row{display:flex;gap:8px;align-items:flex-start}
+.img-row input{flex:1}
+
+/* ═══════ RESPONSIVE ═══════ */
+@media(max-width:900px){
+  #sidebar{display:none}
+  #mob-nav{display:block}
+  #app{flex-direction:column}
+  #main{padding-bottom:70px}
+  .sec{padding:20px 16px 100px}
+  .dash-grid{grid-template-columns:1fr 1fr}
+  .g2,.g3,.fg-row{grid-template-columns:1fr}
+  .modal{border-radius:16px}
+  #toast{bottom:90px}
+}
+@media(max-width:500px){
+  .dash-grid{grid-template-columns:1fr}
+  .pg-title{font-size:1.25rem}
+  .card{padding:16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ════ LOGIN ════ -->
+<div id="login-screen">
+  <div class="lbox">
+    <div class="lbox-logo">Kampüs Kafası</div>
+    <div class="lbox-sub">Admin Paneli</div>
+
+    <div id="login-form-wrap">
+      <label class="lbox-lbl">Şifre</label>
+      <input class="lbox-inp" type="password" id="login-pwd" placeholder="••••••••"
+        autocomplete="current-password"
+        onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="lbox-btn" id="login-btn" onclick="doLogin()">Giriş Yap</button>
+      <div class="lbox-err" id="login-err">Hatalı şifre. Lütfen tekrar deneyin.</div>
+      <div class="lbox-attempts" id="attempts-txt"></div>
+    </div>
+
+    <div class="lbox-lock" id="login-lock">
+      <div class="ico">🔒</div>
+      <p>Çok fazla hatalı giriş denemesi.<br><strong id="lock-countdown">5:00</strong> sonra tekrar deneyebilirsiniz.</p>
+    </div>
+
+    <div class="lbox-security-note">
+      🛡️ Bu panel yalnızca yetkili kişiler içindir.<br>
+      Yetkisiz giriş denemeleri kayıt altına alınır.
+    </div>
+  </div>
+</div>
+
+<!-- ════ APP ════ -->
+<div id="app">
+
+  <!-- Sidebar (desktop) -->
+  <aside id="sidebar">
+    <div class="sb-head">
+      <div class="sb-logo">Kampüs Kafası</div>
+      <div class="sb-badge">Admin Panel</div>
+      <div class="sb-user" id="sb-user"></div>
+    </div>
+    <nav class="sb-nav">
+      <div class="sb-item on" onclick="goSec('dashboard')"><span class="ico">📊</span>Dashboard</div>
+      <div class="sb-item" onclick="goSec('etkinlikler')"><span class="ico">📅</span>Etkinlikler</div>
+      <div class="sb-item" onclick="goSec('ekip')"><span class="ico">👥</span>Ekip</div>
+      <div class="sb-item" onclick="goSec('iletisim')"><span class="ico">📞</span>İletişim</div>
+      <div class="sb-item" onclick="goSec('sponsorluk')"><span class="ico">💼</span>Sponsorluk</div>
+      <div class="sb-item" onclick="goSec('metinler')"><span class="ico">📝</span>Sayfa Metinleri</div>
+      <div class="sb-item" onclick="goSec('ayarlar')"><span class="ico">⚙️</span>Genel Ayarlar</div>
+    </nav>
+    <div class="sb-foot">
+      <button class="sb-logout" onclick="doLogout()"><span class="ico">🚪</span>Çıkış Yap</button>
+    </div>
+  </aside>
+
+  <!-- Main -->
+  <main id="main">
+
+    <!-- ── DASHBOARD ── -->
+    <div class="sec on" id="sec-dashboard">
+      <div class="pg-title">Dashboard</div>
+      <div class="pg-sub">Sitenin genel durumu.</div>
+      <div class="dash-grid" id="dash-grid"></div>
+      <div class="card">
+        <div class="card-title"><span class="ico">⚡</span>Hızlı İşlemler</div>
+        <div class="qa-grid">
+          <button class="btn btn-o" onclick="goSec('etkinlikler');openEvModal()">+ Yeni Etkinlik</button>
+          <button class="btn btn-o" onclick="goSec('ekip');openMemberModal('board')">+ Ekip Üyesi</button>
+          <button class="btn btn-o" onclick="goSec('iletisim');openFaqModal()">SSS Düzenle</button>
+          <button class="btn btn-o" onclick="goSec('ayarlar')">Sayaçları Güncelle</button>
+        </div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">📋</span>Son Etkinlikler</div>
+        <div id="dash-recent"></div>
+      </div>
+    </div>
+
+    <!-- ── ETKİNLİKLER ── -->
+    <div class="sec" id="sec-etkinlikler">
+      <div class="pg-title">Etkinlikler</div>
+      <div class="pg-sub">Ekle, düzenle veya sil. Öne çıkanlar ana sayfada görünür.</div>
+      <div class="sec-hdr">
+        <div></div>
+        <button class="btn btn-p" onclick="openEvModal()">+ Yeni Etkinlik Ekle</button>
+      </div>
+      <div class="card" style="padding:0;overflow:hidden">
+        <div class="tbl-wrap" style="border:none;border-radius:0;margin:0">
+          <table class="tbl">
+            <thead><tr>
+              <th>Başlık</th><th>Tarih</th><th>Kategori</th><th>Konum</th><th>Durum</th><th style="text-align:right">İşlem</th>
+            </tr></thead>
+            <tbody id="ev-tbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── EKİP ── -->
+    <div class="sec" id="sec-ekip">
+      <div class="pg-title">Ekip</div>
+      <div class="pg-sub">Yönetim kurulu ve admin üyelerini yönet.</div>
+      <div class="tab-bar">
+        <button class="tab-btn on" id="tb-board" onclick="switchEkipTab('board')">Yönetim Kurulu</button>
+        <button class="tab-btn" id="tb-admins" onclick="switchEkipTab('admins')">Adminler</button>
+      </div>
+      <div class="tab-pane on" id="tp-board">
+        <div class="sec-hdr">
+          <div style="font-size:.9rem;font-weight:700;color:var(--white)">Yönetim Kurulu</div>
+          <button class="btn btn-p btn-sm" onclick="openMemberModal('board')">+ Üye Ekle</button>
+        </div>
+        <div id="board-list"></div>
+      </div>
+      <div class="tab-pane" id="tp-admins">
+        <div class="sec-hdr">
+          <div style="font-size:.9rem;font-weight:700;color:var(--white)">Adminler</div>
+          <button class="btn btn-p btn-sm" onclick="openMemberModal('admins')">+ Admin Ekle</button>
+        </div>
+        <div id="admins-list"></div>
+      </div>
+    </div>
+
+    <!-- ── İLETİŞİM ── -->
+    <div class="sec" id="sec-iletisim">
+      <div class="pg-title">İletişim</div>
+      <div class="pg-sub">İletişim bilgileri ve sık sorulan sorular.</div>
+      <div class="card">
+        <div class="card-title"><span class="ico">📍</span>İletişim Bilgileri</div>
+        <div class="g2">
+          <div class="fg"><label>Adres</label><input id="c-address" type="text" placeholder="Üniversite, Şehir"></div>
+          <div class="fg"><label>E-posta</label><input id="c-email" type="email" placeholder="ornek@mail.com"></div>
+          <div class="fg"><label>Instagram (@kullanıcıadı)</label><input id="c-instagram" type="text" placeholder="kampuskafasii"></div>
+          <div class="fg"><label>WhatsApp Grup Linki</label><input id="c-whatsapp" type="url" placeholder="https://chat.whatsapp.com/..."></div>
+          <div class="fg"><label>LinkedIn URL</label><input id="c-linkedin" type="url" placeholder="https://linkedin.com/..."></div>
+          <div class="fg"><label>Google Maps URL</label><input id="c-maps" type="url" placeholder="https://maps.google.com/..."></div>
+        </div>
+        <button class="btn btn-p" onclick="saveContact()">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">❓</span>Sık Sorulan Sorular</div>
+        <div class="sec-hdr" style="margin-bottom:10px">
+          <div></div>
+          <button class="btn btn-p btn-sm" onclick="openFaqModal()">+ Soru Ekle</button>
+        </div>
+        <div id="faq-list"></div>
+      </div>
+    </div>
+
+    <!-- ── SPONSORLUK ── -->
+    <div class="sec" id="sec-sponsorluk">
+      <div class="pg-title">Sponsorluk Sayfası</div>
+      <div class="pg-sub">Sponsorluk sayfasındaki içerikleri düzenle.</div>
+      <div class="card">
+        <div class="card-title"><span class="ico">🦸</span>Hero & CTA Metinleri</div>
+        <div class="fg"><label>Hero Alt Başlık</label><textarea id="sp-heroSub" rows="2" placeholder="17.000'den fazla öğrenciyle..."></textarea></div>
+        <div class="fg"><label>CTA Başlığı</label><input id="sp-ctaTitle" type="text" placeholder="Bizimle İş Birliği Yapmak İster misiniz?"></div>
+        <div class="fg"><label>CTA Açıklaması</label><textarea id="sp-ctaText" rows="2" placeholder="Sponsorluk paketlerimiz hakkında..."></textarea></div>
+        <button class="btn btn-p" onclick="saveSpBasic()">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">✅</span>Neden Biz? Maddeleri</div>
+        <div class="sec-hdr" style="margin-bottom:10px">
+          <div></div>
+          <button class="btn btn-p btn-sm" onclick="openWhyModal()">+ Madde Ekle</button>
+        </div>
+        <div id="sp-why-list"></div>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">🤝</span>İş Birliği Kartları</div>
+        <div class="sec-hdr" style="margin-bottom:10px">
+          <div></div>
+          <button class="btn btn-p btn-sm" onclick="openOptionModal()">+ Kart Ekle</button>
+        </div>
+        <div id="sp-options-list"></div>
+      </div>
+    </div>
+
+    <!-- ── METİNLER ── -->
+    <div class="sec" id="sec-metinler">
+      <div class="pg-title">Sayfa Metinleri</div>
+      <div class="pg-sub">Ana sayfa ve hakkımızda metinlerini güncelle.</div>
+      <div class="card">
+        <div class="card-title"><span class="ico">🏠</span>Ana Sayfa — Hero</div>
+        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-heroBadge" type="text" placeholder="Akdeniz Üniversitesi · Antalya"></div>
+        <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-heroSub" rows="3"></textarea></div>
+        <button class="btn btn-p" onclick="saveTexts('hero')">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">ℹ️</span>Ana Sayfa — Biz Kimiz</div>
+        <div class="fg"><label>1. Paragraf</label><textarea id="txt-who1" rows="4"></textarea></div>
+        <div class="fg"><label>2. Paragraf</label><textarea id="txt-who2" rows="4"></textarea></div>
+        <button class="btn btn-p" onclick="saveTexts('who')">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">📖</span>Hakkımızda — Giriş</div>
+        <div class="fg"><label>1. Paragraf</label><textarea id="txt-about1" rows="3"></textarea></div>
+        <div class="fg"><label>2. Paragraf</label><textarea id="txt-about2" rows="3"></textarea></div>
+        <div class="fg"><label>3. Paragraf</label><textarea id="txt-about3" rows="3"></textarea></div>
+        <button class="btn btn-p" onclick="saveTexts('about')">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">🌍</span>Hakkımızda — Vizyon & Misyon</div>
+        <div class="g2">
+          <div>
+            <div class="fg"><label>Vizyon 1. Paragraf</label><textarea id="txt-vision1" rows="4"></textarea></div>
+            <div class="fg"><label>Vizyon 2. Paragraf</label><textarea id="txt-vision2" rows="3"></textarea></div>
+          </div>
+          <div>
+            <div class="fg"><label>Misyon 1. Paragraf</label><textarea id="txt-mission1" rows="4"></textarea></div>
+            <div class="fg"><label>Misyon 2. Paragraf</label><textarea id="txt-mission2" rows="3"></textarea></div>
+          </div>
+        </div>
+        <button class="btn btn-p" onclick="saveTexts('vm')">💾 Kaydet</button>
+      </div>
+    </div>
+
+    <!-- ── AYARLAR ── -->
+    <div class="sec" id="sec-ayarlar">
+      <div class="pg-title">Genel Ayarlar</div>
+      <div class="pg-sub">Sayaçlar, sosyal medya linkleri ve global bağlantılar.</div>
+      <div class="card">
+        <div class="card-title"><span class="ico">🔢</span>Animasyonlu Sayaçlar</div>
+        <p style="font-size:.78rem;color:var(--muted2);margin-bottom:14px">Ana sayfa ve sponsorluk sayfasında görünen artan sayılar.</p>
+        <div class="g3">
+          <div class="fg"><label>Üye Sayısı</label><input id="cnt-members" type="number" placeholder="17000"></div>
+          <div class="fg"><label>Etkinlik Sayısı</label><input id="cnt-events" type="number" placeholder="50"></div>
+          <div class="fg"><label>Yıl</label><input id="cnt-years" type="number" placeholder="4"></div>
+        </div>
+        <button class="btn btn-p" onclick="saveCounters()">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">🔗</span>Global Bağlantılar</div>
+        <p style="font-size:.78rem;color:var(--muted2);margin-bottom:14px">Tüm sayfalarda kullanılan linkler.</p>
+        <div class="g2">
+          <div class="fg"><label>E-posta</label><input id="g-email" type="email" placeholder="ornek@mail.com"></div>
+          <div class="fg"><label>WhatsApp Grup Linki</label><input id="g-wa" type="url" placeholder="https://chat.whatsapp.com/..."></div>
+          <div class="fg"><label>Instagram Kullanıcı Adı</label><input id="g-instagram" type="text" placeholder="kampuskafasii"></div>
+          <div class="fg"><label>LinkedIn URL</label><input id="g-linkedin" type="url" placeholder="https://linkedin.com/..."></div>
+        </div>
+        <button class="btn btn-p" onclick="saveGlobalSettings()">💾 Kaydet</button>
+      </div>
+      <div class="card" style="margin-top:14px">
+        <div class="card-title"><span class="ico">🔑</span>Şifre Değiştir</div>
+        <p style="font-size:.78rem;color:var(--muted2);margin-bottom:14px">Firebase Authentication şifreni buradan değiştiremezsin — bunun için Firebase Console → Authentication → Users'dan güncelle.</p>
+        <a href="https://console.firebase.google.com/" target="_blank" rel="noopener noreferrer" class="btn btn-o btn-sm">Firebase Console'u Aç ↗</a>
+      </div>
+    </div>
+
+  </main><!-- /main -->
+</div><!-- /app -->
+
+<!-- ════ MOBİL BOTTOM NAV ════ -->
+<div id="mob-nav">
+  <div id="mob-nav-inner">
+    <div class="mob-item on" onclick="goSec('dashboard')"><span class="ico">📊</span>Panel</div>
+    <div class="mob-item" onclick="goSec('etkinlikler')"><span class="ico">📅</span>Etkinlik</div>
+    <div class="mob-item" onclick="goSec('ekip')"><span class="ico">👥</span>Ekip</div>
+    <div class="mob-item" onclick="goSec('iletisim')"><span class="ico">📞</span>İletişim</div>
+    <div class="mob-item" onclick="goSec('sponsorluk')"><span class="ico">💼</span>Sponsorluk</div>
+    <div class="mob-item" onclick="goSec('metinler')"><span class="ico">📝</span>Metinler</div>
+    <div class="mob-item" onclick="goSec('ayarlar')"><span class="ico">⚙️</span>Ayarlar</div>
+  </div>
+  <button class="mob-logout-btn" onclick="doLogout()">🚪 Çıkış Yap</button>
+</div>
+
+<!-- ════ MODAL: ETKİNLİK ════ -->
+<div class="modal-bg" id="ev-modal">
+  <div class="modal wide">
+    <div class="modal-title" id="ev-modal-title">📅 Etkinlik Ekle</div>
+    <button class="modal-close" onclick="closeEvModal()">✕</button>
+    <input type="hidden" id="ev-edit-id">
+    <div class="fg-row">
+      <div class="fg" style="grid-column:1/-1"><label>Başlık *</label><input id="ev-title" type="text" placeholder="Etkinlik adı"></div>
+      <div class="fg"><label>Tarih *</label><input id="ev-date" type="date"></div>
+      <div class="fg"><label>Kategori</label>
+        <select id="ev-cat">
+          <option>Konferans</option><option>Gezi</option><option>Spor</option>
+          <option selected>Sosyal</option><option>Kültür</option>
+          <option>Eğitim</option><option>Diğer</option>
+        </select>
+      </div>
+      <div class="fg" style="grid-column:1/-1"><label>Konum</label><input id="ev-loc" type="text" placeholder="Yer, adres..."></div>
+      <div class="fg" style="grid-column:1/-1"><label>Açıklama</label><textarea id="ev-desc" rows="4" placeholder="Etkinlik detayları..."></textarea></div>
+      <div class="fg" style="grid-column:1/-1">
+        <label>Fotoğraf URL (internet linki)</label>
+        <div class="img-row">
+          <input id="ev-img" type="url" placeholder="https://..." oninput="previewImg()">
+        </div>
+        <img id="ev-img-preview" class="img-preview">
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px;margin-top:10px;padding:14px;background:rgba(45,221,212,.04);border:1px solid rgba(45,221,212,.1);border-radius:10px">
+      <label class="sw"><input type="checkbox" id="ev-featured"><span class="sw-track"></span></label>
+      <div>
+        <div style="font-size:.83rem;color:rgba(255,255,255,.8);font-weight:700">⭐ Ana Sayfada Öne Çıkar</div>
+        <div style="font-size:.72rem;color:var(--muted2);margin-top:2px">Bu etkinlik ana sayfada gösterilir.</div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-o" onclick="closeEvModal()">İptal</button>
+      <button class="btn btn-p" onclick="saveEvent()">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: EKİP ÜYESİ ════ -->
+<div class="modal-bg" id="member-modal">
+  <div class="modal">
+    <div class="modal-title" id="member-modal-title">👤 Üye Ekle</div>
+    <button class="modal-close" onclick="closeMemberModal()">✕</button>
+    <input type="hidden" id="m-type">
+    <input type="hidden" id="m-edit-id">
+    <div class="fg"><label>Ad Soyad *</label><input id="m-name" type="text" placeholder="Örn: Ahmet Yılmaz"></div>
+    <div class="fg"><label>Unvan / Görev *</label><input id="m-role" type="text" placeholder="Başkan, Yazılım Sorumlusu..."></div>
+    <div class="fg" id="m-order-wrap">
+      <label>Hiyerarşi Sırası (sadece YK)</label>
+      <input id="m-order" type="number" min="1" placeholder="1=Başkan · 2=Bşk.Yrd · 3=Koordinatör...">
+      <div style="font-size:.7rem;color:var(--muted2);margin-top:4px">Aynı numarayı alanlar ekip sayfasında yan yana dizilir.</div>
+    </div>
+    <div class="fg"><label>Fotoğraf URL</label><input id="m-img" type="url" placeholder="https://..."></div>
+    <div class="fg"><label>Instagram (@)</label><input id="m-ig" type="text" placeholder="kullaniciadi"></div>
+    <div class="fg"><label>LinkedIn URL</label><input id="m-linkedin" type="url" placeholder="https://linkedin.com/in/..."></div>
+    <div class="modal-foot">
+      <button class="btn btn-o" onclick="closeMemberModal()">İptal</button>
+      <button class="btn btn-p" onclick="saveMember()">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: SSS ════ -->
+<div class="modal-bg" id="faq-modal">
+  <div class="modal">
+    <div class="modal-title">❓ SSS Ekle / Düzenle</div>
+    <button class="modal-close" onclick="closeFaqModal()">✕</button>
+    <input type="hidden" id="faq-edit-id">
+    <div class="fg"><label>Soru *</label><input id="faq-q" type="text" placeholder="Soru metnini girin..."></div>
+    <div class="fg"><label>Cevap *</label><textarea id="faq-a" rows="4" placeholder="Cevabı girin..."></textarea></div>
+    <div class="modal-foot">
+      <button class="btn btn-o" onclick="closeFaqModal()">İptal</button>
+      <button class="btn btn-p" onclick="saveFaq()">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: NEDEN BİZ ════ -->
+<div class="modal-bg" id="why-modal">
+  <div class="modal">
+    <div class="modal-title">✅ Madde Ekle</div>
+    <button class="modal-close" onclick="closeWhyModal()">✕</button>
+    <input type="hidden" id="why-edit-id">
+    <div class="fg"><label>Başlık *</label><input id="why-title" type="text" placeholder="Güçlü Topluluk"></div>
+    <div class="fg"><label>Açıklama</label><textarea id="why-desc" rows="3" placeholder="Kısa açıklama..."></textarea></div>
+    <div class="fg"><label>Emoji / İkon</label><input id="why-ico" type="text" placeholder="👥" maxlength="4"></div>
+    <div class="modal-foot">
+      <button class="btn btn-o" onclick="closeWhyModal()">İptal</button>
+      <button class="btn btn-p" onclick="saveWhy()">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: İŞ BİRLİĞİ KARTLARI ════ -->
+<div class="modal-bg" id="option-modal">
+  <div class="modal">
+    <div class="modal-title">🤝 Kart Ekle</div>
+    <button class="modal-close" onclick="closeOptionModal()">✕</button>
+    <input type="hidden" id="opt-edit-id">
+    <div class="fg"><label>Başlık *</label><input id="opt-title" type="text" placeholder="Etkinlik Sponsorluğu"></div>
+    <div class="fg"><label>Açıklama</label><textarea id="opt-desc" rows="3" placeholder="Kısa açıklama..."></textarea></div>
+    <div class="fg"><label>Emoji / İkon</label><input id="opt-ico" type="text" placeholder="🎯" maxlength="4"></div>
+    <div class="modal-foot">
+      <button class="btn btn-o" onclick="closeOptionModal()">İptal</button>
+      <button class="btn btn-p" onclick="saveOption()">💾 Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ TOAST ════ -->
+<div id="toast"></div>
+
+<!-- ════ FIREBASE + SCRIPTS ════ -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, setDoc, getDoc, collection, addDoc, deleteDoc, getDocs, updateDoc, serverTimestamp }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
+  from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+
+/* ════════════════════════════════════
+   🔧 FIREBASE YAPILANDIRMA
+   ────────────────────────────────────
+   firebase-config.js dosyasını
+   projenize ekleyin (aşağıya bakın)
+   ════════════════════════════════════ */
+import { firebaseConfig } from "./firebase-config.js";
+
+const app  = initializeApp(firebaseConfig);
+const db   = getFirestore(app);
+const auth = getAuth(app);
+
+/* ─── Admin e-postası ─── */
+const ADMIN_EMAIL = "kampuskafasi07@gmail.com"; // Firebase'deki admin e-postanla değiştir
+
+/* ════════════════════════════════════
+   GÜVENLİK: Brute-force Koruması
+   ════════════════════════════════════ */
+const MAX_ATTEMPTS = 5;
+const LOCK_MS = 5 * 60 * 1000; // 5 dakika
+
+function getAttemptData() {
+  try { return JSON.parse(localStorage.getItem('_kka') || '{}'); }
+  catch { return {}; }
+}
+function setAttemptData(d) { localStorage.setItem('_kka', JSON.stringify(d)); }
+
+function checkLock() {
+  const d = getAttemptData();
+  if (d.lockedUntil && Date.now() < d.lockedUntil) return d.lockedUntil;
+  return null;
+}
+
+function recordFailedAttempt() {
+  const d = getAttemptData();
+  d.attempts = (d.attempts || 0) + 1;
+  if (d.attempts >= MAX_ATTEMPTS) {
+    d.lockedUntil = Date.now() + LOCK_MS;
+    d.attempts = 0;
+  }
+  setAttemptData(d);
+  return d.attempts;
+}
+
+function clearAttempts() { localStorage.removeItem('_kka'); }
+
+function startLockTimer(until) {
+  document.getElementById('login-form-wrap').style.display = 'none';
+  document.getElementById('login-lock').style.display = 'flex';
+  const cd = document.getElementById('lock-countdown');
+  const tick = () => {
+    const rem = until - Date.now();
+    if (rem <= 0) {
+      clearAttempts();
+      document.getElementById('login-form-wrap').style.display = 'block';
+      document.getElementById('login-lock').style.display = 'none';
+      return;
+    }
+    const m = Math.floor(rem / 60000);
+    const s = Math.floor((rem % 60000) / 1000);
+    cd.textContent = `${m}:${s.toString().padStart(2,'0')}`;
+    setTimeout(tick, 1000);
+  };
+  tick();
+}
+
+/* ════════════════════════════════════
+   GİRİŞ
+   ════════════════════════════════════ */
+window.doLogin = async function() {
+  const locked = checkLock();
+  if (locked) { startLockTimer(locked); return; }
+
+  const pwd = document.getElementById('login-pwd').value;
+  if (!pwd) return;
+
+  const btn = document.getElementById('login-btn');
+  btn.textContent = 'Giriş yapılıyor...';
+  btn.classList.add('loading');
+  btn.disabled = true;
+
+  try {
+    await signInWithEmailAndPassword(auth, ADMIN_EMAIL, pwd);
+    clearAttempts();
+  } catch(e) {
+    const attempts = recordFailedAttempt();
+    const locked2 = checkLock();
+    if (locked2) {
+      startLockTimer(locked2);
+      toast('Çok fazla hatalı giriş. 5 dakika bekleyin.', 'err');
+    } else {
+      const err = document.getElementById('login-err');
+      err.textContent = `Hatalı şifre. ${MAX_ATTEMPTS - attempts} deneme hakkınız kaldı.`;
+      err.style.display = 'block';
+      document.getElementById('attempts-txt').textContent = `Başarısız deneme: ${attempts}/${MAX_ATTEMPTS}`;
+      setTimeout(() => { err.style.display = 'none'; }, 3000);
+    }
+    document.getElementById('login-pwd').value = '';
+  } finally {
+    btn.textContent = 'Giriş Yap';
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+};
+
+window.doLogout = async function() {
+  if (!confirm('Çıkış yapmak istediğinizden emin misiniz?')) return;
+  await signOut(auth);
+  location.reload();
+};
+
+/* ════════════════════════════════════
+   AUTH STATE
+   ════════════════════════════════════ */
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    document.getElementById('login-screen').style.display = 'none';
+    document.getElementById('app').classList.add('on');
+    document.getElementById('sb-user').textContent = user.email || '';
+    await loadAll();
+  } else {
+    document.getElementById('app').classList.remove('on');
+    document.getElementById('login-screen').style.display = 'flex';
+    const locked = checkLock();
+    if (locked) startLockTimer(locked);
+  }
+});
+
+/* ════════════════════════════════════
+   NAVİGASYON
+   ════════════════════════════════════ */
+window.goSec = function(name) {
+  document.querySelectorAll('.sec').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.sb-item').forEach(s => s.classList.remove('on'));
+  document.querySelectorAll('.mob-item').forEach(s => s.classList.remove('on'));
+
+  const sec = document.getElementById('sec-' + name);
+  if (sec) sec.classList.add('on');
+
+  // Sidebar
+  document.querySelectorAll('.sb-nav .sb-item').forEach(el => {
+    if ((el.getAttribute('onclick') || '').includes("'" + name + "'")) el.classList.add('on');
+  });
+  // Mobile
+  document.querySelectorAll('.mob-item').forEach(el => {
+    if ((el.getAttribute('onclick') || '').includes("'" + name + "'")) el.classList.add('on');
+  });
+
+  document.getElementById('main').scrollTop = 0;
+};
+
+/* ════════════════════════════════════
+   TÜM VERİLERİ YÜKLE
+   ════════════════════════════════════ */
+async function loadAll() {
+  await Promise.all([
+    loadSettings(),
+    loadCounters(),
+    loadTexts(),
+    loadSpBasic(),
+    loadEvents(),
+    loadTeam(),
+    loadFaqs(),
+    loadWhyItems(),
+    loadOptionItems(),
+  ]);
+  renderDashboard();
+}
+
+/* ── Ayarlar ── */
+async function loadSettings() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_sett"));
+    if (!snap.exists()) return;
+    const s = snap.data();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    set('c-address', s.address); set('c-email', s.email); set('c-instagram', s.ig);
+    set('c-whatsapp', s.wa); set('c-linkedin', s.linkedin); set('c-maps', s.maps);
+    set('g-email', s.email); set('g-wa', s.wa); set('g-instagram', s.ig); set('g-linkedin', s.linkedin);
+  } catch(e) { console.warn('loadSettings:', e); }
+}
+
+/* ── Sayaçlar ── */
+async function loadCounters() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_counters"));
+    if (!snap.exists()) return;
+    const c = snap.data();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    set('cnt-members', c.members); set('cnt-events', c.events); set('cnt-years', c.years);
+  } catch(e) { console.warn('loadCounters:', e); }
+}
+
+/* ── Metinler ── */
+async function loadTexts() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_metin_v1"));
+    if (!snap.exists()) return;
+    const m = snap.data();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    set('txt-heroBadge', m.heroBadge); set('txt-heroSub', m.heroSub);
+    set('txt-who1', m.who1); set('txt-who2', m.who2);
+    set('txt-about1', m.about1); set('txt-about2', m.about2); set('txt-about3', m.about3);
+    set('txt-vision1', m.vision1); set('txt-vision2', m.vision2);
+    set('txt-mission1', m.mission1); set('txt-mission2', m.mission2);
+  } catch(e) { console.warn('loadTexts:', e); }
+}
+
+/* ── Sponsorluk Temel ── */
+async function loadSpBasic() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
+    if (!snap.exists()) return;
+    const s = snap.data();
+    const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
+    set('sp-heroSub', s.heroSub); set('sp-ctaTitle', s.ctaTitle); set('sp-ctaText', s.ctaText);
+  } catch(e) { console.warn('loadSpBasic:', e); }
+}
+
+/* ════════════════════════════════════
+   DASHBOARD
+   ════════════════════════════════════ */
+window.renderDashboard = function() {
+  const members = document.getElementById('cnt-members')?.value || 17000;
+  const events  = document.getElementById('cnt-events')?.value || 50;
+  const years   = document.getElementById('cnt-years')?.value || 4;
+
+  document.getElementById('dash-grid').innerHTML = `
+    <div class="dash-card"><div class="dc-ico">👥</div><div class="dc-num">${parseInt(members).toLocaleString('tr-TR')}+</div><div class="dc-lbl">Üye</div></div>
+    <div class="dash-card"><div class="dc-ico">📅</div><div class="dc-num">${events}</div><div class="dc-lbl">Etkinlik Hedefi</div></div>
+    <div class="dash-card"><div class="dc-ico">⏳</div><div class="dc-num">${years}</div><div class="dc-lbl">Deneyim Yılı</div></div>
+  `;
+};
+
+/* ════════════════════════════════════
+   ETKİNLİKLER
+   ════════════════════════════════════ */
+async function loadEvents() {
+  const tbody = document.getElementById('ev-tbody');
+  const recent = document.getElementById('dash-recent');
+  tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted2)">Yükleniyor...</td></tr>';
+
+  try {
+    const snap = await getDocs(collection(db, "kk_events"));
+    if (snap.empty) {
+      tbody.innerHTML = `<tr><td colspan="6"><div class="empty"><div class="ico">📅</div>Henüz etkinlik eklenmedi.</div></td></tr>`;
+      if (recent) recent.innerHTML = `<div class="empty"><div class="ico">📅</div>Henüz etkinlik yok.</div>`;
+      return;
+    }
+
+    const items = [];
+    snap.forEach(d => items.push({ id: d.id, ...d.data() }));
+    items.sort((a, b) => (b.date || '').localeCompare(a.date || ''));
+
+    tbody.innerHTML = '';
+    items.forEach(e => {
+      const isPast = new Date(e.date) < new Date();
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><strong>${esc(e.title)}</strong></td>
+        <td>${fmtDate(e.date)}</td>
+        <td><span class="badge">${esc(e.cat)}</span></td>
+        <td style="max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${esc(e.loc || '—')}</td>
+        <td><span class="badge${isPast ? ' past' : ''}">${isPast ? 'Geçti' : '🟢 Yaklaşan'}${e.featured ? ' · ⭐' : ''}</span></td>
+        <td><div class="acts">
+          <button class="btn btn-o btn-xs" onclick="editEvent('${e.id}')">Düzenle</button>
+          <button class="btn btn-d btn-xs" onclick="deleteEvent('${e.id}')">Sil</button>
+        </div></td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (recent) {
+      recent.innerHTML = '';
+      items.slice(0, 5).forEach(e => {
+        const div = document.createElement('div');
+        div.className = 'li';
+        div.style.marginBottom = '6px';
+        div.innerHTML = `
+          <div class="li-body">
+            <div class="li-title">${esc(e.title)}</div>
+            <div class="li-sub">${fmtDate(e.date)} · ${esc(e.cat)}${e.featured ? ' · ⭐ Öne Çıkan' : ''}</div>
+          </div>
+          <button class="btn btn-d btn-xs" onclick="deleteEvent('${e.id}')">Sil</button>
+        `;
+        recent.appendChild(div);
+      });
+    }
+  } catch(err) {
+    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--danger)">Yükleme hatası: ${err.message}</td></tr>`;
+    toast('Etkinlikler yüklenemedi!', 'err');
+  }
+}
+
+window.openEvModal = function() {
+  ['ev-title','ev-date','ev-loc','ev-desc','ev-img','ev-edit-id'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('ev-cat').value = 'Sosyal';
+  document.getElementById('ev-featured').checked = false;
+  document.getElementById('ev-img-preview').style.display = 'none';
+  document.getElementById('ev-modal-title').textContent = '📅 Etkinlik Ekle';
+  document.getElementById('ev-modal').classList.add('on');
+};
+window.closeEvModal = function() { document.getElementById('ev-modal').classList.remove('on'); };
+
+window.editEvent = async function(id) {
+  try {
+    const snap = await getDoc(doc(db, 'kk_events', id));
+    if (!snap.exists()) { toast('Etkinlik bulunamadı.', 'err'); return; }
+    const e = snap.data();
+    document.getElementById('ev-edit-id').value = id;
+    document.getElementById('ev-title').value   = e.title || '';
+    document.getElementById('ev-date').value    = e.date  || '';
+    document.getElementById('ev-cat').value     = e.cat   || 'Sosyal';
+    document.getElementById('ev-loc').value     = e.loc   || '';
+    document.getElementById('ev-desc').value    = e.desc  || '';
+    document.getElementById('ev-img').value     = e.img   || '';
+    document.getElementById('ev-featured').checked = e.featured || false;
+    const prev = document.getElementById('ev-img-preview');
+    if (e.img) { prev.src = e.img; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
+    document.getElementById('ev-modal-title').textContent = '📅 Etkinliği Düzenle';
+    document.getElementById('ev-modal').classList.add('on');
+  } catch(e) { toast('Yüklenemedi: ' + e.message, 'err'); }
+};
+
+window.previewImg = function() {
+  const url = document.getElementById('ev-img').value.trim();
+  const prev = document.getElementById('ev-img-preview');
+  if (url) { prev.src = url; prev.style.display = 'block'; }
+  else { prev.style.display = 'none'; }
+};
+
+window.saveEvent = async function() {
+  const title   = document.getElementById('ev-title').value.trim();
+  const date    = document.getElementById('ev-date').value;
+  const editId  = document.getElementById('ev-edit-id').value;
+  if (!title || !date) { toast('Başlık ve tarih zorunludur!', 'err'); return; }
+
+  const data = {
+    title, date,
+    cat:      document.getElementById('ev-cat').value,
+    loc:      document.getElementById('ev-loc').value.trim(),
+    desc:     document.getElementById('ev-desc').value.trim(),
+    img:      document.getElementById('ev-img').value.trim(),
+    featured: document.getElementById('ev-featured').checked,
+  };
+
+  try {
+    if (editId) {
+      await updateDoc(doc(db, 'kk_events', editId), data);
+      toast('Etkinlik güncellendi!', 'ok');
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'kk_events'), data);
+      toast('Etkinlik eklendi!', 'ok');
+    }
+    closeEvModal();
+    await loadEvents();
+    renderDashboard();
+  } catch(e) {
+    toast('Kaydedilemedi: ' + e.message, 'err');
+  }
+};
+
+window.deleteEvent = async function(id) {
+  if (!confirm('Bu etkinliği silmek istediğinizden emin misiniz?')) return;
+  try {
+    await deleteDoc(doc(db, "kk_events", id));
+    await loadEvents();
+    toast('Etkinlik silindi.', 'ok');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+/* ════════════════════════════════════
+   EKİP
+   ════════════════════════════════════ */
+async function loadTeam() {
+  await Promise.all([loadTeamList('board'), loadTeamList('admins')]);
+}
+
+async function loadTeamList(type) {
+  const listEl = document.getElementById(type === 'board' ? 'board-list' : 'admins-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'kk_team_' + type));
+    if (snap.empty) {
+      listEl.innerHTML = `<div class="empty"><div class="ico">👤</div>Henüz üye eklenmedi.</div>`;
+      return;
+    }
+    const members = [];
+    snap.forEach(d => members.push({ id: d.id, ...d.data() }));
+    if (type === 'board') members.sort((a,b) => (a.order||99)-(b.order||99));
+
+    listEl.innerHTML = '';
+    members.forEach(m => {
+      const div = document.createElement('div');
+      div.className = 'li';
+      div.innerHTML = `
+        <div class="li-body">
+          <div class="li-title">${esc(m.name)}${type==='board' && m.order ? ` <span style="font-size:.65rem;color:var(--muted2);font-weight:400">· sıra ${m.order}</span>` : ''}</div>
+          <div class="li-sub">${esc(m.role)}${m.ig ? ' · @' + m.ig : ''}</div>
+        </div>
+        <div class="li-acts">
+          <button class="btn btn-o btn-xs" onclick="editMember('${type}','${m.id}')">Düzenle</button>
+          <button class="btn btn-d btn-xs" onclick="deleteMember('${type}','${m.id}')">Sil</button>
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  } catch(e) { toast('Ekip yüklenemedi: ' + e.message, 'err'); }
+}
+
+window.switchEkipTab = function(tab) {
+  document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('on'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+  document.getElementById('tp-' + tab).classList.add('on');
+  document.getElementById('tb-' + tab).classList.add('on');
+};
+
+window.openMemberModal = function(type) {
+  ['m-name','m-role','m-img','m-ig','m-linkedin','m-order','m-edit-id'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('m-type').value = type;
+  document.getElementById('member-modal-title').textContent = type === 'board' ? '👤 Yönetim Kurulu Üyesi Ekle' : '👤 Admin Ekle';
+  document.getElementById('m-order-wrap').style.display = type === 'board' ? 'flex' : 'none';
+  document.getElementById('m-order-wrap').style.flexDirection = 'column';
+  document.getElementById('member-modal').classList.add('on');
+};
+window.closeMemberModal = function() { document.getElementById('member-modal').classList.remove('on'); };
+
+window.editMember = async function(type, id) {
+  try {
+    const snap = await getDoc(doc(db, 'kk_team_' + type, id));
+    if (!snap.exists()) { toast('Üye bulunamadı.', 'err'); return; }
+    const m = snap.data();
+    document.getElementById('m-edit-id').value  = id;
+    document.getElementById('m-type').value     = type;
+    document.getElementById('m-name').value     = m.name     || '';
+    document.getElementById('m-role').value     = m.role     || '';
+    document.getElementById('m-img').value      = m.img      || '';
+    document.getElementById('m-ig').value       = m.ig       || '';
+    document.getElementById('m-linkedin').value = m.linkedin || '';
+    document.getElementById('m-order-wrap').style.display = type === 'board' ? 'flex' : 'none';
+    document.getElementById('m-order-wrap').style.flexDirection = 'column';
+    if (type === 'board') document.getElementById('m-order').value = m.order || '';
+    document.getElementById('member-modal-title').textContent = type === 'board' ? '👤 YK Üyesini Düzenle' : '👤 Admini Düzenle';
+    document.getElementById('member-modal').classList.add('on');
+  } catch(e) { toast('Yüklenemedi: ' + e.message, 'err'); }
+};
+
+window.saveMember = async function() {
+  const name   = document.getElementById('m-name').value.trim();
+  const role   = document.getElementById('m-role').value.trim();
+  const type   = document.getElementById('m-type').value;
+  const editId = document.getElementById('m-edit-id').value;
+  if (!name || !role) { toast('Ad ve unvan zorunludur!', 'err'); return; }
+
+  const data = {
+    name, role,
+    img:      document.getElementById('m-img').value.trim(),
+    ig:       document.getElementById('m-ig').value.trim().replace('@',''),
+    linkedin: document.getElementById('m-linkedin').value.trim(),
+  };
+  if (type === 'board') data.order = parseInt(document.getElementById('m-order').value) || 99;
+
+  try {
+    if (editId) {
+      await updateDoc(doc(db, 'kk_team_' + type, editId), data);
+      toast('Üye güncellendi!', 'ok');
+    } else {
+      data.createdAt = serverTimestamp();
+      await addDoc(collection(db, 'kk_team_' + type), data);
+      toast('Üye eklendi!', 'ok');
+    }
+    closeMemberModal();
+    await loadTeam();
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+window.deleteMember = async function(type, id) {
+  if (!confirm('Bu üye silinecek?')) return;
+  try {
+    await deleteDoc(doc(db, 'kk_team_' + type, id));
+    await loadTeamList(type);
+    toast('Üye silindi.', 'ok');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+/* ════════════════════════════════════
+   SSS
+   ════════════════════════════════════ */
+async function loadFaqs() {
+  const listEl = document.getElementById('faq-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'kk_faq'));
+    if (snap.empty) {
+      listEl.innerHTML = `<div class="empty"><div class="ico">❓</div>Henüz soru eklenmedi.</div>`;
+      return;
+    }
+    listEl.innerHTML = '';
+    snap.forEach(d => {
+      const f = d.data(); const id = d.id;
+      const div = document.createElement('div');
+      div.className = 'li';
+      div.innerHTML = `
+        <div class="li-body">
+          <div class="li-title">${esc(f.q)}</div>
+          <div class="li-sub">${esc(f.a)}</div>
+        </div>
+        <div class="li-acts">
+          <button class="btn btn-o btn-xs" onclick="editFaq('${id}','${esc(f.q).replace(/'/g,"\\'")}','${esc(f.a).replace(/'/g,"\\'")}')">Düzenle</button>
+          <button class="btn btn-d btn-xs" onclick="deleteFaq('${id}')">Sil</button>
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  } catch(e) { toast('SSS yüklenemedi: ' + e.message, 'err'); }
+}
+
+window.openFaqModal = function() {
+  document.getElementById('faq-q').value = '';
+  document.getElementById('faq-a').value = '';
+  document.getElementById('faq-edit-id').value = '';
+  document.getElementById('faq-modal').classList.add('on');
+};
+window.closeFaqModal = function() { document.getElementById('faq-modal').classList.remove('on'); };
+window.editFaq = function(id, q, a) {
+  document.getElementById('faq-edit-id').value = id;
+  document.getElementById('faq-q').value = q;
+  document.getElementById('faq-a').value = a;
+  document.getElementById('faq-modal').classList.add('on');
+};
+window.saveFaq = async function() {
+  const q = document.getElementById('faq-q').value.trim();
+  const a = document.getElementById('faq-a').value.trim();
+  const editId = document.getElementById('faq-edit-id').value;
+  if (!q || !a) { toast('Soru ve cevap zorunludur!', 'err'); return; }
+  try {
+    if (editId) {
+      await updateDoc(doc(db, 'kk_faq', editId), { q, a });
+    } else {
+      await addDoc(collection(db, 'kk_faq'), { q, a, createdAt: serverTimestamp() });
+    }
+    closeFaqModal();
+    await loadFaqs();
+    toast('SSS kaydedildi!', 'ok');
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+window.deleteFaq = async function(id) {
+  if (!confirm('Bu soru silinecek?')) return;
+  try {
+    await deleteDoc(doc(db, 'kk_faq', id));
+    await loadFaqs();
+    toast('Soru silindi.', 'ok');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+/* ════════════════════════════════════
+   NEDEN BİZ
+   ════════════════════════════════════ */
+async function loadWhyItems() {
+  const listEl = document.getElementById('sp-why-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'kk_sp_why'));
+    if (snap.empty) { listEl.innerHTML = `<div class="empty"><div class="ico">✅</div>Henüz madde eklenmedi.</div>`; return; }
+    listEl.innerHTML = '';
+    snap.forEach(d => {
+      const w = d.data(); const id = d.id;
+      const div = document.createElement('div');
+      div.className = 'li';
+      div.innerHTML = `
+        <div class="li-body">
+          <div class="li-title">${esc(w.ico || '')} ${esc(w.title)}</div>
+          <div class="li-sub">${esc(w.desc || '')}</div>
+        </div>
+        <div class="li-acts">
+          <button class="btn btn-d btn-xs" onclick="deleteWhy('${id}')">Sil</button>
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  } catch(e) { toast('Maddeler yüklenemedi.', 'err'); }
+}
+window.openWhyModal = function() {
+  ['why-title','why-desc','why-ico'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('why-edit-id').value = '';
+  document.getElementById('why-modal').classList.add('on');
+};
+window.closeWhyModal = function() { document.getElementById('why-modal').classList.remove('on'); };
+window.saveWhy = async function() {
+  const title = document.getElementById('why-title').value.trim();
+  if (!title) { toast('Başlık zorunludur!', 'err'); return; }
+  try {
+    await addDoc(collection(db, 'kk_sp_why'), {
+      title, desc: document.getElementById('why-desc').value.trim(),
+      ico: document.getElementById('why-ico').value.trim(),
+      createdAt: serverTimestamp(),
+    });
+    closeWhyModal();
+    await loadWhyItems();
+    toast('Madde eklendi!', 'ok');
+  } catch(e) { toast('Eklenemedi: ' + e.message, 'err'); }
+};
+window.deleteWhy = async function(id) {
+  if (!confirm('Silinsin mi?')) return;
+  try { await deleteDoc(doc(db, 'kk_sp_why', id)); await loadWhyItems(); toast('Silindi.', 'ok'); }
+  catch(e) { toast('Silinemedi.', 'err'); }
+};
+
+/* ════════════════════════════════════
+   İŞ BİRLİĞİ KARTLARI
+   ════════════════════════════════════ */
+async function loadOptionItems() {
+  const listEl = document.getElementById('sp-options-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'kk_sp_options'));
+    if (snap.empty) { listEl.innerHTML = `<div class="empty"><div class="ico">🤝</div>Henüz kart eklenmedi.</div>`; return; }
+    listEl.innerHTML = '';
+    snap.forEach(d => {
+      const o = d.data(); const id = d.id;
+      const div = document.createElement('div');
+      div.className = 'li';
+      div.innerHTML = `
+        <div class="li-body">
+          <div class="li-title">${esc(o.ico || '')} ${esc(o.title)}</div>
+          <div class="li-sub">${esc(o.desc || '')}</div>
+        </div>
+        <div class="li-acts">
+          <button class="btn btn-d btn-xs" onclick="deleteOption('${id}')">Sil</button>
+        </div>
+      `;
+      listEl.appendChild(div);
+    });
+  } catch(e) { toast('Kartlar yüklenemedi.', 'err'); }
+}
+window.openOptionModal = function() {
+  ['opt-title','opt-desc','opt-ico'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('opt-edit-id').value = '';
+  document.getElementById('option-modal').classList.add('on');
+};
+window.closeOptionModal = function() { document.getElementById('option-modal').classList.remove('on'); };
+window.saveOption = async function() {
+  const title = document.getElementById('opt-title').value.trim();
+  if (!title) { toast('Başlık zorunludur!', 'err'); return; }
+  try {
+    await addDoc(collection(db, 'kk_sp_options'), {
+      title, desc: document.getElementById('opt-desc').value.trim(),
+      ico: document.getElementById('opt-ico').value.trim(),
+      createdAt: serverTimestamp(),
+    });
+    closeOptionModal();
+    await loadOptionItems();
+    toast('Kart eklendi!', 'ok');
+  } catch(e) { toast('Eklenemedi: ' + e.message, 'err'); }
+};
+window.deleteOption = async function(id) {
+  if (!confirm('Silinsin mi?')) return;
+  try { await deleteDoc(doc(db, 'kk_sp_options', id)); await loadOptionItems(); toast('Silindi.', 'ok'); }
+  catch(e) { toast('Silinemedi.', 'err'); }
+};
+
+/* ════════════════════════════════════
+   KAYDETME FONKSİYONLARI
+   ════════════════════════════════════ */
+window.saveContact = async function() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_sett"));
+    const mevcut = snap.exists() ? snap.data() : {};
+    Object.assign(mevcut, {
+      address:  document.getElementById('c-address').value.trim(),
+      email:    document.getElementById('c-email').value.trim(),
+      ig:       document.getElementById('c-instagram').value.trim().replace('@',''),
+      wa:       document.getElementById('c-whatsapp').value.trim(),
+      linkedin: document.getElementById('c-linkedin').value.trim(),
+      maps:     document.getElementById('c-maps').value.trim(),
+    });
+    await setDoc(doc(db, "ayarlar", "kk_sett"), mevcut);
+    toast('İletişim bilgileri kaydedildi!', 'ok');
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+window.saveGlobalSettings = async function() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_sett"));
+    const mevcut = snap.exists() ? snap.data() : {};
+    Object.assign(mevcut, {
+      email:    document.getElementById('g-email').value.trim(),
+      wa:       document.getElementById('g-wa').value.trim(),
+      ig:       document.getElementById('g-instagram').value.trim().replace('@',''),
+      linkedin: document.getElementById('g-linkedin').value.trim(),
+    });
+    await setDoc(doc(db, "ayarlar", "kk_sett"), mevcut);
+    toast('Global bağlantılar kaydedildi!', 'ok');
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+window.saveCounters = async function() {
+  try {
+    await setDoc(doc(db, "ayarlar", "kk_counters"), {
+      members: parseInt(document.getElementById('cnt-members').value) || 17000,
+      events:  parseInt(document.getElementById('cnt-events').value) || 50,
+      years:   parseInt(document.getElementById('cnt-years').value) || 4,
+    });
+    renderDashboard();
+    toast('Sayaçlar güncellendi!', 'ok');
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+window.saveTexts = async function(group) {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_metin_v1"));
+    const mevcut = snap.exists() ? snap.data() : {};
+    const get = id => document.getElementById(id)?.value.trim() || '';
+    if (group === 'hero') { mevcut.heroBadge = get('txt-heroBadge'); mevcut.heroSub = get('txt-heroSub'); }
+    else if (group === 'who') { mevcut.who1 = get('txt-who1'); mevcut.who2 = get('txt-who2'); }
+    else if (group === 'about') { mevcut.about1 = get('txt-about1'); mevcut.about2 = get('txt-about2'); mevcut.about3 = get('txt-about3'); }
+    else if (group === 'vm') { mevcut.vision1 = get('txt-vision1'); mevcut.vision2 = get('txt-vision2'); mevcut.mission1 = get('txt-mission1'); mevcut.mission2 = get('txt-mission2'); }
+    await setDoc(doc(db, "ayarlar", "kk_metin_v1"), mevcut);
+    toast('Metinler kaydedildi!', 'ok');
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+window.saveSpBasic = async function() {
+  try {
+    const snap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
+    const mevcut = snap.exists() ? snap.data() : {};
+    mevcut.heroSub  = document.getElementById('sp-heroSub').value.trim();
+    mevcut.ctaTitle = document.getElementById('sp-ctaTitle').value.trim();
+    mevcut.ctaText  = document.getElementById('sp-ctaText').value.trim();
+    await setDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"), mevcut);
+    toast('Sponsorluk metinleri kaydedildi!', 'ok');
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+/* ════════════════════════════════════
+   YARDIMCILAR
+   ════════════════════════════════════ */
+function fmtDate(d) {
+  if (!d) return '—';
+  const [y, m, day] = d.split('-');
+  const months = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+  return parseInt(day) + ' ' + months[parseInt(m) - 1] + ' ' + y;
+}
+function esc(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+window.toast = function(msg, type = 'ok') {
+  const c = document.getElementById('toast');
+  const el = document.createElement('div');
+  el.className = 'toast-el ' + type;
+  el.textContent = (type === 'ok' ? '✅ ' : type === 'err' ? '❌ ' : '⚠️ ') + msg;
+  c.appendChild(el);
+  setTimeout(() => {
+    el.style.transition = 'opacity .3s,transform .3s';
+    el.style.opacity = '0';
+    el.style.transform = 'translateX(16px)';
+    setTimeout(() => el.remove(), 320);
+  }, 3200);
+};
+
+/* Keyboard shortcut: Escape closes modals */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.querySelectorAll('.modal-bg.on').forEach(m => m.classList.remove('on'));
+  }
+});
+/* Click outside modal closes it */
+document.querySelectorAll('.modal-bg').forEach(bg => {
+  bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('on'); });
+});
+
+</script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="style.css"> 
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sponsorluk & İş Birliği — Kampüs Kafası</title>
+<link rel="icon" type="image/jpeg" href="logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* PAGE HERO */
+.page-hero{padding:130px 32px 70px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
+.page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
+.page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
+.page-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:18px;opacity:0;animation:fadeUp .7s .3s ease forwards}
+.page-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.page-title{font-family:'Dancing Script',cursive;font-size:clamp(2.8rem,6.5vw,5.5rem);font-weight:700;line-height:1.2;margin-bottom:14px;padding-bottom:6px;overflow:visible;background:linear-gradient(135deg,var(--cl) 0%,#fff 50%,var(--cl) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .45s ease forwards,shimmerAnim 3s 1.5s linear infinite;text-align:left}
+.page-subtitle{font-size:.95rem;color:rgba(255,255,255,.4);font-weight:400;max-width:520px;line-height:1.75;opacity:0;animation:fadeUp .7s .6s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* SECTIONS */
+.section-wrap{max-width:1100px;margin:0 auto}
+.section-lbl{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:8px}
+.section-lbl::before{content:'';display:block;width:14px;height:1.5px;background:var(--cl)}
+.section-h{font-size:clamp(1.55rem,3.2vw,2.2rem);font-weight:800;line-height:1.15;margin-bottom:6px}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+/* STATS BAR - index-style animated counters */
+#sp-stats{padding:0 32px 52px;background:transparent}
+.sp-stats-grid{display:flex;gap:0;border:1px solid var(--bd);border-radius:18px;overflow:hidden;max-width:540px;background:rgba(255,255,255,.02)}
+.sp-stat-item{flex:1;padding:28px 16px;text-align:center;border-right:1px solid var(--bd);transition:background .3s}
+.sp-stat-item:last-child{border-right:none}
+.sp-stat-item:hover{background:rgba(45,221,212,.03)}
+.sp-stat-num{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.sp-stat-icon{display:none}
+.sp-stat-lbl{font-size:.7rem;color:var(--muted);font-weight:500;margin-top:3px;letter-spacing:.04em}
+
+/* NEDEN BİZ */
+#sp-why{padding:72px 32px;background:rgba(7,9,11,.82)}
+.sp-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;max-width:780px}
+.sp-why-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-left:2px solid rgba(45,216,240,.3);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;transition:border-color .2s,background .2s}
+.sp-why-item:hover{border-left-color:var(--cl);background:rgba(45,216,240,.04)}
+.sp-why-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);flex-shrink:0;margin-top:6px}
+.sp-why-text{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65}
+.sp-why-text strong{color:rgba(255,255,255,.85);font-weight:600;display:block;margin-bottom:2px;font-size:.86rem}
+
+/* İŞ BİRLİĞİ SEÇENEKLERİ */
+#sp-options{padding:80px 32px;background:rgba(10,15,21,.82)}
+.sp-options-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+.sp-option-card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:30px 24px 24px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default;display:flex;flex-direction:column}
+.sp-option-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
+.sp-option-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
+.sp-option-card:hover{border-color:rgba(45,216,240,.28);box-shadow:0 16px 48px rgba(0,0,0,.4);transform:translateY(-4px)}
+.sp-option-card:hover::after{opacity:.6}
+.sp-option-icon{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.18);display:flex;align-items:center;justify-content:center;color:var(--cl);margin-bottom:18px;font-size:1.3rem}
+.sp-option-card h3{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:10px}
+.sp-option-card p{font-size:.84rem;color:rgba(255,255,255,.42);line-height:1.75;flex:1;margin-bottom:20px}
+.btn-card-offer{display:inline-flex;align-items:center;gap:7px;background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.22);color:var(--cl);padding:9px 18px;border-radius:100px;font-size:.82rem;font-weight:600;transition:background .2s,border-color .2s,transform .2s;cursor:pointer;align-self:flex-start;text-decoration:none}
+.btn-card-offer:hover{background:rgba(45,216,240,.15);border-color:var(--cl);transform:translateY(-1px)}
+
+/* SÜREÇ - yeni tasarım */
+#sp-process{padding:80px 32px;background:rgba(7,9,11,.82)}
+.sp-steps{display:grid;grid-template-columns:1fr;gap:0;margin-top:52px;max-width:700px;position:relative}
+.sp-step{display:flex;align-items:flex-start;gap:28px;padding:0 0 40px 0;position:relative;opacity:0;transform:translateX(-18px);transition:opacity .55s ease,transform .55s ease}
+.sp-step.visible{opacity:1;transform:translateX(0)}
+.sp-step:nth-child(2){transition-delay:.12s}
+.sp-step:nth-child(3){transition-delay:.24s}
+.sp-step:nth-child(4){transition-delay:.36s}
+.sp-step:last-child{padding-bottom:0}
+/* vertical connector */
+.sp-step-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.sp-step-circle{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.18));border:1px solid rgba(45,216,240,.3);display:flex;align-items:center;justify-content:center;position:relative;transition:border-color .3s,box-shadow .3s,background .3s;flex-shrink:0}
+.sp-step:hover .sp-step-circle{border-color:rgba(45,216,240,.6);background:linear-gradient(135deg,rgba(45,216,240,.2),rgba(13,110,106,.25));box-shadow:0 0 28px rgba(45,221,212,.18)}
+.sp-step-n{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sp-connector{width:1px;flex:1;min-height:24px;background:linear-gradient(180deg,rgba(45,216,240,.4),rgba(45,216,240,.05));margin-top:6px}
+.sp-step:last-child .sp-connector{display:none}
+.sp-step-right{padding-top:10px;flex:1}
+.sp-step-tag{display:inline-block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cl);background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.18);padding:3px 10px;border-radius:100px;margin-bottom:8px}
+.sp-step h4{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:7px;line-height:1.3}
+.sp-step p{font-size:.84rem;color:rgba(255,255,255,.4);line-height:1.75}
+/* eski .sp-step-badge & icon gerekirse */
+.sp-step-badge{display:none}
+.sp-step-icon{display:none}
+
+/* CTA 
+#sp-cta{padding:80px 32px;background:rgba(10,15,21,.82)}
+.sp-cta-box{background:linear-gradient(135deg,rgba(45,216,240,.08),rgba(13,110,106,.1));border:1px solid rgba(45,216,240,.2);border-radius:22px;padding:52px 40px;text-align:center;position:relative;overflow:hidden}
+.sp-cta-box::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 50% 0%,rgba(45,216,240,.07),transparent 70%);pointer-events:none}
+.sp-cta-box h2{font-size:clamp(1.5rem,3vw,2.2rem);font-weight:800;color:var(--white);margin-bottom:12px;position:relative;z-index:1}
+.sp-cta-box p{font-size:.93rem;color:rgba(255,255,255,.45);line-height:1.75;max-width:500px;margin:0 auto 32px;position:relative;z-index:1}
+.sp-cta-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;position:relative;z-index:1}
+.btn-sp-primary{display:inline-flex;align-items:center;gap:9px;background:linear-gradient(135deg,var(--cl),var(--cd));color:var(--black);padding:13px 28px;border-radius:100px;font-weight:700;font-size:.92rem;box-shadow:0 6px 28px rgba(45,216,240,.3);transition:transform .2s,box-shadow .2s}
+.btn-sp-primary:hover{transform:translateY(-2px);box-shadow:0 12px 36px rgba(45,216,240,.45)}
+.btn-sp-outline{display:inline-flex;align-items:center;gap:9px;border:1.5px solid rgba(45,216,240,.3);color:var(--cl);padding:12px 26px;border-radius:100px;font-weight:600;font-size:.9rem;transition:background .2s,border-color .2s,transform .2s}
+.btn-sp-outline:hover{background:rgba(45,216,240,.08);border-color:var(--cl);transform:translateY(-2px)} */
+
+/* İLETİŞİM */
+#sp-contact{padding:80px 32px;background:rgba(7,9,11,.82)}
+.sp-contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px}
+.sp-cc{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 20px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default}
+.sp-cc::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
+.sp-cc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
+.sp-cc:hover{box-shadow:0 14px 40px rgba(0,0,0,.4);border-color:rgba(45,216,240,.22);transform:translateY(-3px)}
+.sp-cc:hover::after{opacity:.55}
+.sp-cc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.16);display:flex;align-items:center;justify-content:center;margin-bottom:14px;flex-shrink:0;color:var(--cl)}
+.sp-cc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:4px}
+.sp-cc-value{font-size:.9rem;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:4px;word-break:break-word}
+.sp-cc-value a{color:var(--white);transition:color .2s}
+.sp-cc-value a:hover{color:var(--cl)}
+.sp-cc-sub{font-size:.76rem;color:rgba(255,255,255,.32);line-height:1.5}
+
+/* FOOTER */
+footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 32px 32px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.footer-brand .fl{font-family:'Dancing Script',cursive;font-size:1.5rem;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.footer-brand p{font-size:.83rem;color:rgba(255,255,255,.3);line-height:1.7}
+.footer-col h5{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cl);margin-bottom:16px}
+.footer-col a{display:block;font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:9px;transition:color .2s}
+.footer-col a:hover{color:var(--cl)}
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:24px;border-top:1px solid var(--bd);text-align:center;font-size:.75rem;color:rgba(255,255,255,.2)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .sp-options-grid{grid-template-columns:1fr;gap:14px}
+  .sp-steps{max-width:100%}
+  .sp-stats-grid{width:100%}
+  .sp-contact-grid{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr;gap:28px}
+  #nav{padding:0 18px}.nav-links{display:none}
+  #sp-why,#sp-options,#sp-process,#sp-cta,#sp-contact{padding:60px 18px}
+  #sp-stats{padding:0 18px 40px}
+  .sp-why-grid{grid-template-columns:1fr}
+  .page-hero{padding:110px 18px 40px}
+  footer{padding:48px 18px 32px}
+  .sp-cta-box{padding:36px 24px}
+}
+@media(max-width:520px){
+  .sp-stats-grid{border-radius:12px}
+  .sp-cta-btns{flex-direction:column;align-items:center}
+}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <canvas id="ld-canvas"></canvas>
+  <div class="loader-bg-grid"></div>
+  <div class="loader-glow"></div>
+  <div class="loader-content">
+    <div class="loader-logo-wrap">
+      <img src="logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
+      <div class="loader-img-ring"></div><div class="loader-img-ring2"></div><div class="loader-img-ring3"></div>
+    </div>
+    <div class="loader-text-wrap">
+      <div class="loader-title">Kampüs Kafası</div>
+      <div class="loader-divider"></div>
+      <div class="loader-sub">Sponsorluk</div>
+      <div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Ana Sayfa</a></li>
+    <li><a href="hakkimizda.html">Hakkımızda</a></li>
+    <li><a href="etkinlikler.html">Etkinlikler</a></li>
+    <li><a href="ekip.html">Ekip</a></li>
+    <li><a href="iletisim.html">İletişim</a></li>
+    <li><a href="sponsorluk.html" class="active">Sponsorluk</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- DRAWER -->
+<div id="drawer-overlay" onclick="closeDrawer()"></div>
+<aside id="drawer">
+  <div class="drawer-top">
+    <div class="drawer-logo"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <nav class="drawer-links">
+    <a href="index.html" class="drawer-link" onclick="closeDrawer()">Ana Sayfa</a>
+    <a href="hakkimizda.html" class="drawer-link" onclick="closeDrawer()">Hakkımızda</a>
+    <a href="etkinlikler.html" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
+    <a href="ekip.html" class="drawer-link" onclick="closeDrawer()">Ekip</a>
+    <a href="iletisim.html" class="drawer-link" onclick="closeDrawer()">İletişim</a>
+    <a href="sponsorluk.html" class="drawer-link active" onclick="closeDrawer()">Sponsorluk & İş Birliği</a>
+  </nav>
+  <div class="drawer-bottom">
+    <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="drawer-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @kampuskafasii
+    </a>
+    <a href="#" id="drawer-wa" class="drawer-ig" style="background:linear-gradient(135deg,#25d366,#128c7e);margin-top:8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp Grubuna Katıl
+    </a>
+</div>
+</aside>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="page-eyebrow"><span class="page-dot"></span>Fırsatlar · Kampüs Kafası</div>
+    <h1 class="page-title">Sponsorluk</h1>
+<div class="page-subtitle sp-hero-sub">17.000'den fazla üniversite öğrencisine ulaşmak istiyorsanız doğru yerdesiniz.</div>
+        <div class="sp-stats-grid" style="margin-top:32px;opacity:0;animation:fadeUp .7s .75s ease forwards">
+      <div class="sp-stat-item">
+        <div class="sp-stat-num" id="st-members">0</div>
+        <div class="sp-stat-lbl">Aktif Üye</div>
+      </div>
+      <div class="sp-stat-item">
+        <div class="sp-stat-num" id="st-events">0</div>
+        <div class="sp-stat-lbl">Etkinlik</div>
+      </div>
+      <div class="sp-stat-item">
+        <div class="sp-stat-num" id="st-exp">0</div>
+        <div class="sp-stat-lbl">Yıllık Deneyim</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- STATS SECTION (hidden, for counter trigger) -->
+<section id="sp-stats" style="display:none"></section>
+
+<!-- NEDEN BİZ -->
+<section id="sp-why">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">Neden Biz?</span>
+      <h2 class="section-h" style="color:var(--white)">Doğru Kitleye Doğrudan Ulaş</h2>
+    </div>
+    <div class="sp-why-grid">
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Geniş & Sadık Kitle</strong>17.000'i aşkın aktif öğrenci, anlık görünürlük.</div>
+      </div>
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Güvenilir Platform</strong>GSB ortaklığıyla resmi tanınan öğrenci topluluğu.</div>
+      </div>
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Hedefli Erişim</strong>Üniversite öğrencisi demografisine tam isabet.</div>
+      </div>
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Doğrudan Etkileşim</strong>Sahada, dijitalde ve görsel içerikte aktif temas.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- İŞ BİRLİĞİ SEÇENEKLERİ -->
+<section id="sp-options">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">İş Birliği Seçenekleri</span>
+      <h2 class="section-h" style="color:var(--white)">Nasıl Çalışabiliriz?</h2>
+      <p style="font-size:.92rem;color:rgba(255,255,255,.4);line-height:1.8;margin-top:10px;max-width:600px">İhtiyacınıza göre şekillenen üç farklı iş birliği modeliyle markanızı öğrenci kitlesine taşıyoruz.</p>
+    </div>
+    <div class="sp-options-grid">
+      <div class="sp-option-card reveal">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>Etkinlik Sponsorluğu</h3>
+        <p>Düzenlediğimiz kampüs etkinliklerinde markanızı ön plana çıkarın. Logo yerleşimi, afiş ve stant alanı, sahne tanıtımı ve öğrencilerle birebir etkileşim fırsatı sunar. Etkinlik öncesi ve sonrası sosyal medya paylaşımlarıyla görünürlüğünüz katlanır.</p>
+        <a href="mailto:iletisim@kampuskafasi.com?subject=Etkinlik Sponsorluğu Teklifi" class="btn-card-offer" id="sp-email-btn-1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
+      </div>
+      <div class="sp-option-card reveal">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <h3>Sosyal Medya İş Birliği</h3>
+        <p>Instagram sayfamız ve 17.000+ üyeli WhatsApp ağımızda markanızı tanıtın. Organik içerik üretimi, story ve reels paylaşımları ile geniş öğrenci kitlesine özgün ve etkili bir şekilde ulaşın.</p>
+        <a href="mailto:iletisim@kampuskafasi.com?subject=Sosyal Medya İş Birliği Teklifi" class="btn-card-offer" id="sp-email-btn-2">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
+      </div>
+      <div class="sp-option-card reveal">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Kampüs Tanıtımı</h3>
+        <p>Ürün veya hizmetinizi doğrudan hedef kitlenize duyurun. WhatsApp gruplarımız üzerinden anlık erişim, üniversite ortamında marka bilinirliği ve öğrenci geri bildirimiyle organik büyüme sağlayın.</p>
+        <a href="mailto:iletisim@kampuskafasi.com?subject=Kampüs Tanıtımı Teklifi" class="btn-card-offer" id="sp-email-btn-3">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SÜREÇ -->
+<section id="sp-process">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">Süreç</span>
+      <h2 class="section-h" style="color:var(--white)">Nasıl İlerleriz?</h2>
+    </div>
+    <div class="sp-steps">
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">1</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 01</div>
+          <h4>İletişime Geç</h4>
+          <p>E-posta veya Instagram üzerinden bize ulaş, hedeflerini ve beklentilerini paylaş. Sana en kısa sürede geri döneceğiz.</p>
+        </div>
+      </div>
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">2</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 02</div>
+          <h4>Teklif & Planlama</h4>
+          <p>İhtiyaçlarına özel bir iş birliği modeli ve detaylı bir plan birlikte oluşturuyoruz. Bütçe ve hedeflerine göre şekillenen esnek seçenekler sunuyoruz.</p>
+        </div>
+      </div>
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">3</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 03</div>
+          <h4>Uygulama</h4>
+          <p>Anlaşılan plan doğrultusunda etkinliği veya dijital içerikleri hayata geçiriyoruz. Süreç boyunca seni bilgilendiriyoruz.</p>
+        </div>
+      </div>
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">4</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 04</div>
+          <h4>Birlikte Değerlendirme</h4>
+          <p>Süreci seninle birlikte değerlendiriyor, sonuçları ve öğrenilenleri paylaşıyoruz. Uzun vadeli iş birliği için temel atıyoruz.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+<!-- İLETİŞİM -->
+<section id="sp-contact">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">İletişim</span>
+      <h2 class="section-h" style="color:var(--white)">Bize Ulaşın</h2>
+      <p style="font-size:.92rem;color:rgba(255,255,255,.4);line-height:1.8;margin-top:10px;max-width:500px">Sponsorluk teklifleriniz ve sorularınız için aşağıdaki kanallardan bizimle iletişime geçebilirsiniz.</p>
+    </div>
+    <div class="sp-contact-grid">
+      <div class="sp-cc reveal">
+        <div class="sp-cc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </div>
+        <div class="sp-cc-label">E-Posta</div>
+        <div class="sp-cc-value"><a href="mailto:iletisim@kampuskafasi.com" id="contact-email-val">iletisim@kampuskafasi.com</a></div>
+        <div class="sp-cc-sub">Sponsorluk teklifleri için tercih edilen kanal</div>
+      </div>
+      <div class="sp-cc reveal">
+        <div class="sp-cc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="sp-cc-label">Instagram</div>
+        <div class="sp-cc-value"><a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">@kampuskafasii</a></div>
+        <div class="sp-cc-sub">DM ile hızlı iletişim için</div>
+      </div>
+      <div class="sp-cc reveal">
+        <div class="sp-cc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </div>
+        <div class="sp-cc-label">WhatsApp</div>
+        <div class="sp-cc-value"><a href="#" id="sp-wa-link">Mesaj Gönder</a></div>
+        <div class="sp-cc-sub">Hızlı görüşme için WhatsApp'tan ulaşın</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="fl">Kampüs Kafası · Antalya</div>
+      <p>Akdeniz Üniversitesi öğrenci topluluğu<br>17.000+ üye · Antalya</p>
+    </div>
+    <div class="footer-col">
+      <h5>Navigasyon</h5>
+      <a href="index.html">Ana Sayfa</a>
+      <a href="hakkimizda.html">Hakkımızda</a>
+      <a href="etkinlikler.html">Etkinlikler</a>
+      <a href="ekip.html">Ekip</a>
+      <a href="iletisim.html">İletişim</a>
+    </div>
+    <div class="footer-col">
+      <h5>Sosyal Medya</h5>
+      <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="#" id="footer-wa">WhatsApp</a>
+      <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
+</footer>
+
+<script>
+// ── SAYAÇLAR ──
+let _countersStarted = false;
+
+function animCountEl(el, target, suffix, fmt) {
+  if (!el) return;
+  el.textContent = '0' + suffix;
+  const dur = 1800, start = performance.now();
+  const run = now => {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = Math.round(ease * target);
+    el.textContent = fmt ? val.toLocaleString('tr-TR') + suffix : val + suffix;
+    if (p < 1) requestAnimationFrame(run);
+    else el.textContent = fmt ? target.toLocaleString('tr-TR') + suffix : target + suffix;
+  };
+  requestAnimationFrame(run);
+}
+
+function startCounters() {
+  if (_countersStarted) return;
+  _countersStarted = true;
+  animCountEl(document.getElementById('st-members'), 17000, '+', true);
+  animCountEl(document.getElementById('st-events'),  50,    '+', false);
+  animCountEl(document.getElementById('st-exp'),     4,     '+', false);
+}
+
+// loader bittikten hemen sonra sayaçları başlat
+(function(){
+  const loader = document.getElementById('loader');
+  loader.classList.remove('hidden');
+  window.scrollTo(0,0);
+  window.addEventListener('load', () => setTimeout(() => {
+    loader.classList.add('hidden');
+    setTimeout(startCounters, 200);
+  }, 1200));
+})();
+
+// ── LOADER CANVAS ──
+(function(){
+  const c=document.getElementById('ld-canvas');if(!c)return;
+  const ctx=c.getContext('2d');
+  c.width=window.innerWidth;c.height=window.innerHeight;
+  const pts=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}));
+  function draw(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.strokeStyle=`rgba(45,221,212,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));pts.forEach(p=>{ctx.fillStyle='rgba(45,221,212,.45)';ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);}
+  draw();
+})();
+
+// ── NAV SCROLL ──
+window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);},{passive:true});
+
+// ── DRAWER ──
+function toggleDrawer(){
+  const d=document.getElementById('drawer'),o=document.getElementById('drawer-overlay'),h=document.getElementById('hamburger');
+  const open=d.classList.toggle('open');
+  o.classList.toggle('open',open);h.classList.toggle('open',open);
+  document.body.style.overflow=open?'hidden':'';
+}
+function closeDrawer(){
+  ['drawer','drawer-overlay'].forEach(id=>document.getElementById(id).classList.remove('open'));
+  document.getElementById('hamburger').classList.remove('open');
+  document.body.style.overflow='';
+}
+
+// ── SCROLL REVEAL ──
+const revealObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+// ── GLOW TRAIL ──
+document.querySelectorAll('.sp-option-card,.sp-cc').forEach(card=>{
+  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();card.style.background=`radial-gradient(300px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.07),transparent 60%),var(--card)`;});
+  card.addEventListener('mouseleave',()=>{card.style.background='';});
+});
+
+
+if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+window.scrollTo(0, 0);
+window.addEventListener('load', () => { window.scrollTo(0, 0); });
+</script>
+
+<script type="module">
+import { getApps, initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "./firebase-config.js";
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Hero ve CTA metinleri
+const spSnap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
+if (spSnap.exists()) {
+  const s = spSnap.data();
+  const heroSub = document.querySelector('.sp-hero-sub');
+  const ctaTitle = document.querySelector('.sp-cta-title');
+  const ctaText  = document.querySelector('.sp-cta-text');
+  if (heroSub && s.heroSub)   heroSub.textContent  = s.heroSub;
+  if (ctaTitle && s.ctaTitle) ctaTitle.textContent = s.ctaTitle;
+  if (ctaText  && s.ctaText)  ctaText.textContent  = s.ctaText;
+}
+
+// Neden Biz
+const whySnap = await getDocs(collection(db, "kk_sp_why"));
+if (!whySnap.empty) {
+  const whyGrid = document.querySelector('.sp-why-grid');
+  if (whyGrid) {
+    whyGrid.innerHTML = '';
+    whySnap.forEach(d => {
+      const w = d.data();
+      whyGrid.innerHTML += `
+        <div class="sp-why-item reveal">
+          <div class="sp-why-dot"></div>
+          <div class="sp-why-text"><strong>${w.ico||''} ${w.title}</strong>${w.desc||''}</div>
+        </div>`;
+    });
+    if (typeof revealObs !== 'undefined') {
+      whyGrid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    } else {
+      whyGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    }
+  }
+}
+
+// İş Birliği Kartları
+const optSnap = await getDocs(collection(db, "kk_sp_options"));
+if (!optSnap.empty) {
+  const optGrid = document.querySelector('.sp-options-grid');
+  if (optGrid) {
+    optGrid.innerHTML = '';
+    optSnap.forEach(d => {
+      const o = d.data();
+      optGrid.innerHTML += `
+        <div class="sp-option-card reveal">
+          <div class="sp-option-ico">${o.ico||'🤝'}</div>
+          <h3>${o.title}</h3>
+          <p>${o.desc||''}</p>
+        </div>`;
+   });
+    if (typeof revealObs !== 'undefined') {
+      optGrid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    } else {
+      optGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    }
+  }
+}
+</script>
+<script type="module" src="kk-data.js"></script>
+</body>
+</html>

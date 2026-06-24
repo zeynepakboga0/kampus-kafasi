@@ -1,0 +1,15 @@
+# Firebase yapılandırması — GİZLİ, GitHub'a gönderme!
+firebase-config.js
+
+# Node modules (eğer varsa)
+node_modules/
+
+# OS dosyaları
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+kamkaf-admin_07.html
