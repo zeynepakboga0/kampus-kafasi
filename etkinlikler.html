@@ -438,7 +438,7 @@ function closeDrawer() {
 }
 
 // ── ETKİNLİK VERİLERİ ──
-// Önce localStorage'dan (admin panelinden) oku, yoksa hardcoded yedek kullan
+// Firebase Firestore'dan (kk_events koleksiyonu) okunur, başarısız olursa boş yedek kullanılır
 const HARDCODED_EVENTS = [];
 
 // API'den oku, yoksa hardcoded yedek kullan
