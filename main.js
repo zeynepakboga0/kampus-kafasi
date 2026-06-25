@@ -12,8 +12,10 @@ if (navLogoLink) {
   });
 }
 
-let sett = { wa: '', email: '' };
-let events = [], board = [], admins = [];
+window.sett = { wa: '', email: '' };
+window.events = [];
+window.board = [];
+window.admins = [];
 
 // Firebase verileri kk-data.js tarafından yüklenir.
 // Bu fonksiyon kk-data.js yüklemesi tamamlandıktan sonra çağrılır.

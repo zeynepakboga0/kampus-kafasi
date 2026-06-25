@@ -500,17 +500,61 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 // ── ETKİNLİK VERİSİ ──
 const EMOJI_MAP = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
 
-function loadActivities() {
-  let events = [];
-  try { events = JSON.parse(localStorage.getItem('kk_events')) || []; } catch(e) {}
-  if (!events.length) {
-    events = [
-      {id:1,title:'Üniversiteye Hoşgeldin',date:'2025-09-15',cat:'Sosyal',loc:'Akdeniz Üniversitesi',desc:'Yeni öğrencilerle tanışma ve kampüs turu.',img:''},
-      {id:2,title:'KYK Yurt Bilgilendirme',date:'2025-09-22',cat:'Eğitim',loc:'Online / Zoom',desc:'KYK yurtları ve başvuru süreçleri.',img:''},
-      {id:3,title:'Antalya Şehir Keşfi',date:'2025-10-10',cat:'Gezi',loc:'Kaleiçi & Konyaaltı',desc:"Güzel Antalya'yı birlikte keşfedelim!",img:''}
-    ];
+function loadActivities(eventsFromFirebase) {
+  const events = eventsFromFirebase || [];
+  const featured = events.filter(e => e.featured);
+  const toShow = featured.length
+    ? featured.slice(0, 6)
+    : [...events].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 6);
+
+  const grid = document.getElementById('activities-grid');
+  grid.innerHTML = '';
+
+  if (!toShow.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted)">Henüz etkinlik eklenmedi.</div>';
+    return;
   }
 
+  toShow.forEach((ev, i) => {
+    const card = document.createElement('div');
+    card.className = 'activity-card';
+    card.style.opacity = '0';
+    card.style.transition = `opacity .42s ${i*0.06}s ease`;
+    card.classList.add('ac-enter');
+    card.addEventListener('click', () => openEvModal(ev, events));
+
+    const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});
+    const cover = document.createElement('div'); cover.className = 'ac-cover';
+    if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
+      const img = document.createElement('img'); img.src = ev.img; img.alt = ev.title;
+      cover.appendChild(img);
+    } else {
+      const em = document.createElement('div'); em.className = 'ac-cover-emoji';
+      em.textContent = EMOJI_MAP[ev.cat] || '📌';
+      cover.appendChild(em);
+    }
+    card.appendChild(cover);
+
+    const body = document.createElement('div'); body.className = 'ac-body';
+    body.innerHTML = `
+      <div class="ac-meta">
+        <span class="ac-cat">${EMOJI_MAP[ev.cat]||''} ${escHtml(ev.cat)}</span>
+        <span class="ac-date-lbl">${ds}</span>
+      </div>
+      <div class="ac-title">${escHtml(ev.title)}</div>
+      ${ev.desc ? `<div class="ac-desc">${escHtml(ev.desc)}</div>` : ''}
+      ${ev.loc ? `<div class="ac-loc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
+    `;
+    card.appendChild(body);
+    grid.appendChild(card);
+  });
+
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, {threshold:0.08});
+  document.querySelectorAll('#activities-grid .ac-enter').forEach(el => obs.observe(el));
+}
+window.loadActivities = loadActivities;
   // Tarihe göre en son geçmiş etkinlikler (max 6)
   const now = new Date();
   const past = events.filter(e => new Date(e.date) <= now)
@@ -628,7 +672,6 @@ document.querySelectorAll('.vm-card').forEach(card => {
   card.addEventListener('mouseleave', () => { card.style.background=''; });
 });
 
-loadActivities();
 
 (function(){
   const c=document.getElementById('ld-canvas');if(!c)return;

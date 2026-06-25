@@ -94,25 +94,13 @@ if (ekipData.length === 0) ekipData = null;
       const sub = document.getElementById('hero-sub-el');
       if (sub) sub.textContent = metin.heroSub;
     }
-    renderHomeEvents();
 
     const whoPs = document.querySelectorAll('#who .who-inner p');
     if (metin.who1 && whoPs[0]) whoPs[0].textContent = metin.who1;
     if (metin.who2 && whoPs[1]) whoPs[1].textContent = metin.who2;
   }
 
-  // ETKİNLİKLER sayfası
-  if (page === 'etkinlikler.html') {
-    window.kk_events_data = eventsList;
-    // renderEvents varsa çağır, yoksa etkinlikler.html kendi içinde kk_events_data'yı kullansın
-    if (typeof window.renderEvents === 'function') {
-      window.renderEvents(eventsList);
-    } else {
-      document.addEventListener('kk:ready', () => {
-        if (typeof window.renderEvents === 'function') window.renderEvents(eventsList);
-      });
-    }
-  }
+  
 
   // EKİP sayfası
   if (page === 'ekip.html' && ekipData) {
@@ -124,50 +112,26 @@ if (ekipData.length === 0) ekipData = null;
     await applySponsorPage();
   }
 
-  // HAKKIMIZDA sayfası
+ // HAKKIMIZDA sayfası
   if (page === 'hakkimizda.html') {
     applyAboutTexts();
+    if (typeof window.loadActivities === 'function') {
+      window.loadActivities(eventsList);
+    }
   }
 
   /* ── YARDIMCI PROSES FONKSİYONLARI ── */
 
   function applyCounters() {
-    const mEl = document.getElementById('sc-members');
-    const eEl = document.getElementById('sc-events');
-    const yEl = document.getElementById('sc-year');
+    const mEl = document.getElementById('sc-members') || document.getElementById('st-members');
+    const eEl = document.getElementById('sc-events') || document.getElementById('st-events');
+    const yEl = document.getElementById('sc-year') || document.getElementById('st-exp');
     if (mEl) mEl.setAttribute('data-target', cnt.members || 17000);
     if (eEl) eEl.setAttribute('data-target', cnt.events || 50);
     if (yEl) yEl.setAttribute('data-target', cnt.years || 4);
+    if (typeof window.startCounters === 'function') window.startCounters();
   }
 
-  function renderHomeEvents() {
-    const grid = document.getElementById('events-grid');
-    if (!grid) return;
-    const active = eventsList.filter(e => !e.isPast).slice(0, 3);
-    if (active.length === 0) {
-      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--muted)">Yakın zamanda planlanmış etkinlik bulunmuyor. Takipte kalın!</div>';
-      return;
-    }
-    grid.innerHTML = active.map(ev => `
-      <div class="event-card reveal" onclick="openEventModal('${ev.id}')">
-        <div class="ev-img-wrap">
-          <img src="${ev.img || 'logo.jpg'}" alt="${esc(ev.title)}">
-          <span class="ev-badge ${ev.isPast ? 'past' : 'upcoming'}">${ev.isPast ? 'Tamamlandı' : 'Yaklaşan'}</span>
-        </div>
-        <div class="ev-body">
-          <span class="ev-date">${formatDate(ev.date)}</span>
-          <h3 class="ev-title">${esc(ev.title)}</h3>
-          <p class="ev-desc">${esc(ev.desc)}</p>
-        </div>
-      </div>
-    `).join('');
-    
-    // Modal açma köprüsü
-    window.openEventModal = function(id) {
-      const found = eventsList.find(e => e.id === id);
-      if(found && typeof window.showModal === 'function') window.showModal(found);
-    };
-  }
 
   function renderEkipPage(list) {
     const container = document.getElementById('ekip-container');

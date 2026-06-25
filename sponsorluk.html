@@ -43,10 +43,10 @@
 /* NEDEN BİZ */
 #sp-why{padding:72px 32px;background:rgba(7,9,11,.82)}
 .sp-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;max-width:780px}
-.sp-why-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-left:2px solid rgba(45,216,240,.3);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;transition:border-color .2s,background .2s}
+.sp-why-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-left:2px solid rgba(45,216,240,.3);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;transition:border-color .2s,background .2s;min-height:84px;box-sizing:border-box}
 .sp-why-item:hover{border-left-color:var(--cl);background:rgba(45,216,240,.04)}
 .sp-why-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);flex-shrink:0;margin-top:6px}
-.sp-why-text{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65}
+.sp-why-text{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;word-wrap:break-word;overflow-wrap:break-word}
 .sp-why-text strong{color:rgba(255,255,255,.85);font-weight:600;display:block;margin-bottom:2px;font-size:.86rem}
 
 /* İŞ BİRLİĞİ SEÇENEKLERİ */
@@ -246,7 +246,7 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
     <div class="sp-why-grid">
       <div class="sp-why-item reveal">
         <div class="sp-why-dot"></div>
-        <div class="sp-why-text"><strong>Geniş & Sadık Kitle</strong>17.000'i aşkın aktif öğrenci, anlık görünürlük.</div>
+<div class="sp-why-text"><strong>Geniş & Sadık Kitle</strong><span>17.000'i aşkın aktif öğrenci, anlık görünürlük.</span></div>
       </div>
       <div class="sp-why-item reveal">
         <div class="sp-why-dot"></div>
@@ -449,10 +449,14 @@ function animCountEl(el, target, suffix, fmt) {
 function startCounters() {
   if (_countersStarted) return;
   _countersStarted = true;
-  animCountEl(document.getElementById('st-members'), 17000, '+', true);
-  animCountEl(document.getElementById('st-events'),  50,    '+', false);
-  animCountEl(document.getElementById('st-exp'),     4,     '+', false);
+  const m = parseInt(document.getElementById('st-members')?.getAttribute('data-target')) || 17000;
+  const e = parseInt(document.getElementById('st-events')?.getAttribute('data-target')) || 50;
+  const y = parseInt(document.getElementById('st-exp')?.getAttribute('data-target')) || 4;
+  animCountEl(document.getElementById('st-members'), m, '+', true);
+  animCountEl(document.getElementById('st-events'),  e, '+', false);
+  animCountEl(document.getElementById('st-exp'),     y, '+', false);
 }
+window.startCounters = startCounters;
 
 // loader bittikten hemen sonra sayaçları başlat
 (function(){
@@ -540,7 +544,7 @@ if (!whySnap.empty) {
       whyGrid.innerHTML += `
         <div class="sp-why-item reveal">
           <div class="sp-why-dot"></div>
-          <div class="sp-why-text"><strong>${w.ico||''} ${w.title}</strong>${w.desc||''}</div>
+<div class="sp-why-text"><strong>${w.ico||''} ${w.title}</strong><span>${w.desc||''}</span></div>
         </div>`;
     });
     if (typeof revealObs !== 'undefined') {
