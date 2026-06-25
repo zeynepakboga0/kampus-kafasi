@@ -44,15 +44,13 @@ function veriBaslat() {
 let _countersStarted = false;
 function startCounters() {
   if (_countersStarted) return;
-  _countersStarted = true;
-  // data-target henüz set edilmediyse bekle
   const mEl = document.getElementById('sc-members');
   if (!mEl || !mEl.getAttribute('data-target')) {
-    setTimeout(startCounters, 200);
-    _countersStarted = false;
+    setTimeout(startCounters, 300);
     return;
   }
-  const m = parseInt(document.getElementById('sc-members')?.getAttribute('data-target')) || 17000;
+  _countersStarted = true;
+  const m = parseInt(mEl.getAttribute('data-target')) || 17000;
   const e = parseInt(document.getElementById('sc-events')?.getAttribute('data-target')) || 50;
   const y = parseInt(document.getElementById('sc-year')?.getAttribute('data-target')) || 4;
   animCountEl(document.getElementById('sc-members'), m, '+', true);
@@ -63,7 +61,7 @@ function startCounters() {
 function animCountEl(el, target, suffix, fmt) {
   if (!el) return;
   el.textContent = fmt ? '0+' : '0+';
-  const dur = 1800, start = performance.now();
+  const dur = 3200, start = performance.now();
   const run = now => {
     const p = Math.min((now - start) / dur, 1);
     const ease = 1 - Math.pow(1 - p, 3);
