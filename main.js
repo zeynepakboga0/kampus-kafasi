@@ -34,10 +34,10 @@ function veriBaslat() {
   function hideLoader() {
     loader.classList.add('hidden');
     // Loader biter bitmez sayaçları başlat
-    setTimeout(startCounters, 100);
+    setTimeout(startCounters, 600);
   }
 
-  window.addEventListener('load', () => setTimeout(hideLoader, 2000));
+  window.addEventListener('load', () => setTimeout(hideLoader, 3500));
 })();
 
 // ── SAYAÇLAR: loader bittikten 5sn sonra 0'dan başlayarak artar ──
@@ -45,6 +45,13 @@ let _countersStarted = false;
 function startCounters() {
   if (_countersStarted) return;
   _countersStarted = true;
+  // data-target henüz set edilmediyse bekle
+  const mEl = document.getElementById('sc-members');
+  if (!mEl || !mEl.getAttribute('data-target')) {
+    setTimeout(startCounters, 200);
+    _countersStarted = false;
+    return;
+  }
   const m = parseInt(document.getElementById('sc-members')?.getAttribute('data-target')) || 17000;
   const e = parseInt(document.getElementById('sc-events')?.getAttribute('data-target')) || 50;
   const y = parseInt(document.getElementById('sc-year')?.getAttribute('data-target')) || 4;

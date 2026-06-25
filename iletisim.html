@@ -107,7 +107,7 @@
 .faq-chevron svg{stroke:rgba(255,255,255,.4);transition:stroke .2s}
 .faq-item.open .faq-chevron svg{stroke:var(--cl)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1)}
-.faq-a-inner{padding:0 22px 18px;font-size:.86rem;color:rgba(255,255,255,.45);line-height:1.78;border-top:1px solid rgba(45,216,240,.07)}
+.faq-a-inner{padding:0 22px 18px;font-size:.86rem;color:rgba(255,255,255,.45);line-height:1.78;border-top:1px solid rgba(45,216,240,.07);white-space:normal;word-break:break-word}
 .faq-a-inner p{padding-top:14px}
 
 /* ADMIN PANEL */
@@ -474,7 +474,9 @@ function toggleFaq(i) {
   });
   if (!isOpen) {
     item.classList.add('open');
-    ans.style.maxHeight = ans.scrollHeight + 'px';
+    // scrollHeight 0 dönerse büyük bir değer ver, içerik kendini gösterir
+    const h = ans.scrollHeight;
+    ans.style.maxHeight = (h > 10 ? h : 600) + 'px';
   }
 }
 
