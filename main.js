@@ -34,10 +34,10 @@ function veriBaslat() {
   function hideLoader() {
     loader.classList.add('hidden');
     // Loader biter bitmez sayaçları başlat
-    setTimeout(startCounters, 600);
+    setTimeout(startCounters, 0);
   }
 
-  window.addEventListener('load', () => setTimeout(hideLoader, 3500));
+  window.addEventListener('load', () => setTimeout(hideLoader, 1500));
 })();
 
 // ── SAYAÇLAR: loader bittikten 5sn sonra 0'dan başlayarak artar ──
