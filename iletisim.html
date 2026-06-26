@@ -100,11 +100,11 @@
 .faq-item{background:var(--card);border:1px solid var(--bd);border-radius:14px;overflow:hidden;transition:border-color .3s}
 .faq-item.open{border-color:rgba(45,216,240,.22)}
 .faq-q{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;cursor:pointer;gap:12px;-webkit-tap-highlight-color:transparent;user-select:none}
-.faq-q-text{font-size:.92rem;font-weight:700;color:rgba(255,255,255,.85);line-height:1.4;flex:1}
+.faq-q-text{font-size:.92rem;font-weight:700;color:rgba(255,255,255,.85);line-height:1.4;flex:1;word-break:break-word;overflow-wrap:break-word;white-space:normal;min-width:0}
 .faq-item.open .faq-q-text{color:var(--cl)}
 .faq-chevron{width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid var(--bd);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .2s,border-color .2s,transform .3s}
 .faq-item.open .faq-chevron{background:rgba(45,216,240,.1);border-color:rgba(45,216,240,.25);transform:rotate(180deg)}
-.faq-chevron svg{stroke:rgba(255,255,255,.4);transition:stroke .2s}
+.faq-chevron svg{stroke:rgba(255,255,255,.4);transition:stroke .2s;display:block;flex-shrink:0}
 .faq-item.open .faq-chevron svg{stroke:var(--cl)}
 .faq-a{max-height:0;overflow:hidden;transition:max-height .38s cubic-bezier(.4,0,.2,1)}
 .faq-a-inner{padding:0 22px 18px;font-size:.86rem;color:rgba(255,255,255,.45);line-height:1.78;border-top:1px solid rgba(45,216,240,.07);white-space:normal;word-break:break-word}
