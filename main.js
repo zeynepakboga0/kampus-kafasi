@@ -41,15 +41,16 @@ function veriBaslat() {
 })();
 
 // ── SAYAÇLAR: loader bittikten 5sn sonra 0'dan başlayarak artar ──
-let _countersStarted = false;
 function startCounters() {
-  if (_countersStarted) return;
   const mEl = document.getElementById('sc-members');
   if (!mEl || !mEl.getAttribute('data-target')) {
     setTimeout(startCounters, 300);
     return;
   }
-  _countersStarted = true;
+  // Zaten çalışıyorsa tekrar başlatma
+  if (mEl.dataset.running === '1') return;
+  mEl.dataset.running = '1';
+
   const m = parseInt(mEl.getAttribute('data-target')) || 17000;
   const e = parseInt(document.getElementById('sc-events')?.getAttribute('data-target')) || 50;
   const y = parseInt(document.getElementById('sc-year')?.getAttribute('data-target')) || 4;
@@ -60,8 +61,8 @@ function startCounters() {
 
 function animCountEl(el, target, suffix, fmt) {
   if (!el) return;
-  el.textContent = fmt ? '0+' : '0+';
-  const dur = 3200, start = performance.now();
+  el.textContent = '0+';
+  const dur = 4500, start = performance.now();
   const run = now => {
     const p = Math.min((now - start) / dur, 1);
     const ease = 1 - Math.pow(1 - p, 3);

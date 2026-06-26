@@ -554,85 +554,14 @@ function loadActivities(eventsFromFirebase) {
   }, {threshold:0.08});
   document.querySelectorAll('#activities-grid .ac-enter').forEach(el => obs.observe(el));
 }
+
 window.loadActivities = loadActivities;
-  // Tarihe göre en son geçmiş etkinlikler (max 6)
-  const now = new Date();
-  const past = events.filter(e => new Date(e.date) <= now)
-                     .sort((a,b) => new Date(b.date) - new Date(a.date))
-                     .slice(0, 6);
-  // Geçmiş yoksa tümünü göster (yaklaşanlar)
-  const toShow = past.length ? past : events.slice(0, 6);
-
-  const grid = document.getElementById('activities-grid');
-  grid.innerHTML = '';
-
-  toShow.forEach((ev, i) => {
-    const card = document.createElement('div');
-    card.className = 'activity-card';
-    card.style.opacity = '0';
-    card.style.transition = `opacity .42s ${i*0.06}s ease`;
-    card.classList.add('ac-enter');
-    card.addEventListener('click', () => openEvModal(ev, events));
-
-    const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});
-    const cover = document.createElement('div'); cover.className = 'ac-cover';
-    if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-      const img = document.createElement('img'); img.src = ev.img; img.alt = ev.title;
-      cover.appendChild(img);
-    } else {
-      const em = document.createElement('div'); em.className = 'ac-cover-emoji';
-      em.textContent = EMOJI_MAP[ev.cat] || '📌';
-      cover.appendChild(em);
-    }
-    card.appendChild(cover);
-
-    const body = document.createElement('div'); body.className = 'ac-body';
-    body.innerHTML = `
-      <div class="ac-meta">
-        <span class="ac-cat">${EMOJI_MAP[ev.cat]||''} ${escHtml(ev.cat)}</span>
-        <span class="ac-date-lbl">${ds}</span>
-      </div>
-      <div class="ac-title">${escHtml(ev.title)}</div>
-      ${ev.desc ? `<div class="ac-desc">${escHtml(ev.desc)}</div>` : ''}
-      ${ev.loc ? `<div class="ac-loc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
-    `;
-    card.appendChild(body);
-    grid.appendChild(card);
-  });
-
-  // Stagger animation tetikle
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        grid.querySelectorAll('.activity-card').forEach(el => {
-          el.style.opacity = '1'; el.classList.remove('ac-enter');
-        });
-        obs.unobserve(entry.target);
-      }
-    });
-  }, {threshold:0.05});
-  obs.observe(grid);
-
-  // Glow effect
-  grid.querySelectorAll('.activity-card').forEach(card => {
-    card.addEventListener('mousemove', e => {
-      const r=card.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform=`translateY(-6px) perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
-      card.style.background=`radial-gradient(260px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.07),transparent 55%),var(--card)`;
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transform='';
-      card.style.background='';
-    });
-  });
-}
 
 function openEvModal(ev, allEvents) {
   const now = new Date();
   const isPast = new Date(ev.date) <= now;
   const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-
+ 
   const heroImg = document.getElementById('m-hero-img');
   const heroEmoji = document.getElementById('m-emoji');
   if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
@@ -643,18 +572,18 @@ function openEvModal(ev, allEvents) {
     heroEmoji.style.display = 'flex';
     heroEmoji.textContent = EMOJI_MAP[ev.cat] || '📌';
   }
-
+ 
   document.getElementById('m-cat').textContent = (EMOJI_MAP[ev.cat]||'') + ' ' + ev.cat;
   document.getElementById('m-title').textContent = ev.title;
   document.getElementById('m-date').textContent = ds;
-
+ 
   const locItem = document.getElementById('m-loc-item');
   if (ev.loc) { document.getElementById('m-loc').textContent = ev.loc; locItem.style.display='flex'; }
   else locItem.style.display = 'none';
-
+ 
   document.getElementById('m-status').textContent = isPast ? '✓ Tamamlandı' : '🟢 Yaklaşan';
   document.getElementById('m-desc').textContent = ev.desc || '';
-
+ 
   document.getElementById('ev-modal-bg').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
@@ -662,7 +591,7 @@ function closeEvModal() {
   document.getElementById('ev-modal-bg').classList.remove('open');
   document.body.style.overflow = '';
 }
-
+ 
 // vm-card hover
 document.querySelectorAll('.vm-card').forEach(card => {
   card.addEventListener('mousemove', e => {
@@ -671,8 +600,8 @@ document.querySelectorAll('.vm-card').forEach(card => {
   });
   card.addEventListener('mouseleave', () => { card.style.background=''; });
 });
-
-
+ 
+ 
 (function(){
   const c=document.getElementById('ld-canvas');if(!c)return;
   const ctx=c.getContext('2d');
