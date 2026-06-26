@@ -519,6 +519,11 @@ document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 // ── ETKİNLİK VERİSİ ──
 const EMOJI_MAP = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
 
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
 function loadActivities(eventsFromFirebase) {
   const events = eventsFromFirebase || [];
   const now = new Date();
