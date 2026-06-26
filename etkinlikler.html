@@ -633,6 +633,7 @@ function openModal(id){
 
   document.getElementById('modal-desc').textContent = ev.desc || '';
   document.getElementById('ev-modal').classList.add('open');
+  document.querySelector('#ev-modal .modal-box').scrollTop = 0;
   document.body.style.overflow='hidden';
 }
 function closeModal(){ document.getElementById('ev-modal').classList.remove('open'); document.body.style.overflow=''; }

@@ -392,13 +392,24 @@ function renderEvents() {
     const featuredBadge = card.querySelector('.ev-featured-badge');
     if (featuredBadge) featuredBadge.remove();
     g.appendChild(card);
+    card.addEventListener('mousemove', e => {
+      const r = card.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
+      card.style.transform = `translateY(-6px) perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
+      card.style.background = `radial-gradient(260px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.07),transparent 55%),var(--card)`;
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transform = '';
+      card.style.background = '';
+    });
+    if (typeof revealObs !== 'undefined') revealObs.observe(card);
     if (typeof revealObs !== 'undefined') revealObs.observe(card);
   });
 }
 
 // ── MODAL ──
 function openModal(id) {
-  const ev = events.find(e => e.id === id);
+    const ev = events.find(e => e.id === id);
   if (!ev) return;
   const now = new Date();
   const isPast = new Date(ev.date) < now;
@@ -429,6 +440,7 @@ function openModal(id) {
 
   document.getElementById('m-desc').textContent = ev.desc || '';
   document.getElementById('event-modal').classList.add('open');
+  document.querySelector('#event-modal .modal-box').scrollTop = 0;
   document.body.style.overflow = 'hidden';
 }
 function closeModal() { document.getElementById('event-modal').classList.remove('open'); document.body.style.overflow=''; }
