@@ -37,7 +37,7 @@ function veriBaslat() {
     setTimeout(startCounters, 0);
   }
 
-  window.addEventListener('load', () => setTimeout(hideLoader, 1500));
+  window.addEventListener('load', () => setTimeout(hideLoader, 800));
 })();
 
 // ── SAYAÇLAR: loader bittikten 5sn sonra 0'dan başlayarak artar ──
@@ -62,7 +62,7 @@ function startCounters() {
 function animCountEl(el, target, suffix, fmt) {
   if (!el) return;
   el.textContent = '0+';
-  const dur = 4500, start = performance.now();
+  const dur = 3500, start = performance.now();
   const run = now => {
     const p = Math.min((now - start) / dur, 1);
     const ease = 1 - Math.pow(1 - p, 3);

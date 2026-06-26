@@ -434,7 +434,7 @@ let _countersStarted = false;
 function animCountEl(el, target, suffix, fmt) {
   if (!el) return;
   el.textContent = '0' + suffix;
-  const dur = 3200, start = performance.now();
+  const dur = 3500, start = performance.now();
   const run = now => {
     const p = Math.min((now - start) / dur, 1);
     const ease = 1 - Math.pow(1 - p, 3);
@@ -470,8 +470,8 @@ window.startCounters = startCounters;
   window.scrollTo(0,0);
   window.addEventListener('load', () => setTimeout(() => {
   loader.classList.add('hidden');
-  setTimeout(startCounters, 800);
-}, 3000));
+  setTimeout(startCounters, 0);
+}, 800));
 })();
 
 // ── LOADER CANVAS ──

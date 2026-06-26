@@ -443,7 +443,7 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
 window.addEventListener('pageshow', function(e){ if(e.persisted) window.location.reload(); });
-window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1200); });
+window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader').classList.add('hidden'), 800); });
 window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40); }, {passive:true});
 
 function toggleDrawer() {
