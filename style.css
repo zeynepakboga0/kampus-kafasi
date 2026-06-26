@@ -643,6 +643,19 @@ footer {
   .counter-item { border-right: none; border-bottom: 1px solid var(--bd); }
   .counter-item:last-child { border-bottom: none; }
   .sponsor-modal-box { padding: 28px 18px; }
+
+  /* MOBIL GENEL DÜZELTMELERİ */
+  #hero { padding: 80px 16px 56px; }
+  .hero-title { font-size: clamp(2.6rem, 12vw, 3.8rem); }
+  .hero-sub { font-size: .9rem; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+  .hero-stats { max-width: 100%; width: 100%; }
+  .stat-num { font-size: 1.6rem; }
+  .who-inner { gap: 20px; }
+  .section-label { font-size: .65rem; }
+  .section-title { font-size: 1.5rem; }
+  #who, #events, #contact { padding: 56px 16px; }
 }
 
 
@@ -740,8 +753,8 @@ footer {
   .who-inner { grid-template-columns:1fr;gap:36px; }
 }
 @media (max-width: 520px) {
-  .contact-cards { grid-template-columns:repeat(2,1fr);gap:10px; }
-  .hero-stats { max-width:100%; }
-  .hero-btns { flex-direction:column;align-items:flex-start; }
-  .btn-primary,.btn-outline { width:100%;justify-content:center; }
+  .contact-cards { grid-template-columns: repeat(2,1fr); gap: 10px; }
+  .hero-stats { max-width: 100%; width: 100%; }
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
 }
