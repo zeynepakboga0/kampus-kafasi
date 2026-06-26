@@ -123,15 +123,9 @@ if (ekipData.length === 0) ekipData = null;
   /* ── YARDIMCI PROSES FONKSİYONLARI ── */
 
   function applyCounters() {
-    const mEl = document.getElementById('sc-members') || document.getElementById('st-members');
-    const eEl = document.getElementById('sc-events') || document.getElementById('st-events');
-    const yEl = document.getElementById('sc-year') || document.getElementById('st-exp');
-    if (mEl) mEl.setAttribute('data-target', cnt.members || 17000);
-    if (eEl) eEl.setAttribute('data-target', cnt.events || 50);
-    if (yEl) yEl.setAttribute('data-target', cnt.years || 4);
-    if (typeof window.startCounters === 'function') window.startCounters();
+    window._countersStarted = false;
+    if (typeof window.startCounters === 'function') window.startCounters(cnt.members, cnt.events, cnt.years);
   }
-  if (typeof window.startCounters === 'function') window.startCounters();
 
 
   function renderEkipPage(list) {

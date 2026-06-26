@@ -33,21 +33,21 @@ function veriBaslat() {
 
   function hideLoader() {
     loader.classList.add('hidden');
-    // Loader biter bitmez sayaçları başlat
-    setTimeout(startCounters, 0);
   }
 
-  window.addEventListener('load', () => setTimeout(hideLoader, 800));
+window.addEventListener('load', () => {
+  setTimeout(hideLoader, 800);
+});
 })();
 
 // ── SAYAÇLAR: loader bittikten 5sn sonra 0'dan başlayarak artar ──
 let _countersStarted = false;
-function startCounters() {
+function startCounters(m, e, y) {
   if (_countersStarted) return;
   _countersStarted = true;
-  animCountEl(document.getElementById('sc-members'), 17000, '+', true);
-  animCountEl(document.getElementById('sc-events'),  50, '+', false);
-  animCountEl(document.getElementById('sc-year'),    4, '+', false);
+  animCountEl(document.getElementById('sc-members'), m, '+', true);
+  animCountEl(document.getElementById('sc-events'),  e, '+', false);
+  animCountEl(document.getElementById('sc-year'),    y, '+', false);
 }
 
 function animCountEl(el, target, suffix, fmt) {

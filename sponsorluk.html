@@ -446,12 +446,12 @@ function animCountEl(el, target, suffix, fmt) {
   requestAnimationFrame(run);
 }
 
-function startCounters() {
+function startCounters(m, e, y) {
   if (_countersStarted) return;
   _countersStarted = true;
-  animCountEl(document.getElementById('st-members'), 17000, '+', true);
-  animCountEl(document.getElementById('st-events'),  50, '+', false);
-  animCountEl(document.getElementById('st-exp'),     4, '+', false);
+  animCountEl(document.getElementById('st-members'), m || 17000, '+', true);
+  animCountEl(document.getElementById('st-events'),  e || 50, '+', false);
+  animCountEl(document.getElementById('st-exp'),     y || 4, '+', false);
 }
 window.startCounters = startCounters;
 
@@ -460,10 +460,9 @@ window.startCounters = startCounters;
   const loader = document.getElementById('loader');
   loader.classList.remove('hidden');
   window.scrollTo(0,0);
-  window.addEventListener('load', () => setTimeout(() => {
-  loader.classList.add('hidden');
-  setTimeout(startCounters, 0);
-}, 800));
+  window.addEventListener('load', () => {
+  setTimeout(() => { loader.classList.add('hidden'); }, 800);
+});
 })();
 
 // ── LOADER CANVAS ──
