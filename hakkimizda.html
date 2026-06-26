@@ -233,6 +233,25 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 @media(max-width:520px){
   .activities-grid{grid-template-columns:1fr}
 }
+
+/* MODAL SCROLL FIX — garanti kaydırma */
+#ev-modal-bg{align-items:flex-start!important;padding-top:40px!important}
+#ev-modal-bg .ev-modal{
+  max-height:88vh!important;
+  overflow-y:scroll!important;
+  overflow-x:hidden!important;
+  display:block!important;
+}
+#ev-modal-bg .ev-modal-content{
+  overflow-wrap:break-word!important;
+  word-break:break-word!important;
+}
+#ev-modal-bg .ev-modal-desc{
+  white-space:pre-line!important;
+  overflow-wrap:break-word!important;
+  word-break:break-word!important;
+}
+
 </style>
 </head>
 <body>
@@ -502,10 +521,11 @@ const EMOJI_MAP = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kül
 
 function loadActivities(eventsFromFirebase) {
   const events = eventsFromFirebase || [];
-  const featured = events.filter(e => e.featured);
-  const toShow = featured.length
-    ? featured.slice(0, 6)
-    : [...events].sort((a,b) => new Date(b.date) - new Date(a.date)).slice(0, 6);
+  const now = new Date();
+  const toShow = events
+    .filter(e => new Date(e.date) <= now)
+    .sort((a,b) => new Date(b.date) - new Date(a.date))
+    .slice(0, 3);
 
   const grid = document.getElementById('activities-grid');
   grid.innerHTML = '';

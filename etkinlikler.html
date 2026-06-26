@@ -212,6 +212,25 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   .events-grid{grid-template-columns:1fr}
   .follow-channels{grid-template-columns:1fr}
 }
+
+/* MODAL SCROLL FIX — garanti kaydırma */
+#ev-modal{align-items:flex-start!important;padding-top:40px!important}
+#ev-modal .modal-box{
+  max-height:88vh!important;
+  overflow-y:scroll!important;
+  overflow-x:hidden!important;
+  display:block!important;
+}
+#ev-modal .modal-content{
+  overflow-wrap:break-word!important;
+  word-break:break-word!important;
+}
+#ev-modal .modal-desc-text{
+  white-space:pre-line!important;
+  overflow-wrap:break-word!important;
+  word-break:break-word!important;
+}
+
 </style>
 </head>
 <body>
