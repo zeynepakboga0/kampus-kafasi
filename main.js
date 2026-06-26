@@ -41,22 +41,13 @@ function veriBaslat() {
 })();
 
 // ── SAYAÇLAR: loader bittikten 5sn sonra 0'dan başlayarak artar ──
+let _countersStarted = false;
 function startCounters() {
-  const mEl = document.getElementById('sc-members');
-  if (!mEl || !mEl.getAttribute('data-target')) {
-    setTimeout(startCounters, 300);
-    return;
-  }
-  // Zaten çalışıyorsa tekrar başlatma
-  if (mEl.dataset.running === '1') return;
-  mEl.dataset.running = '1';
-
-  const m = parseInt(mEl.getAttribute('data-target')) || 17000;
-  const e = parseInt(document.getElementById('sc-events')?.getAttribute('data-target')) || 50;
-  const y = parseInt(document.getElementById('sc-year')?.getAttribute('data-target')) || 4;
-  animCountEl(document.getElementById('sc-members'), m, '+', true);
-  animCountEl(document.getElementById('sc-events'),  e, '+', false);
-  animCountEl(document.getElementById('sc-year'),    y, '+', false);
+  if (_countersStarted) return;
+  _countersStarted = true;
+  animCountEl(document.getElementById('sc-members'), 17000, '+', true);
+  animCountEl(document.getElementById('sc-events'),  50, '+', false);
+  animCountEl(document.getElementById('sc-year'),    4, '+', false);
 }
 
 function animCountEl(el, target, suffix, fmt) {

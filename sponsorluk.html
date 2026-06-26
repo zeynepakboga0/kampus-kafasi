@@ -448,18 +448,10 @@ function animCountEl(el, target, suffix, fmt) {
 
 function startCounters() {
   if (_countersStarted) return;
-  const mEl = document.getElementById('st-members');
-  if (!mEl || !mEl.getAttribute('data-target')) {
-    setTimeout(startCounters, 300);
-    return;
-  }
   _countersStarted = true;
-  const m = parseInt(mEl.getAttribute('data-target')) || 17000;
-  const e = parseInt(document.getElementById('st-events')?.getAttribute('data-target')) || 50;
-  const y = parseInt(document.getElementById('st-exp')?.getAttribute('data-target')) || 4;
-  animCountEl(document.getElementById('st-members'), m, '+', true);
-  animCountEl(document.getElementById('st-events'),  e, '+', false);
-  animCountEl(document.getElementById('st-exp'),     y, '+', false);
+  animCountEl(document.getElementById('st-members'), 17000, '+', true);
+  animCountEl(document.getElementById('st-events'),  50, '+', false);
+  animCountEl(document.getElementById('st-exp'),     4, '+', false);
 }
 window.startCounters = startCounters;
 

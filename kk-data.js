@@ -131,6 +131,7 @@ if (ekipData.length === 0) ekipData = null;
     if (yEl) yEl.setAttribute('data-target', cnt.years || 4);
     if (typeof window.startCounters === 'function') window.startCounters();
   }
+  if (typeof window.startCounters === 'function') window.startCounters();
 
 
   function renderEkipPage(list) {
