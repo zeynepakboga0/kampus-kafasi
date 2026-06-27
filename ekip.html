@@ -358,8 +358,8 @@ function makeCard(m, type) {
   const card = document.createElement('div');
   card.className = type === 'board' ? 'board-card' : 'admin-card';
   const avatarContent = m.img
-    ? `<img src="${m.img}" style="width:${size}px;height:${size}px;border-radius:50%;object-fit:cover;" onerror="this.style.display='none'">`
-    : `<span>${initials(m.name)}</span>`;
+  ? `<img src="${m.img}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+  : `<span>${m.initials || initials(m.name)}</span>`;
   card.innerHTML = `
     <div class="${type === 'board' ? 'board' : 'admin'}-avatar">${avatarContent}</div>
     <div class="${type === 'board' ? 'board' : 'admin'}-name">${m.name || ''}</div>
