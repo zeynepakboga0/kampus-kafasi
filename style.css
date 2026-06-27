@@ -544,8 +544,7 @@ footer {
   font-size: 2.5rem; font-weight: 900; line-height: 1;
   background: linear-gradient(135deg, var(--cl), var(--cm));
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-  margin-bottom: 6px; white-space: nowrap; word-break: normal; overflow-wrap: normal;
-}
+margin-bottom: 6px; white-space: normal;}
 .counter-plus {
   font-size: 1.6rem; font-weight: 900;
   background: linear-gradient(135deg, var(--cl), var(--cm));
@@ -646,7 +645,7 @@ footer {
 
   /* MOBIL GENEL DÜZELTMELERİ */
   #hero { padding: 80px 16px 56px; }
-  .hero-title { font-size: clamp(2.6rem, 12vw, 3.8rem); }
+  .hero-title { font-size: clamp(3.8rem, 16vw, 5rem); }
   .hero-sub { font-size: .9rem; }
   .hero-btns { flex-direction: column; align-items: stretch; }
   .btn-primary, .btn-outline { width: 100%; justify-content: center; }
@@ -685,10 +684,10 @@ footer {
 .hero-title { font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(3.2rem,8vw,6.5rem);line-height:1.05;margin-bottom:22px;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .35s ease forwards;padding-bottom:.1em; }
 .hero-sub { font-size:1rem;color:rgba(255,255,255,.45);font-weight:300;max-width:480px;line-height:1.8;margin-bottom:36px;opacity:0;animation:fadeUp .7s .5s ease forwards; }
 .hero-btns { display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s .65s ease forwards; }
-.hero-stats { display:flex;margin-top:48px;opacity:0;animation:fadeUp .7s .8s ease forwards;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);max-width:340px; }
-.stat-item { flex:1; min-width:0; padding:16px 12px;text-align:center;border-right:1px solid var(--bd); }
+.hero-stats { display:flex;margin-top:48px;opacity:0;animation:fadeUp .7s .8s ease forwards;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);max-width:460px; }
+.stat-item { flex:1; min-width:0; padding:16px 6px;text-align:center;border-right:1px solid var(--bd); }
 .stat-item:last-child { border-right:none; }
-.stat-num { font-size:clamp(1.1rem,3.5vw,2rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;word-break:normal;overflow-wrap:normal; }
+.stat-num { font-size:clamp(1.1rem,3.5vw,2rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap; }
 .stat-lbl { font-size:.65rem;color:rgba(255,255,255,.3);font-weight:500;margin-top:3px;letter-spacing:.04em; }
 .hero-visual { opacity:0;animation:fadeUp .7s .55s ease forwards;display:flex;align-items:center;justify-content:center;position:relative;width:340px;height:340px; }
 .logo-glow-bg { position:absolute;inset:-60px;border-radius:50%;background:radial-gradient(circle,rgba(45,221,212,.18),transparent 65%);animation:glowPulse 3.5s ease-in-out infinite;z-index:0; }
@@ -749,7 +748,7 @@ footer {
   .contact-cards { grid-template-columns:repeat(2,1fr);gap:14px; }
   #events, #contact { padding:68px 18px; }
   #who { padding:68px 18px; }
-  #hero { padding:88px 18px 64px; }
+  #hero { padding:110px 18px 64px; }
   .who-inner { grid-template-columns:1fr;gap:36px; }
 }
 @media (max-width: 520px) {
@@ -801,7 +800,7 @@ footer {
     background: rgba(45,216,240,.08);
   }
  /* İçerik nav şeridinin altına kaymasın diye */
-  #hero { padding-top: 108px !important; }
+  #hero { padding-top: 140px !important; }
   .page-hero { padding-top: 150px !important; }
 }
 @media (min-width: 961px) {
