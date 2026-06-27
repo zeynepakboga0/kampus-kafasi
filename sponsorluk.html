@@ -503,10 +503,10 @@ function closeDrawer(){
 }
 
 // ── SCROLL REVEAL ──
-const revealObs = new IntersectionObserver(entries=>{
+window.revealObs = new IntersectionObserver(entries=>{
   entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
 },{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+document.querySelectorAll('.reveal').forEach(el=>window.revealObs.observe(el));
 
 // ── GLOW TRAIL ──
 document.querySelectorAll('.sp-option-card,.sp-cc').forEach(card=>{
@@ -532,17 +532,14 @@ const db = getFirestore(app);
 const spSnap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
 if (spSnap.exists()) {
   const s = spSnap.data();
-  // Hero
   const heroSub  = document.querySelector('.sp-hero-sub');
   const heroTitle = document.querySelector('.page-title');
-  const heroEyebrow = document.querySelector('.page-eyebrow');
   const ctaTitle = document.querySelector('.sp-cta-title');
   const ctaText  = document.querySelector('.sp-cta-text');
   if (heroSub    && s.heroSub)     heroSub.textContent     = s.heroSub;
   if (heroTitle  && s.heroTitle)   heroTitle.textContent   = s.heroTitle;
   if (ctaTitle   && s.ctaTitle)    ctaTitle.textContent    = s.ctaTitle;
   if (ctaText    && s.ctaText)     ctaText.textContent     = s.ctaText;
-  // "Neden Biz" bölüm başlıkları
   const whySection = document.querySelector('#sp-why');
   if (whySection) {
     const wh = whySection.querySelector('.section-h');
@@ -550,7 +547,6 @@ if (spSnap.exists()) {
     if (wh && s.whyTitle) wh.textContent = s.whyTitle;
     if (wd && s.whyDesc)  wd.textContent = s.whyDesc;
   }
-  // "İş Birliği" bölüm başlıkları
   const colSection = document.querySelector('#sp-options');
   if (colSection) {
     const ch = colSection.querySelector('.section-h');
@@ -569,16 +565,15 @@ if (!whySnap.empty) {
     whySnap.forEach(d => {
       const w = d.data();
       whyGrid.innerHTML += `
-        <div class="sp-why-item reveal">
+        <div class="sp-why-item reveal visible">
           <div class="sp-why-dot"></div>
-<div class="sp-why-text"><strong>${w.ico||''} ${w.title}</strong><span>${w.desc||''}</span></div>
+          <div class="sp-why-text"><strong>${w.ico||''} ${w.title}</strong><span>${w.desc||''}</span></div>
         </div>`;
     });
-    if (typeof revealObs !== 'undefined') {
-      whyGrid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-    } else {
-      whyGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-    }
+    whyGrid.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
+      if (window.revealObs) window.revealObs.observe(el);
+    });
   }
 }
 
@@ -591,7 +586,7 @@ if (!optSnap.empty) {
     optSnap.forEach(d => {
       const o = d.data();
       optGrid.innerHTML += `
-        <div class="sp-option-card reveal">
+        <div class="sp-option-card reveal visible">
           <div class="sp-option-icon" style="font-size:1.5rem">${o.ico||'🤝'}</div>
           <h3>${o.title}</h3>
           <p>${o.desc||''}</p>
@@ -600,13 +595,10 @@ if (!optSnap.empty) {
           </a>
         </div>`;
     });
-    // Reveal observer'a kaydet
-    if (typeof revealObs !== 'undefined') {
-      optGrid.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-    } else {
-      optGrid.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-    }
-    // Glow trail ekle (dinamik kartlar için)
+    optGrid.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
+      if (window.revealObs) window.revealObs.observe(el);
+    });
     optGrid.querySelectorAll('.sp-option-card').forEach(card => {
       card.addEventListener('mousemove', e => {
         const r = card.getBoundingClientRect();
@@ -626,7 +618,7 @@ if (!stepsSnap.empty) {
     stepsSnap.forEach(d => steps.push({ id: d.id, ...d.data() }));
     steps.sort((a, b) => (a.order || 99) - (b.order || 99));
     stepsContainer.innerHTML = steps.map((s, i) => `
-      <div class="sp-step reveal">
+      <div class="sp-step reveal visible">
         <div class="sp-step-left">
           <div class="sp-step-circle"><span class="sp-step-n">${s.order || i + 1}</span></div>
           ${i < steps.length - 1 ? '<div class="sp-connector"></div>' : ''}
@@ -637,11 +629,10 @@ if (!stepsSnap.empty) {
           <p>${s.desc || ''}</p>
         </div>
       </div>`).join('');
-    if (typeof revealObs !== 'undefined') {
-      stepsContainer.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
-    } else {
-      stepsContainer.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
-    }
+    stepsContainer.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
+      if (window.revealObs) window.revealObs.observe(el);
+    });
   }
 }
 

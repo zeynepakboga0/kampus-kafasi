@@ -570,6 +570,50 @@ img { max-width: 100%; display: block; }
   .pg-title { font-size: 1.3rem; }
   .card { padding: 14px; }
 }
+
+/* ══ RESET BUTON & ONAY KUTUSU ══ */
+.btn-reset {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 7px 13px; border-radius: var(--r-sm);
+  font-size: .75rem; font-weight: 700;
+  background: var(--danger-a); color: #f87171;
+  border: 1px solid rgba(244,63,94,.22);
+  transition: background .15s, border-color .15s;
+}
+.btn-reset:hover { background: rgba(244,63,94,.18); border-color: rgba(244,63,94,.4); color: #fca5a5; }
+#reset-confirm-overlay {
+  position: fixed; inset: 0; z-index: 8000;
+  background: rgba(0,0,0,.72); backdrop-filter: blur(6px);
+  display: none; align-items: center; justify-content: center; padding: 20px;
+}
+#reset-confirm-overlay.on { display: flex; }
+#reset-confirm-box {
+  background: var(--panel); border: 1px solid rgba(244,63,94,.3);
+  border-radius: 18px; padding: 28px 26px; max-width: 380px; width: 100%;
+  box-shadow: 0 40px 80px rgba(0,0,0,.8);
+  animation: mIn .2s cubic-bezier(.34,1.46,.64,1) both; position: relative;
+}
+.rcb-accent { position: absolute; top: 0; left: 0; right: 0; height: 2.5px;
+  background: linear-gradient(90deg, transparent, var(--danger), transparent);
+  border-radius: 18px 18px 0 0; }
+.rcb-ico { font-size: 1.8rem; text-align: center; margin-bottom: 10px; }
+.rcb-title { font-size: .95rem; font-weight: 800; color: var(--text); text-align: center; margin-bottom: 6px; }
+.rcb-desc { font-size: .78rem; color: var(--sub); text-align: center; line-height: 1.6; margin-bottom: 20px; }
+.rcb-desc strong { color: #f87171; }
+.rcb-check-row {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--danger-a); border: 1px solid rgba(244,63,94,.18);
+  border-radius: var(--r-sm); padding: 11px 13px; margin-bottom: 18px; cursor: pointer;
+}
+.rcb-check-row input[type="checkbox"] { width: 16px; height: 16px; accent-color: var(--danger); cursor: pointer; flex-shrink: 0; }
+.rcb-check-label { font-size: .8rem; color: #fca5a5; font-weight: 600; cursor: pointer; line-height: 1.4; }
+.rcb-actions { display: flex; gap: 8px; justify-content: flex-end; }
+.rcb-cancel { padding: 9px 16px; border-radius: var(--r-sm); font-size: .82rem; font-weight: 700;
+  background: var(--glass2); color: var(--sub); border: 1px solid var(--edge); transition: background .15s; }
+.rcb-cancel:hover { background: rgba(255,255,255,.07); color: var(--text); }
+.rcb-confirm { padding: 9px 16px; border-radius: var(--r-sm); font-size: .82rem; font-weight: 700;
+  background: var(--danger); color: #fff; border: none; opacity: .35; cursor: not-allowed; transition: opacity .2s; }
+.rcb-confirm.active { opacity: 1; cursor: pointer; }
 </style>
 </head>
 <body>
@@ -741,6 +785,7 @@ img { max-width: 100%; display: block; }
             <input class="search-inp" type="text" id="ev-search" placeholder="Etkinlik ara…" oninput="filterEvents()">
           </div>
           <button class="btn btn-p" onclick="openEvModal()">+ Yeni Etkinlik</button>
+          <button class="btn-reset" onclick="askReset('etkinlikler')">🗑 Tümünü Sıfırla</button>
         </div>
       </div>
       <div class="info-box tip" style="margin-bottom:14px">
@@ -782,6 +827,7 @@ img { max-width: 100%; display: block; }
         <div class="sec-hdr">
           <div style="font-size:.85rem;font-weight:700;color:var(--text)">Yönetim Kurulu Üyeleri</div>
           <button class="btn btn-p btn-sm" onclick="openMemberModal('board')">+ Üye Ekle</button>
+          <button class="btn-reset" onclick="askReset('ekip-board')">🗑 Tümünü Sıfırla</button>
         </div>
         <div class="info-box info" style="margin-bottom:14px"><span>ℹ️</span><span>"Hiyerarşi Sırası" alanı, ekip sayfasındaki kart sırasını belirler.</span></div>
         <div id="board-list"></div>
@@ -790,6 +836,7 @@ img { max-width: 100%; display: block; }
         <div class="sec-hdr">
           <div style="font-size:.85rem;font-weight:700;color:var(--text)">Adminler</div>
           <button class="btn btn-p btn-sm" onclick="openMemberModal('admins')">+ Admin Ekle</button>
+          <button class="btn-reset" onclick="askReset('ekip-admins')">🗑 Tümünü Sıfırla</button>
         </div>
         <div id="admins-list"></div>
       </div>
@@ -817,12 +864,14 @@ img { max-width: 100%; display: block; }
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
           <button class="btn btn-p" onclick="saveContact()">Kaydet</button>
           <button class="btn btn-ghost btn-sm" onclick="loadSettings()">↻ Geri Al</button>
+          <button class="btn-reset" onclick="askReset('iletisim')">↺ İletişimi Sıfırla</button>  
         </div>
       </div>
       <div class="card">
         <div class="card-head">
           <div class="card-title"><span class="card-title-ico">❓</span>Sık Sorulan Sorular</div>
           <button class="btn btn-p btn-sm" onclick="openFaqModal()">+ Soru Ekle</button>
+          <button class="btn-reset" onclick="askReset('sss')">🗑 Tümünü Sıfırla</button>
         </div>
         <div class="card-desc">Ziyaretçilerin merak ettiği soruları buraya ekle. İletişim sayfasında görüntülenir.</div>
         <div style="font-size:.72rem;color:var(--sub);margin-bottom:12px" id="faq-count">Yükleniyor…</div>
@@ -859,6 +908,7 @@ img { max-width: 100%; display: block; }
         <div class="sec-hdr" style="margin-bottom:10px">
           <div style="font-size:.82rem;color:var(--sub)">Neden Biz maddeleri</div>
           <button class="btn btn-p btn-sm" onclick="openWhyModal()">+ Madde Ekle</button>
+          <button class="btn-reset" onclick="askReset('neden-biz')">🗑 Sıfırla</button>
         </div>
         <div id="sp-why-list"></div>
       </div>
@@ -873,6 +923,7 @@ img { max-width: 100%; display: block; }
         <div class="sec-hdr" style="margin-bottom:10px">
           <div style="font-size:.82rem;color:var(--sub)">İş birliği kartları</div>
           <button class="btn btn-p btn-sm" onclick="openOptionModal()">+ Kart Ekle</button>
+          <button class="btn-reset" onclick="askReset('options')">🗑 Sıfırla</button> 
         </div>
         <div id="sp-options-list"></div>
       </div>
@@ -896,6 +947,7 @@ img { max-width: 100%; display: block; }
         </div>
         <div class="pg-head-right">
           <button class="btn btn-p" onclick="openStepModal()">+ Adım Ekle</button>
+          <button class="btn-reset" onclick="askReset('steps')">🗑 Adımları Sıfırla</button>
         </div>
       </div>
       <div class="info-box info" style="margin-bottom:16px"><span>ℹ️</span><span>Adımlar "Sıra" numarasına göre sıralanır. 4 adım önerilir ama istediğin kadar ekleyebilirsin.</span></div>
@@ -914,6 +966,9 @@ img { max-width: 100%; display: block; }
           <div class="pg-eyebrow">İçerik</div>
           <div class="pg-title">Sayfa Metinleri</div>
           <div class="pg-sub">Ana sayfa ve hakkımızda sayfasındaki metinleri güncelle.</div>
+        </div>
+        <div class="pg-head-right">
+          <button class="btn-reset" onclick="askReset('metinler')">↺ Tüm Metinleri Sıfırla</button>
         </div>
       </div>
 
@@ -982,7 +1037,12 @@ img { max-width: 100%; display: block; }
           <div class="pg-title">Genel Ayarlar</div>
           <div class="pg-sub">Sayaçlar, global bağlantılar ve site kimliği.</div>
         </div>
+        <div class="pg-head-right">
+          <button class="btn-reset" onclick="askReset('ayarlar')">↺ Genel Ayarları Sıfırla</button>
+        </div>
       </div>
+
+      <!-- Site Kimliği -->
 
       <!-- Site Kimliği -->
       <div class="card">
@@ -1199,6 +1259,24 @@ img { max-width: 100%; display: block; }
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeStepModal()">İptal</button>
       <button class="btn btn-p" onclick="saveStep()">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ RESET ONAY KUTUSU ════ -->
+<div id="reset-confirm-overlay">
+  <div id="reset-confirm-box">
+    <div class="rcb-accent"></div>
+    <div class="rcb-ico">⚠️</div>
+    <div class="rcb-title" id="rcb-title">Sıfırla</div>
+    <div class="rcb-desc" id="rcb-desc">Bu işlem <strong>geri alınamaz.</strong></div>
+    <label class="rcb-check-row">
+      <input type="checkbox" id="rcb-checkbox" onchange="toggleResetConfirm()">
+      <span class="rcb-check-label">Evet, eminim. Bu verileri kalıcı olarak sil.</span>
+    </label>
+    <div class="rcb-actions">
+      <button class="rcb-cancel" onclick="closeResetConfirm()">İptal</button>
+      <button class="rcb-confirm" id="rcb-confirm-btn" onclick="runResetConfirm()">Sıfırla</button>
     </div>
   </div>
 </div>
@@ -2128,6 +2206,254 @@ document.addEventListener('keydown', e => {
 document.querySelectorAll('.modal-bg').forEach(bg => {
   bg.addEventListener('click', e => { if (e.target === bg) bg.classList.remove('on'); });
 });
+
+
+/* ══ ONAY KUTUSU ══ */
+let _resetTarget = null;
+const RESET_LABELS = {
+  'etkinlikler': { title: 'Etkinlikleri Sıfırla', desc: 'Tüm etkinlik kayıtları kalıcı olarak silinecek.' },
+  'ekip-board':  { title: 'Yönetim Kurulunu Sıfırla', desc: 'Tüm yönetim kurulu üyeleri kalıcı olarak silinecek.' },
+  'ekip-admins': { title: 'Admin Listesini Sıfırla', desc: 'Tüm adminler kalıcı olarak silinecek.' },
+  'sss':         { title: "SSS'yi Sıfırla", desc: 'Tüm sık sorulan sorular kalıcı olarak silinecek.' },
+  'iletisim':    { title: 'İletişim Bilgilerini Sıfırla', desc: 'Adres, e-posta ve sosyal medya linkleri temizlenecek.' },
+  'metinler':    { title: 'Sayfa Metinlerini Sıfırla', desc: 'Hero, hakkımızda, vizyon & misyon metinleri temizlenecek.' },
+  'neden-biz':   { title: '"Neden Biz" Maddelerini Sıfırla', desc: 'Tüm maddeler kalıcı olarak silinecek.' },
+  'options':     { title: 'İş Birliği Kartlarını Sıfırla', desc: 'Tüm iş birliği kartları kalıcı olarak silinecek.' },
+  'steps':       { title: 'Süreç Adımlarını Sıfırla', desc: 'Tüm süreç adımları kalıcı olarak silinecek.' },
+  'ayarlar':     { title: 'Genel Ayarları Sıfırla', desc: 'Bağlantılar, sayaçlar ve site kimliği sıfırlanacak.' },
+};
+window.askReset = function(target) {
+  _resetTarget = target;
+  const lbl = RESET_LABELS[target] || { title: 'Sıfırla', desc: '' };
+  document.getElementById('rcb-title').textContent = lbl.title;
+  document.getElementById('rcb-desc').innerHTML = lbl.desc + ' Bu işlem <strong>geri alınamaz.</strong>';
+  document.getElementById('rcb-checkbox').checked = false;
+  document.getElementById('rcb-confirm-btn').classList.remove('active');
+  document.getElementById('reset-confirm-overlay').classList.add('on');
+};
+window.toggleResetConfirm = function() {
+  const ok = document.getElementById('rcb-checkbox').checked;
+  document.getElementById('rcb-confirm-btn').classList.toggle('active', ok);
+};
+window.closeResetConfirm = function() {
+  document.getElementById('reset-confirm-overlay').classList.remove('on');
+  _resetTarget = null;
+};
+window.runResetConfirm = async function() {
+  if (!document.getElementById('rcb-checkbox').checked) return;
+  closeResetConfirm();
+  if (_resetTarget === 'etkinlikler') await resetEtkinlikler(true);
+  else if (_resetTarget === 'ekip-board')  await resetEkip('board', true);
+  else if (_resetTarget === 'ekip-admins') await resetEkip('admins', true);
+  else if (_resetTarget === 'sss')         await resetFaqs(true);
+  else if (_resetTarget === 'iletisim')    await resetContact(true);
+  else if (_resetTarget === 'metinler')    await resetMetinler(true);
+  else if (_resetTarget === 'neden-biz')   await resetWhyItems(true);
+  else if (_resetTarget === 'options')     await resetOptions(true);
+  else if (_resetTarget === 'steps')       await resetSteps(true);
+  else if (_resetTarget === 'ayarlar')     await resetAyarlar(true);
+};
+document.getElementById('reset-confirm-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeResetConfirm();
+});
+
+
+/* ══ ONAY KUTUSU ══ */
+let _resetTarget = null;
+const RESET_LABELS = {
+  'etkinlikler': { title: 'Etkinlikleri Sıfırla', desc: 'Tüm etkinlik kayıtları kalıcı olarak silinecek.' },
+  'ekip-board':  { title: 'Yönetim Kurulunu Sıfırla', desc: 'Tüm yönetim kurulu üyeleri kalıcı olarak silinecek.' },
+  'ekip-admins': { title: 'Admin Listesini Sıfırla', desc: 'Tüm adminler kalıcı olarak silinecek.' },
+  'sss':         { title: "SSS'yi Sıfırla", desc: 'Tüm sık sorulan sorular kalıcı olarak silinecek.' },
+  'iletisim':    { title: 'İletişim Bilgilerini Sıfırla', desc: 'Adres, e-posta ve sosyal medya linkleri temizlenecek.' },
+  'metinler':    { title: 'Sayfa Metinlerini Sıfırla', desc: 'Hero, hakkımızda, vizyon & misyon metinleri temizlenecek.' },
+  'neden-biz':   { title: '"Neden Biz" Maddelerini Sıfırla', desc: 'Tüm maddeler kalıcı olarak silinecek.' },
+  'options':     { title: 'İş Birliği Kartlarını Sıfırla', desc: 'Tüm iş birliği kartları kalıcı olarak silinecek.' },
+  'steps':       { title: 'Süreç Adımlarını Sıfırla', desc: 'Tüm süreç adımları kalıcı olarak silinecek.' },
+  'ayarlar':     { title: 'Genel Ayarları Sıfırla', desc: 'Bağlantılar, sayaçlar ve site kimliği sıfırlanacak.' },
+};
+window.askReset = function(target) {
+  _resetTarget = target;
+  const lbl = RESET_LABELS[target] || { title: 'Sıfırla', desc: '' };
+  document.getElementById('rcb-title').textContent = lbl.title;
+  document.getElementById('rcb-desc').innerHTML = lbl.desc + ' Bu işlem <strong>geri alınamaz.</strong>';
+  document.getElementById('rcb-checkbox').checked = false;
+  document.getElementById('rcb-confirm-btn').classList.remove('active');
+  document.getElementById('reset-confirm-overlay').classList.add('on');
+};
+window.toggleResetConfirm = function() {
+  const ok = document.getElementById('rcb-checkbox').checked;
+  document.getElementById('rcb-confirm-btn').classList.toggle('active', ok);
+};
+window.closeResetConfirm = function() {
+  document.getElementById('reset-confirm-overlay').classList.remove('on');
+  _resetTarget = null;
+};
+window.runResetConfirm = async function() {
+  if (!document.getElementById('rcb-checkbox').checked) return;
+  const t = _resetTarget;
+  closeResetConfirm();
+  if (t === 'etkinlikler') await resetEtkinlikler(true);
+  else if (t === 'ekip-board')  await resetEkip('board', true);
+  else if (t === 'ekip-admins') await resetEkip('admins', true);
+  else if (t === 'sss')         await resetFaqs(true);
+  else if (t === 'iletisim')    await resetContact(true);
+  else if (t === 'metinler')    await resetMetinler(true);
+  else if (t === 'neden-biz')   await resetWhyItems(true);
+  else if (t === 'options')     await resetOptions(true);
+  else if (t === 'steps')       await resetSteps(true);
+  else if (t === 'ayarlar')     await resetAyarlar(true);
+};
+document.getElementById('reset-confirm-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeResetConfirm();
+});
+
+/* ══════════════════════════════════════
+   SIFIRLAMA FONKSİYONLARI
+══════════════════════════════════════ */
+window.resetEtkinlikler = async function(skip) {
+  if (!skip) { askReset('etkinlikler'); return; }
+  try {
+    const snap = await getDocs(collection(db, 'kk_events'));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_events', d.id))));
+    addLog('Tüm etkinlikler sıfırlandı', 'warn');
+    await loadEvents(); renderDashboard();
+    toast('Tüm etkinlikler silindi.', 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+window.resetEkip = async function(type, skip) {
+  if (!skip) { askReset('ekip-' + type); return; }
+  const label = type === 'board' ? 'Yönetim Kurulu' : 'Admin';
+  try {
+    const snap = await getDocs(collection(db, 'kk_team_' + type));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_team_' + type, d.id))));
+    addLog(`Tüm ${label} üyeleri sıfırlandı`, 'warn');
+    await loadTeamList(type);
+    toast(`Tüm ${label} üyeleri silindi.`, 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+window.resetFaqs = async function(skip) {
+  if (!skip) { askReset('sss'); return; }
+  try {
+    const snap = await getDocs(collection(db, 'kk_faqs'));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_faqs', d.id))));
+    addLog('Tüm SSS soruları sıfırlandı', 'warn');
+    await loadFaqs();
+    toast('Tüm SSS soruları silindi.', 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+window.resetMetinler = async function(skip) {
+  if (!skip) { askReset('metinler'); return; }
+  try {
+    await deleteDoc(doc(db, 'ayarlar', 'kk_metin_v1'));
+    addLog('Sayfa metinleri sıfırlandı', 'warn');
+    await loadTexts();
+    toast('Sayfa metinleri sıfırlandı.', 'warn');
+  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
+};
+
+window.resetSpMetinler = async function(skip) {
+  if (!skip) { askReset('sp-metinler'); return; }
+  try {
+    await deleteDoc(doc(db, 'ayarlar', 'kk_sponsorluk_v1'));
+    addLog('Sponsorluk metinleri sıfırlandı', 'warn');
+    await loadSpBasic();
+    toast('Sponsorluk metinleri sıfırlandı.', 'warn');
+  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
+};
+
+window.resetWhyItems = async function(skip) {
+  if (!skip) { askReset('neden-biz'); return; }
+  try {
+    const snap = await getDocs(collection(db, 'kk_sp_why'));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_sp_why', d.id))));
+    addLog('Neden Biz maddeleri sıfırlandı', 'warn');
+    await loadWhyItems();
+    toast('Neden Biz maddeleri silindi.', 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+window.resetOptions = async function(skip) {
+  if (!skip) { askReset('options'); return; }
+  try {
+    const snap = await getDocs(collection(db, 'kk_sp_options'));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_sp_options', d.id))));
+    addLog('İş birliği kartları sıfırlandı', 'warn');
+    await loadOptionItems();
+    toast('İş birliği kartları silindi.', 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+window.resetSteps = async function(skip) {
+  if (!skip) { askReset('steps'); return; }
+  try {
+    const snap = await getDocs(collection(db, 'kk_sp_steps'));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_sp_steps', d.id))));
+    addLog('Süreç adımları sıfırlandı', 'warn');
+    await loadSteps();
+    toast('Süreç adımları silindi.', 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
+};
+
+window.resetContact = async function(skip) {
+  if (!skip) { askReset('iletisim'); return; }
+  try {
+    const snap = await getDoc(doc(db, 'ayarlar', 'kk_sett'));
+    if (snap.exists()) {
+      const temiz = Object.assign({}, snap.data(), { address:'', email:'', ig:'', wa:'', linkedin:'', maps:'' });
+      await setDoc(doc(db, 'ayarlar', 'kk_sett'), temiz);
+    }
+    addLog('İletişim bilgileri sıfırlandı', 'warn');
+    await loadSettings();
+    toast('İletişim bilgileri sıfırlandı.', 'warn');
+  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
+};
+
+window.resetAyarlar = async function(skip) {
+  if (!skip) { askReset('ayarlar'); return; }
+  try {
+    await Promise.all([
+      deleteDoc(doc(db, 'ayarlar', 'kk_sett')),
+      deleteDoc(doc(db, 'ayarlar', 'kk_counters')),
+    ]);
+    addLog('Genel ayarlar sıfırlandı', 'warn');
+    await loadSettings(); await loadCounters();
+    toast('Genel ayarlar sıfırlandı.', 'warn');
+  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
+};
+
+// İletişim bilgilerini sıfırla
+window.resetContact = async function() {
+  if (!confirm('⚠️ İletişim bilgileri sıfırlanacak ve alanlar boşalacak! Emin misiniz?')) return;
+  try {
+    const snap = await getDoc(doc(db, 'ayarlar', 'kk_sett'));
+    if (snap.exists()) {
+      const mevcut = snap.data();
+      const temiz = Object.assign({}, mevcut, { address:'', email:'', ig:'', wa:'', linkedin:'', maps:'' });
+      await setDoc(doc(db, 'ayarlar', 'kk_sett'), temiz);
+    }
+    addLog('İletişim bilgileri sıfırlandı', 'warn');
+    await loadSettings();
+    toast('İletişim bilgileri sıfırlandı.', 'warn');
+  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
+};
+
+// Genel ayarları sıfırla
+window.resetAyarlar = async function() {
+  if (!confirm('⚠️ Genel ayarlar (bağlantılar, sayaçlar, site kimliği) sıfırlanacak! Emin misiniz?')) return;
+  try {
+    await Promise.all([
+      deleteDoc(doc(db, 'ayarlar', 'kk_sett')),
+      deleteDoc(doc(db, 'ayarlar', 'kk_counters')),
+    ]);
+    addLog('Genel ayarlar sıfırlandı', 'warn');
+    await loadSettings(); await loadCounters();
+    toast('Genel ayarlar sıfırlandı.', 'warn');
+  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
+};
 
 </script>
 </body>

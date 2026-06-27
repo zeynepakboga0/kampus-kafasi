@@ -456,13 +456,13 @@ function renderFaq() {
   list.innerHTML = faqs.map((item, i) => `
     <div class="faq-item reveal" id="faq-item-${i}">
       <div class="faq-q" onclick="toggleFaq(${i})">
-        <span class="faq-q-text">${escHtml(item.q)}</span>
+        <span class="faq-q-text">${escHtml(item.question || item.q)}</span>
         <div class="faq-chevron">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
         </div>
       </div>
       <div class="faq-a" id="faq-a-${i}">
-        <div class="faq-a-inner"><p>${escHtml(item.a)}</p></div>
+        <div class="faq-a-inner"><p>${escHtml(item.answer || item.a)}</p></div>
       </div>
     </div>
   `).join('');
