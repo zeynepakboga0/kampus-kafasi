@@ -196,7 +196,7 @@ button { font-family: 'Outfit', sans-serif; }
   display: flex; align-items: center; gap: 9px;
 }
 .drawer-logo img { width: 26px; height: 26px; border-radius: 6px; object-fit: cover; flex-shrink: 0; }
-.drawer-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; padding: 4px; }
+.drawer-close { background: none; border: none; color: var(--muted); font-size: 1.4rem; cursor: pointer; padding: 12px; }
 
 .drawer-links { padding: 22px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
 .drawer-link {
@@ -686,9 +686,9 @@ footer {
 .hero-sub { font-size:1rem;color:rgba(255,255,255,.45);font-weight:300;max-width:480px;line-height:1.8;margin-bottom:36px;opacity:0;animation:fadeUp .7s .5s ease forwards; }
 .hero-btns { display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s .65s ease forwards; }
 .hero-stats { display:flex;margin-top:48px;opacity:0;animation:fadeUp .7s .8s ease forwards;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);max-width:340px; }
-.stat-item { flex:1;padding:16px 12px;text-align:center;border-right:1px solid var(--bd); }
+.stat-item { flex:1; min-width:0; padding:16px 12px;text-align:center;border-right:1px solid var(--bd); }
 .stat-item:last-child { border-right:none; }
-.stat-num { font-size:2rem;font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;word-break:normal;overflow-wrap:normal; }
+.stat-num { font-size:clamp(1.1rem,3.5vw,2rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap;word-break:normal;overflow-wrap:normal; }
 .stat-lbl { font-size:.65rem;color:rgba(255,255,255,.3);font-weight:500;margin-top:3px;letter-spacing:.04em; }
 .hero-visual { opacity:0;animation:fadeUp .7s .55s ease forwards;display:flex;align-items:center;justify-content:center;position:relative;width:340px;height:340px; }
 .logo-glow-bg { position:absolute;inset:-60px;border-radius:50%;background:radial-gradient(circle,rgba(45,221,212,.18),transparent 65%);animation:glowPulse 3.5s ease-in-out infinite;z-index:0; }
@@ -806,4 +806,5 @@ footer {
 }
 @media (min-width: 961px) {
   #mobile-nav-strip { display: none; }
+  .hamburger { display: none; }
 }
