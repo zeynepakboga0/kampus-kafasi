@@ -1177,8 +1177,10 @@ window.switchEkipTab = function(tab) {
 };
 
 window.openMemberModal = function(type) {
-['m-name','m-role','m-img','m-ig','m-linkedin','m-order','m-edit-id','m-initials'].forEach(id => {
-    document.getElementById('m-type').value = type;
+  ['m-name','m-role','m-img','m-ig','m-linkedin','m-order','m-edit-id','m-initials'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('m-type').value = type;
   document.getElementById('member-modal-title').textContent = type === 'board' ? '👤 Yönetim Kurulu Üyesi Ekle' : '👤 Admin Ekle';
   document.getElementById('m-order-wrap').style.display = type === 'board' ? 'flex' : 'none';
   document.getElementById('m-order-wrap').style.flexDirection = 'column';
@@ -1193,7 +1195,8 @@ window.editMember = async function(type, id) {
     const m = snap.data();
     document.getElementById('m-edit-id').value  = id;
     document.getElementById('m-type').value     = type;
-document.getElementById('m-initials').value = m.initials || '';    document.getElementById('m-role').value     = m.role     || '';
+    document.getElementById('m-initials').value = m.initials || '';
+    document.getElementById('m-role').value     = m.role     || '';
     document.getElementById('m-img').value      = m.img      || '';
     document.getElementById('m-ig').value       = m.ig       || '';
     document.getElementById('m-linkedin').value = m.linkedin || '';
@@ -1214,7 +1217,7 @@ window.saveMember = async function() {
 
   const data = {
     name, role,
-initials: document.getElementById('m-initials').value.trim().toUpperCase() || '',
+    initials: document.getElementById('m-initials').value.trim().toUpperCase() || '',
     img:      document.getElementById('m-img').value.trim(),
     ig:       document.getElementById('m-ig').value.trim().replace('@',''),
     linkedin: document.getElementById('m-linkedin').value.trim(),
