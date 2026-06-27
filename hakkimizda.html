@@ -99,7 +99,7 @@ img{display:block;max-width:100%}a{text-decoration:none;color:inherit}button{fon
 
 /* BİZ KİMİZ */
 #intro{padding:80px 32px;background:rgba(10,15,21,.82)}
-.intro-text p{font-size:.98rem;color:rgba(255,255,255,.53);line-height:1.9;margin-bottom:16px}
+.intro-text p{font-size:.98rem;color:rgba(255,255,255,.53);line-height:1.9;margin-bottom:16px;word-break:break-word;overflow-wrap:anywhere;white-space:normal;max-width:100%}
 .intro-text p:last-child{margin-bottom:0}
 .intro-tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:20px}
 .intro-tag{padding:5px 13px;border-radius:100px;font-size:.74rem;font-weight:600;border:1px solid rgba(45,216,240,.2);color:rgba(255,255,255,.48);background:rgba(45,216,240,.04)}
@@ -107,14 +107,15 @@ img{display:block;max-width:100%}a{text-decoration:none;color:inherit}button{fon
 /* VİZYON / MİSYON — kompakt */
 #vision-mission{padding:80px 32px;background:rgba(7,9,11,.88)}
 .vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
-.vm-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 24px;transition:border-color .3s,box-shadow .25s;position:relative;overflow:hidden}
+.vm-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 24px;transition:border-color .3s,box-shadow .25s;position:relative;overflow:visible}
+.vm-card::before{pointer-events:none;overflow:hidden}
 .vm-card::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
 .vm-card:hover{box-shadow:0 14px 40px rgba(0,0,0,.4);border-color:rgba(45,216,240,.2)}
 .vm-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(45,216,240,.1)}
 .vm-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.16);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
 .vm-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:2px}
 .vm-title{font-size:.92rem;font-weight:800;color:var(--white)}
-.vm-text{color:rgba(255,255,255,.48);line-height:1.72;font-size:.85rem;margin-bottom:8px}
+.vm-text{color:rgba(255,255,255,.48);line-height:1.72;font-size:.85rem;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere;white-space:normal;max-width:100%}
 .vm-text:last-child{margin-bottom:0}
 
 /* FAALİYETLER */
@@ -308,6 +309,16 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
     <a href="iletisim.html" class="drawer-link" onclick="closeDrawer()">İletişim</a>
     <a href="sponsorluk.html" class="drawer-link">Sponsorluk & İş Birliği</a>
   </nav>
+
+  <div id="mobile-nav-strip">
+  <a href="index.html" class="mn-link">Ana Sayfa</a>
+  <a href="hakkimizda.html" class="mn-link active">Hakkımızda</a>
+  <a href="etkinlikler.html" class="mn-link">Etkinlikler</a>
+  <a href="ekip.html" class="mn-link">Ekip</a>
+  <a href="iletisim.html" class="mn-link">İletişim</a>
+  <a href="sponsorluk.html" class="mn-link">Sponsorluk</a>
+</div>
+
   <div class="drawer-bottom">
     <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" rel="noopener noreferrer" class="drawer-ig">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@kampuskafasii
@@ -659,6 +670,7 @@ document.querySelectorAll('.vm-card').forEach(card => {
   draw();
 })();
 </script>
+<script src="main.js" defer></script>
 <script type="module" src="kk-data.js"></script>
 </body>
 </html>

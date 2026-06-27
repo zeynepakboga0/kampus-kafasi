@@ -36,7 +36,7 @@
 .sp-stat-item{flex:1;padding:28px 16px;text-align:center;border-right:1px solid var(--bd);transition:background .3s}
 .sp-stat-item:last-child{border-right:none}
 .sp-stat-item:hover{background:rgba(45,221,212,.03)}
-.sp-stat-num{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px}
+.sp-stat-num{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;white-space:nowrap;word-break:normal;overflow-wrap:normal}
 .sp-stat-icon{display:none}
 .sp-stat-lbl{font-size:.7rem;color:var(--muted);font-weight:500;margin-top:3px;letter-spacing:.04em}
 
@@ -142,6 +142,8 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 @media(max-width:520px){
   .sp-stats-grid{border-radius:12px}
   .sp-cta-btns{flex-direction:column;align-items:center}
+  .sp-stat-num{font-size:1.4rem !important}
+  .sp-stat-item{padding:16px 8px}
 }
 </style>
 </head>
@@ -181,6 +183,15 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
   </div>
 </nav>
+<div id="mobile-nav-strip">
+  <a href="index.html" class="mn-link">Ana Sayfa</a>
+  <a href="hakkimizda.html" class="mn-link">Hakkımızda</a>
+  <a href="etkinlikler.html" class="mn-link">Etkinlikler</a>
+  <a href="ekip.html" class="mn-link">Ekip</a>
+  <a href="iletisim.html" class="mn-link">İletişim</a>
+  <a href="sponsorluk.html" class="mn-link active">Sponsorluk</a>
+</div>
+
 
 <!-- DRAWER -->
 <div id="drawer-overlay" onclick="closeDrawer()"></div>

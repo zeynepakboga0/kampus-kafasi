@@ -270,6 +270,15 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   </div>
 </nav>
 
+<div id="mobile-nav-strip">
+  <a href="index.html" class="mn-link">Ana Sayfa</a>
+  <a href="hakkimizda.html" class="mn-link">Hakkımızda</a>
+  <a href="etkinlikler.html" class="mn-link active">Etkinlikler</a>
+  <a href="ekip.html" class="mn-link">Ekip</a>
+  <a href="iletisim.html" class="mn-link">İletişim</a>
+  <a href="sponsorluk.html" class="mn-link">Sponsorluk</a>
+</div>
+
 <!-- DRAWER -->
 <div id="drawer-overlay" onclick="closeDrawer()"></div>
 <aside id="drawer">
@@ -649,6 +658,7 @@ document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
   draw();
 })();
 </script>
+<script src="main.js" defer></script>
 <script type="module" src="kk-data.js"></script>
 </body>
 </html>
