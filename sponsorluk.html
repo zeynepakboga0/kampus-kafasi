@@ -532,12 +532,32 @@ const db = getFirestore(app);
 const spSnap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
 if (spSnap.exists()) {
   const s = spSnap.data();
-  const heroSub = document.querySelector('.sp-hero-sub');
+  // Hero
+  const heroSub  = document.querySelector('.sp-hero-sub');
+  const heroTitle = document.querySelector('.page-title');
+  const heroEyebrow = document.querySelector('.page-eyebrow');
   const ctaTitle = document.querySelector('.sp-cta-title');
   const ctaText  = document.querySelector('.sp-cta-text');
-  if (heroSub && s.heroSub)   heroSub.textContent  = s.heroSub;
-  if (ctaTitle && s.ctaTitle) ctaTitle.textContent = s.ctaTitle;
-  if (ctaText  && s.ctaText)  ctaText.textContent  = s.ctaText;
+  if (heroSub    && s.heroSub)     heroSub.textContent     = s.heroSub;
+  if (heroTitle  && s.heroTitle)   heroTitle.textContent   = s.heroTitle;
+  if (ctaTitle   && s.ctaTitle)    ctaTitle.textContent    = s.ctaTitle;
+  if (ctaText    && s.ctaText)     ctaText.textContent     = s.ctaText;
+  // "Neden Biz" bölüm başlıkları
+  const whySection = document.querySelector('#sp-why');
+  if (whySection) {
+    const wh = whySection.querySelector('.section-h');
+    const wd = whySection.querySelector('p');
+    if (wh && s.whyTitle) wh.textContent = s.whyTitle;
+    if (wd && s.whyDesc)  wd.textContent = s.whyDesc;
+  }
+  // "İş Birliği" bölüm başlıkları
+  const colSection = document.querySelector('#sp-options');
+  if (colSection) {
+    const ch = colSection.querySelector('.section-h');
+    const cd = colSection.querySelector('p[style]');
+    if (ch && s.colTitle) ch.textContent = s.colTitle;
+    if (cd && s.colDesc)  cd.textContent = s.colDesc;
+  }
 }
 
 // Neden Biz
@@ -596,6 +616,35 @@ if (!optSnap.empty) {
     });
   }
 }
+
+// Süreç Adımları
+const stepsSnap = await getDocs(collection(db, "kk_sp_steps"));
+if (!stepsSnap.empty) {
+  const stepsContainer = document.querySelector('.sp-steps');
+  if (stepsContainer) {
+    const steps = [];
+    stepsSnap.forEach(d => steps.push({ id: d.id, ...d.data() }));
+    steps.sort((a, b) => (a.order || 99) - (b.order || 99));
+    stepsContainer.innerHTML = steps.map((s, i) => `
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">${s.order || i + 1}</span></div>
+          ${i < steps.length - 1 ? '<div class="sp-connector"></div>' : ''}
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 0${s.order || i + 1}</div>
+          <h4>${s.ico || ''} ${s.title}</h4>
+          <p>${s.desc || ''}</p>
+        </div>
+      </div>`).join('');
+    if (typeof revealObs !== 'undefined') {
+      stepsContainer.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
+    } else {
+      stepsContainer.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    }
+  }
+}
+
 </script>
 <script type="module" src="kk-data.js"></script>
 </body>

@@ -468,6 +468,27 @@ function applySettings() {
   }
 }
 
+// kk-data.js'den gelen metin verilerini uygula
+function applyIndexTexts() {
+  // Hero buton metinleri
+  const btn1 = document.querySelector('.hero-btns a.btn-primary');
+  const btn2 = document.querySelector('.hero-btns a.btn-outline');
+  if (btn1 && window._kkMetin && window._kkMetin.heroBtn1) btn1.childNodes[0].textContent = window._kkMetin.heroBtn1;
+  if (btn2 && window._kkMetin && window._kkMetin.heroBtn2) {
+    // SVG'yi koruyarak sadece metin kısmını değiştir
+    const svg = btn2.querySelector('svg');
+    btn2.textContent = window._kkMetin.heroBtn2;
+    if (svg) btn2.prepend(svg);
+  }
+  // Etkinlikler bölüm başlığı
+  const evTitle = document.querySelector('#events .section-h');
+  if (evTitle && window._kkMetin && window._kkMetin.evTitle) evTitle.textContent = window._kkMetin.evTitle;
+  // Footer alt metni
+  const footerSub = document.getElementById('footer-sub-el');
+  if (footerSub && window._kkMetin && window._kkMetin.footerSub) footerSub.innerHTML = window._kkMetin.footerSub;
+}
+window.applyIndexTexts = applyIndexTexts;
+
 
 </script>
 <script type="module" src="kk-data.js"></script>

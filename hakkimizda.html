@@ -354,10 +354,7 @@ window.addEventListener('pageshow', function(e){ if(e.persisted) window.location
 window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader').classList.add('hidden'), 800); });
 window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40); }, {passive:true});
 
-// WhatsApp linkini uygula
-(function(){
-  try{const s=JSON.parse(localStorage.getItem('kk_sett'));if(s&&s.wa){const el=document.getElementById('footer-wa');if(el)el.href=s.wa;}}catch(e){}
-})();
+
 
 function toggleDrawer() {
   const d=document.getElementById('drawer'),o=document.getElementById('drawer-overlay'),h=document.getElementById('hamburger');

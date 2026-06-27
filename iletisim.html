@@ -576,7 +576,7 @@ function resetForm() {
       renderContactCards();
     }
 
-    const fSnap = await getDocs(collection(db, "kk_faq"));
+    const fSnap = await getDocs(collection(db, "kk_faqs"));
     if (!fSnap.empty) {
       faqData = [];
       fSnap.forEach(d => faqData.push(d.data()));

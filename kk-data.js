@@ -187,8 +187,12 @@ if (ekipData.length === 0) ekipData = null;
   if (typeof window.sett !== 'undefined') {
     Object.assign(window.sett, sett);
   }
+  window._kkMetin = metin;
   if (typeof window.veriBaslat === 'function') {
     window.veriBaslat();
+  }
+  if (typeof window.applyIndexTexts === 'function') {
+    window.applyIndexTexts();
   }
 
 })();
