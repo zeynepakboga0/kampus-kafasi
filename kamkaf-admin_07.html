@@ -2241,56 +2241,6 @@ window.closeResetConfirm = function() {
 };
 window.runResetConfirm = async function() {
   if (!document.getElementById('rcb-checkbox').checked) return;
-  closeResetConfirm();
-  if (_resetTarget === 'etkinlikler') await resetEtkinlikler(true);
-  else if (_resetTarget === 'ekip-board')  await resetEkip('board', true);
-  else if (_resetTarget === 'ekip-admins') await resetEkip('admins', true);
-  else if (_resetTarget === 'sss')         await resetFaqs(true);
-  else if (_resetTarget === 'iletisim')    await resetContact(true);
-  else if (_resetTarget === 'metinler')    await resetMetinler(true);
-  else if (_resetTarget === 'neden-biz')   await resetWhyItems(true);
-  else if (_resetTarget === 'options')     await resetOptions(true);
-  else if (_resetTarget === 'steps')       await resetSteps(true);
-  else if (_resetTarget === 'ayarlar')     await resetAyarlar(true);
-};
-document.getElementById('reset-confirm-overlay').addEventListener('click', function(e) {
-  if (e.target === this) closeResetConfirm();
-});
-
-
-/* ══ ONAY KUTUSU ══ */
-let _resetTarget = null;
-const RESET_LABELS = {
-  'etkinlikler': { title: 'Etkinlikleri Sıfırla', desc: 'Tüm etkinlik kayıtları kalıcı olarak silinecek.' },
-  'ekip-board':  { title: 'Yönetim Kurulunu Sıfırla', desc: 'Tüm yönetim kurulu üyeleri kalıcı olarak silinecek.' },
-  'ekip-admins': { title: 'Admin Listesini Sıfırla', desc: 'Tüm adminler kalıcı olarak silinecek.' },
-  'sss':         { title: "SSS'yi Sıfırla", desc: 'Tüm sık sorulan sorular kalıcı olarak silinecek.' },
-  'iletisim':    { title: 'İletişim Bilgilerini Sıfırla', desc: 'Adres, e-posta ve sosyal medya linkleri temizlenecek.' },
-  'metinler':    { title: 'Sayfa Metinlerini Sıfırla', desc: 'Hero, hakkımızda, vizyon & misyon metinleri temizlenecek.' },
-  'neden-biz':   { title: '"Neden Biz" Maddelerini Sıfırla', desc: 'Tüm maddeler kalıcı olarak silinecek.' },
-  'options':     { title: 'İş Birliği Kartlarını Sıfırla', desc: 'Tüm iş birliği kartları kalıcı olarak silinecek.' },
-  'steps':       { title: 'Süreç Adımlarını Sıfırla', desc: 'Tüm süreç adımları kalıcı olarak silinecek.' },
-  'ayarlar':     { title: 'Genel Ayarları Sıfırla', desc: 'Bağlantılar, sayaçlar ve site kimliği sıfırlanacak.' },
-};
-window.askReset = function(target) {
-  _resetTarget = target;
-  const lbl = RESET_LABELS[target] || { title: 'Sıfırla', desc: '' };
-  document.getElementById('rcb-title').textContent = lbl.title;
-  document.getElementById('rcb-desc').innerHTML = lbl.desc + ' Bu işlem <strong>geri alınamaz.</strong>';
-  document.getElementById('rcb-checkbox').checked = false;
-  document.getElementById('rcb-confirm-btn').classList.remove('active');
-  document.getElementById('reset-confirm-overlay').classList.add('on');
-};
-window.toggleResetConfirm = function() {
-  const ok = document.getElementById('rcb-checkbox').checked;
-  document.getElementById('rcb-confirm-btn').classList.toggle('active', ok);
-};
-window.closeResetConfirm = function() {
-  document.getElementById('reset-confirm-overlay').classList.remove('on');
-  _resetTarget = null;
-};
-window.runResetConfirm = async function() {
-  if (!document.getElementById('rcb-checkbox').checked) return;
   const t = _resetTarget;
   closeResetConfirm();
   if (t === 'etkinlikler') await resetEtkinlikler(true);
@@ -2414,36 +2364,6 @@ window.resetContact = async function(skip) {
 
 window.resetAyarlar = async function(skip) {
   if (!skip) { askReset('ayarlar'); return; }
-  try {
-    await Promise.all([
-      deleteDoc(doc(db, 'ayarlar', 'kk_sett')),
-      deleteDoc(doc(db, 'ayarlar', 'kk_counters')),
-    ]);
-    addLog('Genel ayarlar sıfırlandı', 'warn');
-    await loadSettings(); await loadCounters();
-    toast('Genel ayarlar sıfırlandı.', 'warn');
-  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
-};
-
-// İletişim bilgilerini sıfırla
-window.resetContact = async function() {
-  if (!confirm('⚠️ İletişim bilgileri sıfırlanacak ve alanlar boşalacak! Emin misiniz?')) return;
-  try {
-    const snap = await getDoc(doc(db, 'ayarlar', 'kk_sett'));
-    if (snap.exists()) {
-      const mevcut = snap.data();
-      const temiz = Object.assign({}, mevcut, { address:'', email:'', ig:'', wa:'', linkedin:'', maps:'' });
-      await setDoc(doc(db, 'ayarlar', 'kk_sett'), temiz);
-    }
-    addLog('İletişim bilgileri sıfırlandı', 'warn');
-    await loadSettings();
-    toast('İletişim bilgileri sıfırlandı.', 'warn');
-  } catch(e) { toast('Sıfırlanamadı: ' + e.message, 'err'); }
-};
-
-// Genel ayarları sıfırla
-window.resetAyarlar = async function() {
-  if (!confirm('⚠️ Genel ayarlar (bağlantılar, sayaçlar, site kimliği) sıfırlanacak! Emin misiniz?')) return;
   try {
     await Promise.all([
       deleteDoc(doc(db, 'ayarlar', 'kk_sett')),
