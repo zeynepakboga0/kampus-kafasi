@@ -50,8 +50,8 @@ function startCounters(m, e, y) {
   animCountEl(document.getElementById('sc-year'),    y, '+', false);
 }
 
-function animCountEl(el, target, suffix, fmt) {
-  if (!el) return;
+window.animCountEl = function animCountEl(el, target, suffix, fmt) {
+    if (!el) return;
   el.textContent = '0+';
   const dur = 3500, start = performance.now();
   const run = now => {
