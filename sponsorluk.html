@@ -135,7 +135,7 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   #sp-why,#sp-options,#sp-process,#sp-cta,#sp-contact{padding:60px 18px}
   #sp-stats{padding:0 18px 40px}
   .sp-why-grid{grid-template-columns:1fr}
-  .page-hero{padding:110px 18px 40px}
+  .page-hero{padding:110px 18px 56px}
   footer{padding:48px 18px 32px}
   .sp-cta-box{padding:36px 24px}
 }
@@ -439,85 +439,16 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 </footer>
 
 <script>
-// ── SAYAÇLAR ──
-let _countersStarted = false;
-
-function animCountEl(el, target, suffix, fmt) {
-  if (!el) return;
-  el.textContent = '0' + suffix;
-  const dur = 3500, start = performance.now();
-  const run = now => {
-    const p = Math.min((now - start) / dur, 1);
-    const ease = 1 - Math.pow(1 - p, 3);
-    const val = Math.round(ease * target);
-    el.textContent = fmt ? val.toLocaleString('tr-TR') + suffix : val + suffix;
-    if (p < 1) requestAnimationFrame(run);
-    else el.textContent = fmt ? target.toLocaleString('tr-TR') + suffix : target + suffix;
-  };
-  requestAnimationFrame(run);
-}
-
-function startCounters(m, e, y) {
-  if (_countersStarted) return;
-  _countersStarted = true;
-  animCountEl(document.getElementById('st-members'), m || 17000, '+', true);
-  animCountEl(document.getElementById('st-events'),  e || 50, '+', false);
-  animCountEl(document.getElementById('st-exp'),     y || 4, '+', false);
-}
-window.startCounters = startCounters;
-
-// loader bittikten hemen sonra sayaçları başlat
-(function(){
-  const loader = document.getElementById('loader');
-  loader.classList.remove('hidden');
-  window.scrollTo(0,0);
-  window.addEventListener('load', () => {
-  setTimeout(() => { loader.classList.add('hidden'); }, 1800);
-});
-})();
-
-// ── LOADER CANVAS ──
-(function(){
-  const c=document.getElementById('ld-canvas');if(!c)return;
-  const ctx=c.getContext('2d');
-  c.width=window.innerWidth;c.height=window.innerHeight;
-  const pts=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}));
-  function draw(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.strokeStyle=`rgba(45,221,212,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));pts.forEach(p=>{ctx.fillStyle='rgba(45,221,212,.45)';ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);}
-  draw();
-})();
-
-// ── NAV SCROLL ──
-window.addEventListener('scroll',()=>{document.getElementById('nav').classList.toggle('scrolled',window.scrollY>40);},{passive:true});
-
-// ── DRAWER ──
-function toggleDrawer(){
-  const d=document.getElementById('drawer'),o=document.getElementById('drawer-overlay'),h=document.getElementById('hamburger');
-  const open=d.classList.toggle('open');
-  o.classList.toggle('open',open);h.classList.toggle('open',open);
-  document.body.style.overflow=open?'hidden':'';
-}
-function closeDrawer(){
-  ['drawer','drawer-overlay'].forEach(id=>document.getElementById(id).classList.remove('open'));
-  document.getElementById('hamburger').classList.remove('open');
-  document.body.style.overflow='';
-}
-
-// ── SCROLL REVEAL ──
-window.revealObs = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible');});
-},{threshold:0.1});
-document.querySelectorAll('.reveal').forEach(el=>window.revealObs.observe(el));
-
-// ── GLOW TRAIL ──
-document.querySelectorAll('.sp-option-card,.sp-cc').forEach(card=>{
-  card.addEventListener('mousemove',e=>{const r=card.getBoundingClientRect();card.style.background=`radial-gradient(300px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.07),transparent 60%),var(--card)`;});
-  card.addEventListener('mouseleave',()=>{card.style.background='';});
-});
-
-
-if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
-window.scrollTo(0, 0);
-window.addEventListener('load', () => { window.scrollTo(0, 0); });
+// Sayaçlar main.js'teki startCounters'ı kullanır.
+// main.js sc-members/sc-events/sc-year ID'lerine yazar, bu sayfada ID'ler farklı (st-members vs.)
+// olduğu için main.js'in fonksiyonunu burada override ediyoruz, aynı isim tekrar tanımlamıyoruz.
+window.startCounters = function(m, e, y) {
+  if (window._spCountersStarted) return;
+  window._spCountersStarted = true;
+  window.animCountEl(document.getElementById('st-members'), m || 17000, '+', true);
+  window.animCountEl(document.getElementById('st-events'),  e || 50, '+', false);
+  window.animCountEl(document.getElementById('st-exp'),     y || 4, '+', false);
+};
 </script>
 
 <script type="module">

@@ -308,8 +308,13 @@
 </footer>
 
 
-<script src="main.js" defer></script>
 <script>
+
+  function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 /* ── INDEX SAYFASINA ÖZGÜ VERİ & FONKSİYONLAR ── */
 
 // sett ve events main.js tarafından tanımlanıyor, burada sadece başlangıç değeri veriyoruz
@@ -363,7 +368,7 @@ function buildEventCard(ev, isPast, delay) {
   const meta = document.createElement('div'); meta.className = 'ev-meta';
   const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
   meta.innerHTML = `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${ds}</div>`
-    + (ev.loc ? `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${ev.loc}</div>` : '');
+    + (ev.loc ? `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : '');
   body.appendChild(meta);
 
   if (ev.desc) {
@@ -485,12 +490,12 @@ function applyIndexTexts() {
   if (evTitle && window._kkMetin && window._kkMetin.evTitle) evTitle.textContent = window._kkMetin.evTitle;
   // Footer alt metni
   const footerSub = document.getElementById('footer-sub-el');
-  if (footerSub && window._kkMetin && window._kkMetin.footerSub) footerSub.innerHTML = window._kkMetin.footerSub;
-}
+  if (footerSub && window._kkMetin && window._kkMetin.footerSub) footerSub.textContent = window._kkMetin.footerSub;}
 window.applyIndexTexts = applyIndexTexts;
 
 
 </script>
+<script src="main.js" defer></script>
 <script type="module" src="kk-data.js"></script>
 </body>
 </html>

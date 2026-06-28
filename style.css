@@ -237,6 +237,7 @@ footer {
   margin-bottom: 10px;
 }
 .footer-brand p { font-size: .83rem; color: rgba(255,255,255,.3); line-height: 1.7; }
+#footer-sub-el { white-space: pre-line; }
 .footer-col h5 {
   font-size: .7rem; font-weight: 700; text-transform: uppercase;
   letter-spacing: .12em; color: var(--cl); margin-bottom: 16px;
@@ -630,6 +631,7 @@ margin-bottom: 6px; white-space: normal;}
   .sponsor-grid { grid-template-columns: 1fr; gap: 16px; }
   .page-hero { padding: 100px 18px 50px; }
   footer { padding: 48px 18px 32px; }
+  .events-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 520px) {

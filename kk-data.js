@@ -117,7 +117,7 @@ if (ekipData.length === 0) ekipData = null;
     applyAboutTexts();
     if (typeof window.loadActivities === 'function') {
       window.loadActivities(eventsList);
-    }
+    }   
   }
 
   /* ── YARDIMCI PROSES FONKSİYONLARI ── */
@@ -126,8 +126,7 @@ if (ekipData.length === 0) ekipData = null;
     window._countersStarted = false;
     if (typeof window.startCounters === 'function') window.startCounters(cnt.members, cnt.events, cnt.years);
   }
-
-
+  
   function renderEkipPage(list) {
     const container = document.getElementById('ekip-container');
     if (!container) return;
