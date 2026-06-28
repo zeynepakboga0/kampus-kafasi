@@ -457,6 +457,8 @@ window.addEventListener('load', function() {
   }, 1900); // loader'ın kapanma süresiyle eşleşiyor (1800ms)
 });
 
+window.renderEvents = function() {};
+
 // kk-data.js'ten gerçek verilerle çağrılırsa override et
 window.startCounters = function(m, e, y) {
   if (window._spCountersStarted) return;

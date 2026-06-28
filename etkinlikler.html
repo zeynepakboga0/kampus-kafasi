@@ -344,6 +344,10 @@ function closeDrawer() {
   document.getElementById('hamburger').classList.remove('open'); document.body.style.overflow='';
 }
 
+// kk-data.js'in çağırdığı veriBaslat() bu sayfada renderEvents bekliyor,
+// ama biz zaten initEvents() ile Firebase'den okuyoruz — bu satır hatayı susturur.
+window.renderEvents = function() {};
+
 // ── ETKİNLİK VERİLERİ ──
 // Firebase Firestore'dan (kk_events koleksiyonu) okunur, başarısız olursa boş yedek kullanılır
 const HARDCODED_EVENTS = [];

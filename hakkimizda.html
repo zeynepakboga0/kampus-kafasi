@@ -361,10 +361,6 @@ function closeDrawer() {
   document.getElementById('hamburger').classList.remove('open'); document.body.style.overflow='';
 }
 
-const revealObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, {threshold:0.08});
-document.querySelectorAll('.reveal').forEach(el => revealObs.observe(el));
 
 // ── ETKİNLİK VERİSİ ──
 const EMOJI_MAP = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
