@@ -36,7 +36,7 @@ function veriBaslat() {
   }
 
 window.addEventListener('load', () => {
-  setTimeout(hideLoader, 1300);
+  setTimeout(hideLoader, 1500);
 });
 })();
 
