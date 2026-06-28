@@ -439,15 +439,32 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 </footer>
 
 <script>
-// Sayaçlar main.js'teki startCounters'ı kullanır.
-// main.js sc-members/sc-events/sc-year ID'lerine yazar, bu sayfada ID'ler farklı (st-members vs.)
-// olduğu için main.js'in fonksiyonunu burada override ediyoruz, aynı isim tekrar tanımlamıyoruz.
+// Sayaçları doğrudan sayfa yüklenince başlat (loader bittikten sonra)
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    // main.js'in animCountEl fonksiyonu hazır olana kadar bekle
+    var tries = 0;
+    function tryStart() {
+      if (typeof window.animCountEl === 'function') {
+        window.animCountEl(document.getElementById('st-members'), 17000, '+', true);
+        window.animCountEl(document.getElementById('st-events'),  50,    '+', false);
+        window.animCountEl(document.getElementById('st-exp'),     4,     '+', false);
+      } else if (tries++ < 20) {
+        setTimeout(tryStart, 100);
+      }
+    }
+    tryStart();
+  }, 1900); // loader'ın kapanma süresiyle eşleşiyor (1800ms)
+});
+
+// kk-data.js'ten gerçek verilerle çağrılırsa override et
 window.startCounters = function(m, e, y) {
   if (window._spCountersStarted) return;
   window._spCountersStarted = true;
+  if (typeof window.animCountEl !== 'function') return;
   window.animCountEl(document.getElementById('st-members'), m || 17000, '+', true);
-  window.animCountEl(document.getElementById('st-events'),  e || 50, '+', false);
-  window.animCountEl(document.getElementById('st-exp'),     y || 4, '+', false);
+  window.animCountEl(document.getElementById('st-events'),  e || 50,    '+', false);
+  window.animCountEl(document.getElementById('st-exp'),     y || 4,     '+', false);
 };
 </script>
 
