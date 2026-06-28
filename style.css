@@ -643,18 +643,6 @@ margin-bottom: 6px; white-space: normal;}
   .counter-item:last-child { border-bottom: none; }
   .sponsor-modal-box { padding: 28px 18px; }
 
-  /* MOBIL GENEL DÜZELTMELERİ */
-  #hero { padding: 80px 16px 56px; }
-  .hero-title { font-size: clamp(3.8rem, 16vw, 5rem); }
-  .hero-sub { font-size: .9rem; }
-  .hero-btns { flex-direction: column; align-items: stretch; }
-  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
-  .hero-stats { max-width: 100%; width: 100%; }
-  .stat-num { font-size: 1.6rem; }
-  .who-inner { gap: 20px; }
-  .section-label { font-size: .65rem; }
-  .section-title { font-size: 1.5rem; }
-  #who, #events, #contact { padding: 56px 16px; }
 }
 
 
@@ -743,22 +731,94 @@ margin-bottom: 6px; white-space: normal;}
    INDEX — RESPONSIVE EKLENTİLER
    ════════════════════════════════════════════════════════════ */
 @media (max-width: 960px) {
-  .hero-inner { grid-template-columns:1fr; }
-  .hero-visual { display:none; }
-  .contact-cards { grid-template-columns:repeat(2,1fr);gap:14px; }
-  #events, #contact { padding:68px 18px; }
-  #who { padding:68px 18px; }
-  #hero { padding:110px 18px 64px; }
-  .who-inner { grid-template-columns:1fr;gap:36px; }
+  /* Hero: tek sütun, görsel gizle */
+  .hero-inner { grid-template-columns: 1fr; gap: 0; }
+  .hero-visual { display: none; }
+
+  /* Hero içerik: ortala, kompakt */
+  #hero { padding: 120px 20px 56px; min-height: unset; }
+  .hero-eyebrow { font-size: .68rem; margin-bottom: 16px; }
+  .hero-title {
+    font-size: clamp(3.6rem, 14vw, 5.5rem);
+    margin-bottom: 16px;
+    text-align: left;
+  }
+  .hero-sub {
+    font-size: .93rem;
+    line-height: 1.75;
+    margin-bottom: 28px;
+    color: rgba(255,255,255,.5);
+    max-width: 100%;
+  }
+
+  /* Butonlar: dikey istif, tam genişlik */
+  .hero-btns {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+  .btn-primary, .btn-outline {
+    width: 100%;
+    justify-content: center;
+    padding: 14px 20px;
+    font-size: .95rem;
+    border-radius: 14px;
+  }
+
+  /* Stats bar: tam genişlik, daha geniş satırlar */
+  .hero-stats {
+    max-width: 100%;
+    width: 100%;
+    margin-top: 32px;
+    border-radius: 16px;
+  }
+  .stat-item { padding: 14px 8px; }
+  .stat-num { font-size: 1.5rem !important; }
+  .stat-lbl { font-size: .6rem; }
+
+  /* Who: tek sütun */
+  .who-inner { grid-template-columns: 1fr; gap: 28px; }
+  #who { padding: 64px 20px; }
+  .who-card { padding: 20px 18px; }
+  .who-card h3 { font-size: .92rem; }
+  .who-card p { font-size: .82rem; }
+
+  /* Events */
+  #events { padding: 64px 20px; }
+  .events-header { margin-bottom: 28px; }
+
+  /* Contact: 2 sütun */
+  .contact-cards { grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 32px; }
+  .contact-card { padding: 24px 14px; gap: 8px; border-radius: 16px; }
+  .cc-icon-wrap { width: 44px; height: 44px; border-radius: 12px; }
+  .cc-label { font-size: .65rem; }
+  .cc-value { font-size: .82rem; }
+  #contact { padding: 64px 20px; }
 }
+
 @media (max-width: 520px) {
-  .contact-cards { grid-template-columns: repeat(2,1fr); gap: 10px; }
-  .hero-stats { max-width: 100%; width: 100%; }
-  .hero-btns { flex-direction: column; align-items: stretch; }
-  .btn-primary, .btn-outline { width: 100%; justify-content: center; }
+  /* Hero: küçük telefon */
+  #hero { padding: 112px 16px 48px; }
+  .hero-eyebrow { font-size: .62rem; padding: 4px 12px; }
+  .hero-title { font-size: clamp(3.2rem, 16vw, 4.2rem); line-height: 1.0; margin-bottom: 14px; }
+  .hero-sub { font-size: .87rem; margin-bottom: 24px; }
+  .btn-primary, .btn-outline { font-size: .9rem; padding: 13px 18px; border-radius: 12px; }
+  .hero-stats { border-radius: 14px; margin-top: 24px; }
+  .stat-item { padding: 12px 4px; }
   .stat-num { font-size: 1.3rem !important; }
-  .stat-lbl { font-size: .58rem; }
-  .stat-item { padding: 12px 6px; }
+  .stat-lbl { font-size: .55rem; letter-spacing: .02em; }
+
+  /* Who */
+  #who, #events, #contact { padding: 52px 16px; }
+  .who-card { padding: 16px 14px; }
+
+  /* Contact: 2 sütun (küçük) */
+  .contact-cards { grid-template-columns: repeat(2,1fr); gap: 8px; }
+  .contact-card { padding: 18px 10px; gap: 6px; border-radius: 14px; }
+  .cc-icon-wrap { width: 38px; height: 38px; border-radius: 10px; }
+  .cc-icon-wrap svg { width: 18px; height: 18px; }
+  .cc-label { font-size: .6rem; }
+  .cc-value { font-size: .78rem; }
 }
 
 /* ════════════════════════════════════════════════════════════
@@ -770,10 +830,10 @@ margin-bottom: 6px; white-space: normal;}
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     scrollbar-width: none;
-    gap: 8px;
-    padding: 8px 16px;
-    background: rgba(10,15,21,.95);
-    border-bottom: 1px solid rgba(45,216,240,.1);
+    gap: 6px;
+    padding: 9px 16px;
+    background: rgba(7,9,11,.96);
+    border-bottom: 1px solid rgba(45,216,240,.08);
     position: fixed;
     top: 62px;
     left: 0; right: 0;
@@ -782,24 +842,25 @@ margin-bottom: 6px; white-space: normal;}
   #mobile-nav-strip::-webkit-scrollbar { display: none; }
   .mn-link {
     flex-shrink: 0;
-    padding: 7px 16px;
-    border-radius: 100px;
-    font-size: .78rem;
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: .76rem;
     font-weight: 600;
-    color: rgba(255,255,255,.5);
-    border: 1px solid rgba(255,255,255,.08);
-    background: rgba(255,255,255,.03);
+    color: rgba(255,255,255,.4);
+    border: 1px solid transparent;
+    background: transparent;
     white-space: nowrap;
     text-decoration: none;
     transition: color .2s, border-color .2s, background .2s;
     -webkit-tap-highlight-color: transparent;
+    letter-spacing: .01em;
   }
   .mn-link:active, .mn-link.active {
     color: var(--cl);
-    border-color: rgba(45,216,240,.4);
-    background: rgba(45,216,240,.08);
+    border-color: rgba(45,216,240,.25);
+    background: rgba(45,216,240,.07);
   }
- /* İçerik nav şeridinin altına kaymasın diye */
+  /* İçerik nav şeridinin altına kaymasın diye */
   #hero { padding-top: 140px !important; }
   .page-hero { padding-top: 150px !important; }
 }
