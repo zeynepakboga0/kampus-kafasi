@@ -1,0 +1,1794 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — Kampüs Kafası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cl: #2DDDD4;
+  --cm: #1BBAB2;
+  --cd: #0D8A85;
+  --cg: rgba(45,221,212,.12);
+  --black: #07090b;
+  --dark: #0d1117;
+  --mid: #0a0f15;
+  --card: #111820;
+  --bd: rgba(255,255,255,.07);
+  --muted: #7a8b98;
+  --white: #ffffff;
+  --r: 20px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden}
+body {
+  font-family: 'Outfit', sans-serif;
+  background: var(--black);
+  color: var(--white);
+}
+
+/* ── NAV ── */
+#nav {
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:62px;padding:0 32px;
+  display:flex;align-items:center;justify-content:space-between;
+  background:rgba(7,9,11,.92);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--bd);
+}
+.nav-logo {
+  display:flex;align-items:center;gap:9px;
+  font-family:'Dancing Script',cursive;font-size:1.45rem;font-weight:700;
+  background:linear-gradient(135deg,var(--cl),var(--cd));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  text-decoration:none;cursor:pointer;
+}
+.nav-home-btn {
+  font-size:.82rem;font-weight:600;color:rgba(255,255,255,.5);
+  text-decoration:none;padding:7px 16px;border:1px solid var(--bd);
+  border-radius:8px;transition:all .2s;
+}
+.nav-home-btn:hover{color:var(--cl);border-color:rgba(45,216,240,.3);}
+
+/* ── MAIN WRAPPER ── */
+#page {
+  position:fixed;inset:0;top:62px;
+  display:flex;flex-direction:column;align-items:center;
+  background:var(--black);
+}
+
+/* ── INTRO SCREEN ── */
+#intro {
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:linear-gradient(180deg,#07090b 0%,#0a1520 100%);
+  z-index:10;
+  transition:opacity .5s,visibility .5s;
+}
+#intro.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.intro-err {
+  font-size:9rem;font-weight:900;line-height:1;
+  background:linear-gradient(135deg,var(--cl),#fff,var(--cm));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 40px rgba(45,221,212,.35));
+  letter-spacing:-4px;
+}
+.intro-sub {
+  margin-top:8px;font-size:1.15rem;color:rgba(255,255,255,.45);font-weight:400;
+  letter-spacing:.05em;
+}
+.intro-msg {
+  margin-top:18px;font-size:1rem;color:rgba(255,255,255,.65);text-align:center;
+  line-height:1.6;max-width:480px;
+}
+.intro-msg span{color:var(--cl);font-weight:700;}
+.intro-start-btn {
+  margin-top:32px;
+  background:linear-gradient(135deg,var(--cl),var(--cd));
+  color:var(--black);border:none;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:1rem;font-weight:700;
+  padding:14px 40px;border-radius:100px;
+  box-shadow:0 8px 32px rgba(45,221,212,.4);
+  transition:transform .2s,box-shadow .2s;
+  letter-spacing:.05em;
+}
+.intro-start-btn:hover{transform:translateY(-2px);box-shadow:0 14px 40px rgba(45,221,212,.55);}
+.intro-hint{margin-top:14px;font-size:.78rem;color:rgba(255,255,255,.25);}
+
+/* ── GAME AREA ── */
+#game-wrapper {
+  position:relative;width:100%;height:100%;overflow:hidden;
+}
+
+/* ── SCORE HUD ── */
+#hud {
+  position:absolute;top:12px;left:0;right:0;
+  display:flex;justify-content:center;gap:32px;align-items:center;
+  z-index:20;pointer-events:none;
+  opacity:0;transition:opacity .4s;
+}
+#hud.visible{opacity:1;}
+.hud-box {
+  background:rgba(7,9,11,.75);border:1px solid var(--bd);
+  backdrop-filter:blur(10px);border-radius:12px;
+  padding:7px 20px;display:flex;flex-direction:column;align-items:center;gap:1px;
+}
+.hud-label{font-size:.6rem;text-transform:uppercase;letter-spacing:.15em;color:var(--muted);}
+.hud-val{font-size:1.2rem;font-weight:800;color:var(--cl);line-height:1;}
+#speed-bar-wrap {
+  position:absolute;top:0;left:0;right:0;height:3px;z-index:21;
+  background:rgba(255,255,255,.05);
+}
+#speed-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cm),var(--cl));transition:width .3s;}
+
+/* ── GAME CANVAS ── */
+#gc{display:block;width:100%;height:100%;}
+
+/* ── FLOAT SCORE TEXT ── */
+.float-score {
+  position:absolute;font-size:1rem;font-weight:800;color:var(--cl);
+  pointer-events:none;z-index:30;
+  animation:floatUp .8s ease forwards;
+  text-shadow:0 0 12px rgba(45,221,212,.8);
+}
+@keyframes floatUp{0%{opacity:1;transform:translateY(0)}100%{opacity:0;transform:translateY(-50px)}}
+
+/* ── GAME OVER OVERLAY ── */
+#gameover {
+  position:absolute;inset:0;display:none;
+  flex-direction:column;align-items:center;justify-content:center;
+  background:rgba(7,9,11,.88);backdrop-filter:blur(8px);z-index:40;
+}
+#gameover.show{display:flex;}
+.go-title{
+  font-size:3rem;font-weight:900;
+  background:linear-gradient(135deg,#ff6b6b,#ff4444);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  filter:drop-shadow(0 0 20px rgba(255,80,80,.5));
+}
+.go-reason{font-size:1rem;color:rgba(255,255,255,.45);margin-top:6px;}
+.go-stats{
+  margin-top:28px;display:flex;gap:24px;
+}
+.go-stat{
+  background:var(--card);border:1px solid var(--bd);border-radius:14px;
+  padding:16px 28px;text-align:center;
+}
+.go-stat-lbl{font-size:.65rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted);}
+.go-stat-val{font-size:2rem;font-weight:800;color:var(--cl);line-height:1.2;}
+.go-restart{
+  margin-top:28px;
+  background:linear-gradient(135deg,var(--cl),var(--cd));
+  color:var(--black);border:none;cursor:pointer;
+  font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:700;
+  padding:13px 36px;border-radius:100px;
+  box-shadow:0 6px 24px rgba(45,221,212,.35);
+  transition:transform .2s,box-shadow .2s;
+}
+.go-restart:hover{transform:translateY(-2px);box-shadow:0 10px 32px rgba(45,221,212,.5);}
+.go-hint{margin-top:10px;font-size:.75rem;color:rgba(255,255,255,.25);}
+.go-home-btn{
+  margin-top:12px;display:inline-block;
+  font-size:.85rem;font-weight:600;color:rgba(255,255,255,.5);
+  text-decoration:none;padding:8px 20px;border:1px solid var(--bd);
+  border-radius:8px;transition:all .2s;
+}
+.go-home-btn:hover{color:var(--cl);border-color:rgba(45,216,240,.3);}
+
+/* ── MOBILE JUMP BUTTON ── */
+#jump-btn {
+  position:absolute;bottom:24px;right:24px;z-index:50;
+  width:72px;height:72px;border-radius:50%;
+  background:linear-gradient(135deg,var(--cl),var(--cd));
+  border:none;cursor:pointer;
+  display:none;align-items:center;justify-content:center;
+  font-size:1.6rem;
+  box-shadow:0 8px 28px rgba(45,221,212,.4);
+  -webkit-tap-highlight-color:transparent;
+  transition:transform .1s;
+}
+#jump-btn:active{transform:scale(.92);}
+@media(max-width:768px){
+  #jump-btn{display:flex;}
+  .intro-err{font-size:6rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="index.html" class="nav-logo">Kampüs Kafası</a>
+  <a href="index.html" class="nav-home-btn">← Ana Sayfa</a>
+</nav>
+
+<div id="page">
+
+  <!-- INTRO -->
+  <div id="intro">
+    <div class="intro-err">404</div>
+    <div class="intro-sub">Sayfa Bulunamadı</div>
+    <div class="intro-msg">
+      Aradığın sayfa kampüste bir yerlere kayboldu 🏃‍♂️<br>
+      Ama derse yetişmek için <span>Meltem Kapısı'ndan</span> koşmaya ne dersin?<br>
+      <small style="color:rgba(255,255,255,.3);font-size:.75rem;">Bisiklet, KYK yatağı, Beachpark ve daha fazla engeli aşabilecek misin?</small>
+    </div>
+    <button class="intro-start-btn" id="start-btn">Koşmaya Başla!</button>
+    <div class="intro-hint">Boşluk / Yukarı Ok / Ekrana Dokun = Zıpla</div>
+  </div>
+
+  <!-- GAME -->
+  <div id="game-wrapper">
+    <div id="speed-bar-wrap"><div id="speed-bar"></div></div>
+    <div id="hud">
+      <div class="hud-box">
+        <div class="hud-label">Skor</div>
+        <div class="hud-val" id="hud-score">0</div>
+      </div>
+      <div class="hud-box">
+        <div class="hud-label">Rekor</div>
+        <div class="hud-val" id="hud-best">0</div>
+      </div>
+      <div class="hud-box">
+        <div class="hud-label">Hız</div>
+        <div class="hud-val" id="hud-speed">1.0x</div>
+      </div>
+    </div>
+    <canvas id="gc"></canvas>
+    <button id="jump-btn" aria-label="Zıpla">⬆️</button>
+
+    <!-- GAME OVER -->
+    <div id="gameover">
+      <div class="go-title">DERS KAÇTI! 😭</div>
+      <div class="go-reason" id="go-reason">Bisiklete çarptın!</div>
+      <div class="go-stats">
+        <div class="go-stat">
+          <div class="go-stat-lbl">Skor</div>
+          <div class="go-stat-val" id="go-score">0</div>
+        </div>
+        <div class="go-stat">
+          <div class="go-stat-lbl">En İyi</div>
+          <div class="go-stat-val" id="go-best">0</div>
+        </div>
+      </div>
+      <button class="go-restart" id="restart-btn">Tekrar Dene!</button>
+      <a href="index.html" class="go-home-btn">🏠 Ana Sayfaya Dön</a>
+      <div class="go-hint">Boşluk / Enter / Dokun = Yeniden Başla</div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  KAMPÜS KOŞUSU — 404 OYUNU
+// ═══════════════════════════════════════════════════════════════
+
+const canvas = document.getElementById('gc');
+const ctx = canvas.getContext('2d');
+
+// ── State ──
+let state = 'idle'; // idle | running | dead
+let score = 0;
+let bestScore = parseInt(localStorage.getItem('kk_best') || '0');
+let frame = 0;
+let gameSpeed = 3.5;
+const SPEED_BASE = 3.5;
+const SPEED_MAX = 13;
+let raf;
+
+// ── Player ──
+const GROUND_OFFSET = 90; // from bottom
+let player = {};
+
+// ── Obstacles ──
+let obstacles = [];
+let nextObstacleIn = 100;
+
+// ── Particles ──
+let particles = [];
+
+// ── Float texts ──
+let floatTexts = [];
+
+// ── Background layers ──
+let bgX1 = 0, bgX2 = 0, bgX3 = 0; // parallax offsets
+
+// ── Init ──
+function resize() {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+  resetPlayer();
+}
+
+function resetPlayer() {
+  const W = canvas.width, H = canvas.height;
+  player = {
+    x: 110,
+    y: H - GROUND_OFFSET - 54,
+    w: 38,
+    h: 54,
+    vy: 0,
+    onGround: true,
+    jumping: false,
+    doubleJumped: false,
+    stepPhase: 0,
+    steamTimer: 0,
+  };
+}
+
+// ─── DRAW BACKGROUND ───────────────────────────────────────────
+function drawBackground() {
+  const W = canvas.width, H = canvas.height;
+
+  // Sky gradient
+  const sky = ctx.createLinearGradient(0, 0, 0, H * 0.72);
+  sky.addColorStop(0, '#0a1a2e');
+  sky.addColorStop(0.4, '#0d2640');
+  sky.addColorStop(0.7, '#0f3060');
+  sky.addColorStop(1, '#1a4a5c');
+  ctx.fillStyle = sky;
+  ctx.fillRect(0, 0, W, H);
+
+  // Sun / glow
+  const sunX = W * 0.78, sunY = H * 0.18;
+  const sunGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 160);
+  sunGlow.addColorStop(0, 'rgba(255,220,80,.25)');
+  sunGlow.addColorStop(0.4, 'rgba(45,221,212,.08)');
+  sunGlow.addColorStop(1, 'transparent');
+  ctx.fillStyle = sunGlow;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.beginPath();
+  ctx.arc(sunX, sunY, 22, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,230,100,.9)';
+  ctx.fill();
+
+  // ─ Layer 1: Mountains (slowest) ─
+  drawMountains(W, H, bgX1 * 0.15);
+
+  // ─ Layer 2: Campus Buildings ─
+  drawBuildings(W, H, bgX2 * 0.4);
+
+  // ─ Layer 3: Meltem Gate (only at start, scrolls away) ─
+  drawMeltemGate(W, H, bgX3 * 0.55);
+
+  // ─ Ground ─
+  drawGround(W, H);
+
+  // ─ Layer 3: Foreground trees ─
+  drawFgTrees(W, H, bgX3 * 0.85);
+}
+
+function drawMountains(W, H, ox) {
+  ctx.save();
+  // Toros dağları - pastel siluet
+  const peaks = [
+    {x:0.0, y:0.52, h:0.14},
+    {x:0.08, y:0.48, h:0.18},
+    {x:0.18, y:0.44, h:0.22},
+    {x:0.3, y:0.50, h:0.14},
+    {x:0.42, y:0.46, h:0.20},
+    {x:0.55, y:0.43, h:0.22},
+    {x:0.68, y:0.48, h:0.16},
+    {x:0.80, y:0.45, h:0.19},
+    {x:0.92, y:0.50, h:0.14},
+    {x:1.05, y:0.44, h:0.21},
+  ];
+
+  // Draw twice for seamless loop
+  for (let pass = 0; pass < 2; pass++) {
+    const baseOx = (ox % W) - W * pass;
+    ctx.beginPath();
+    ctx.moveTo(baseOx, H * 0.72);
+    peaks.forEach(p => {
+      const px = baseOx + p.x * W;
+      ctx.lineTo(px - p.h * W * 0.5, H * p.y);
+      ctx.lineTo(px, H * (p.y - p.h * 0.6));
+      ctx.lineTo(px + p.h * W * 0.5, H * p.y);
+    });
+    ctx.lineTo(baseOx + W, H * 0.72);
+    ctx.closePath();
+    const mg = ctx.createLinearGradient(0, H * 0.3, 0, H * 0.72);
+    mg.addColorStop(0, 'rgba(30,60,100,.6)');
+    mg.addColorStop(1, 'rgba(20,45,80,.4)');
+    ctx.fillStyle = mg;
+    ctx.fill();
+
+    // Snow caps
+    ctx.fillStyle = 'rgba(200,230,255,.25)';
+    peaks.forEach(p => {
+      const px = baseOx + p.x * W;
+      ctx.beginPath();
+      ctx.moveTo(px, H * (p.y - p.h * 0.6));
+      ctx.lineTo(px - p.h * W * 0.12, H * (p.y - p.h * 0.28));
+      ctx.lineTo(px + p.h * W * 0.12, H * (p.y - p.h * 0.28));
+      ctx.closePath();
+      ctx.fill();
+    });
+  }
+  ctx.restore();
+}
+
+function drawBuildings(W, H, ox) {
+  const groundY = H - GROUND_OFFSET;
+  const bldgs = [
+    // Rektörlük - büyük merkezi bina
+    {x:0.04, w:0.14, h:0.26, type:'rektorluk'},
+    // Kütüphane - kubbeli
+    {x:0.25, w:0.10, h:0.22, type:'kutuphane'},
+    // Fakülte A
+    {x:0.40, w:0.09, h:0.18, type:'fakulte'},
+    // Spor salonu
+    {x:0.54, w:0.11, h:0.15, type:'spor'},
+    // Fakülte B
+    {x:0.70, w:0.08, h:0.20, type:'fakulte'},
+    // Kafeterya
+    {x:0.83, w:0.07, h:0.14, type:'cafeteria'},
+    // Çarşılar
+    {x:0.96, w:0.10, h:0.17, type:'ceypark'},
+    {x:1.12, w:0.09, h:0.15, type:'olbia'},
+    // Rektörlük tekrar (loop)
+    {x:1.28, w:0.14, h:0.26, type:'rektorluk'},
+    {x:1.48, w:0.10, h:0.22, type:'kutuphane'},
+    {x:1.62, w:0.09, h:0.18, type:'fakulte'},
+    {x:1.76, w:0.11, h:0.15, type:'spor'},
+    {x:1.90, w:0.08, h:0.20, type:'fakulte'},
+    {x:2.03, w:0.07, h:0.14, type:'cafeteria'},
+    {x:2.16, w:0.10, h:0.17, type:'yakut'},
+  ];
+
+  ctx.save();
+  const loop = ox % W;
+
+  bldgs.forEach(b => {
+    let bx = (b.x * W + loop) % (W * 2) - W * 0.5;
+    if (bx > W + 50) return;
+    const bw = b.w * W;
+    const bh = b.h * H;
+    const by = groundY - bh;
+
+    if (b.type === 'rektorluk') drawRektorluk(bx, by, bw, bh);
+    else if (b.type === 'kutuphane') drawKutuphane(bx, by, bw, bh);
+    else if (b.type === 'spor') drawSpor(bx, by, bw, bh);
+    else if (b.type === 'ceypark') drawCarsi(bx, by, bw, bh, 'Ceypark', '#1a4a5c');
+    else if (b.type === 'olbia') drawCarsi(bx, by, bw, bh, 'Olbia Çarşı', '#2a4a1c');
+    else if (b.type === 'yakut') drawCarsi(bx, by, bw, bh, 'Yakut Çarşı', '#4a1a2a');
+    else drawFakulte(bx, by, bw, bh, b.type === 'cafeteria');
+  });
+  ctx.restore();
+}
+
+function drawRektorluk(x, y, w, h) {
+  // Ana gövde
+  const g = ctx.createLinearGradient(x, y, x, y + h);
+  g.addColorStop(0, '#1a3a5c');
+  g.addColorStop(1, '#0f2540');
+  ctx.fillStyle = g;
+  ctx.fillRect(x, y, w, h);
+
+  // Çatı - üçgenimsi
+  ctx.fillStyle = '#1e4570';
+  ctx.beginPath();
+  ctx.moveTo(x - 8, y);
+  ctx.lineTo(x + w / 2, y - 20);
+  ctx.lineTo(x + w + 8, y);
+  ctx.closePath();
+  ctx.fill();
+
+  // Kolonlar
+  ctx.fillStyle = 'rgba(45,221,212,.15)';
+  const colW = 5, gap = w / 7;
+  for (let i = 0; i < 6; i++) {
+    ctx.fillRect(x + 10 + i * gap, y + 10, colW, h - 10);
+  }
+
+  // Pencereler
+  ctx.fillStyle = 'rgba(45,221,212,.35)';
+  const rows = 4, cols = 5;
+  const pw = (w - 20) / cols - 4, ph = 10;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      const wx2 = x + 10 + c * ((w - 20) / cols);
+      const wy = y + 15 + r * 20;
+      ctx.fillRect(wx2, wy, pw, ph);
+    }
+  }
+
+  // Label
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.font = `bold ${w * 0.1}px Outfit`;
+  ctx.textAlign = 'center';
+  ctx.fillText('REKTÖRLÜK', x + w / 2, y + h - 8);
+}
+
+function drawKutuphane(x, y, w, h) {
+  ctx.fillStyle = '#16385a';
+  ctx.fillRect(x, y + 20, w, h - 20);
+
+  // Kubbe
+  ctx.beginPath();
+  ctx.ellipse(x + w / 2, y + 20, w * 0.42, 28, 0, Math.PI, 0);
+  ctx.fillStyle = '#1a4a6e';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(45,221,212,.3)';
+  ctx.lineWidth = 1.5;
+  ctx.stroke();
+
+  // Kubbe tepesi
+  ctx.beginPath();
+  ctx.arc(x + w / 2, y + 20, 5, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(45,221,212,.7)';
+  ctx.fill();
+
+  // Pencereler
+  ctx.fillStyle = 'rgba(45,221,212,.3)';
+  const pw = w * 0.12, ph = 14;
+  for (let c = 0; c < 3; c++) {
+    const wx2 = x + w * 0.18 + c * (w * 0.28);
+    ctx.beginPath();
+    ctx.roundRect(wx2, y + 30, pw, ph, 3);
+    ctx.fill();
+  }
+
+  ctx.fillStyle = 'rgba(255,255,255,.4)';
+  ctx.font = `bold ${w * 0.11}px Outfit`;
+  ctx.textAlign = 'center';
+  ctx.fillText('KÜTÜPHANE', x + w / 2, y + h - 6);
+}
+
+function drawSpor(x, y, w, h) {
+  // Spor salonu - kemer çatılı
+  ctx.fillStyle = '#152d48';
+  ctx.fillRect(x, y + 15, w, h - 15);
+
+  ctx.beginPath();
+  ctx.ellipse(x + w / 2, y + 15, w * 0.5, 22, 0, Math.PI, 0);
+  ctx.fillStyle = '#1c3a60';
+  ctx.fill();
+
+  ctx.fillStyle = 'rgba(45,221,212,.2)';
+  ctx.fillRect(x + 8, y + 20, w - 16, 3);
+
+  ctx.fillStyle = 'rgba(255,255,255,.35)';
+  ctx.font = `bold ${w * 0.1}px Outfit`;
+  ctx.textAlign = 'center';
+  ctx.fillText('SPOR', x + w / 2, y + h - 6);
+}
+
+function drawFakulte(x, y, w, h, isCafe) {
+  ctx.fillStyle = '#122840';
+  ctx.fillRect(x, y, w, h);
+
+  ctx.fillStyle = '#1a3658';
+  ctx.fillRect(x, y, w, 8);
+
+  ctx.fillStyle = 'rgba(45,221,212,.25)';
+  const rows = 3, cols = 3;
+  const pw = (w - 14) / cols - 2, ph = 8;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      ctx.fillRect(x + 7 + c * ((w - 14) / cols), y + 14 + r * 16, pw, ph);
+    }
+  }
+
+  ctx.fillStyle = 'rgba(255,255,255,.35)';
+  ctx.font = `bold ${w * 0.12}px Outfit`;
+  ctx.textAlign = 'center';
+  ctx.fillText(isCafe ? 'KAFETERYA' : 'FAKÜLTE', x + w / 2, y + h - 5);
+}
+
+
+function drawCarsi(x, y, w, h, label, baseColor) {
+  // Main building body
+  const g = ctx.createLinearGradient(x, y, x, y + h);
+  g.addColorStop(0, baseColor);
+  g.addColorStop(1, '#0a0f1a');
+  ctx.fillStyle = g;
+  ctx.fillRect(x, y, w, h);
+
+  // Flat roof with parapet
+  ctx.fillStyle = baseColor;
+  ctx.fillRect(x - 3, y - 8, w + 6, 10);
+
+  // Sign strip
+  ctx.fillStyle = 'rgba(45,221,212,.2)';
+  ctx.fillRect(x, y + 6, w, 14);
+
+  // Windows grid
+  ctx.fillStyle = 'rgba(45,221,212,.3)';
+  const cols = 3, rows = 3;
+  const pw = (w - 14) / cols - 2, ph = 8;
+  for (let r = 0; r < rows; r++) {
+    for (let c = 0; c < cols; c++) {
+      ctx.fillRect(x + 7 + c * ((w - 14) / cols), y + 26 + r * 15, pw, ph);
+    }
+  }
+
+  // Label
+  ctx.fillStyle = 'rgba(255,255,255,.5)';
+  ctx.font = `bold ${w * 0.1}px Outfit`;
+  ctx.textAlign = 'center';
+  ctx.fillText(label, x + w / 2, y + h - 5);
+}
+
+function drawMeltemGate(W, H, ox) {
+  const groundY = H - GROUND_OFFSET;
+  // Gate appears at x offset (scrolls left)
+  const gx = (W * 0.65 + ox) % (W * 3) - W * 0.8;
+  if (gx < -250 || gx > W + 50) return;
+
+  const gw = 180, gh = 120;
+  const gy = groundY - gh;
+
+  ctx.save();
+
+  // Center pillar
+  ctx.fillStyle = '#b8ccd8';
+  ctx.fillRect(gx + gw * 0.38, gy + 20, gw * 0.24, gh - 20);
+
+  // Pillar gradient
+  const pg = ctx.createLinearGradient(gx + gw * 0.38, 0, gx + gw * 0.62, 0);
+  pg.addColorStop(0, 'rgba(0,0,0,.2)');
+  pg.addColorStop(0.4, 'rgba(255,255,255,.15)');
+  pg.addColorStop(1, 'rgba(0,0,0,.2)');
+  ctx.fillStyle = pg;
+  ctx.fillRect(gx + gw * 0.38, gy + 20, gw * 0.24, gh - 20);
+
+  // Side columns
+  ctx.fillStyle = '#8aabb8';
+  ctx.fillRect(gx + gw * 0.12, gy + 50, 12, gh - 50);
+  ctx.fillRect(gx + gw * 0.76, gy + 50, 12, gh - 50);
+
+  // Arched roof - characteristic curved wing shape
+  ctx.beginPath();
+  // Left wing
+  ctx.moveTo(gx, gy + 55);
+  ctx.quadraticCurveTo(gx + gw * 0.28, gy + 10, gx + gw * 0.42, gy + 22);
+  // Right wing  
+  ctx.quadraticCurveTo(gx + gw * 0.58, gy + 10, gx + gw, gy + 55);
+  ctx.lineTo(gx + gw, gy + 62);
+  ctx.quadraticCurveTo(gx + gw * 0.58, gy + 18, gx + gw * 0.5, gy + 28);
+  ctx.quadraticCurveTo(gx + gw * 0.42, gy + 18, gx, gy + 62);
+  ctx.closePath();
+  ctx.fillStyle = '#2a2a35';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(45,221,212,.3)';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Roof ribs
+  ctx.strokeStyle = 'rgba(255,255,255,.12)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 7; i++) {
+    const t = i / 6;
+    const rx = gx + gw * t;
+    const ry = gy + 55 - Math.sin(Math.PI * t) * 38;
+    if (i > 0) {
+      ctx.beginPath();
+      ctx.moveTo(rx, ry + 8);
+      ctx.lineTo(rx, ry + 18);
+      ctx.stroke();
+    }
+  }
+
+  // Center logo circle
+  const cx2 = gx + gw * 0.5, cy2 = gy + 48;
+  ctx.beginPath();
+  ctx.arc(cx2, cy2, 16, 0, Math.PI * 2);
+  ctx.fillStyle = '#1e3a6e';
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(255,255,255,.6)';
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // "A" logo
+  ctx.fillStyle = '#fff';
+  ctx.font = 'bold 14px Arial';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  ctx.fillText('A', cx2, cy2);
+
+  // Akdeniz label
+  ctx.fillStyle = 'rgba(255,255,255,.7)';
+  ctx.font = 'bold 7px Outfit';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'alphabetic';
+  ctx.fillText('MELTEM KAPISI', gx + gw / 2, gy + gh + 10);
+
+  ctx.restore();
+}
+
+function drawGround(W, H) {
+  const groundY = H - GROUND_OFFSET;
+
+  // Road surface
+  const rg = ctx.createLinearGradient(0, groundY, 0, H);
+  rg.addColorStop(0, '#1a2535');
+  rg.addColorStop(0.3, '#141d2a');
+  rg.addColorStop(1, '#0d1520');
+  ctx.fillStyle = rg;
+  ctx.fillRect(0, groundY, W, H - groundY);
+
+  // Ground line glow
+  ctx.strokeStyle = 'rgba(45,221,212,.4)';
+  ctx.lineWidth = 2;
+  ctx.shadowColor = 'rgba(45,221,212,.6)';
+  ctx.shadowBlur = 8;
+  ctx.beginPath();
+  ctx.moveTo(0, groundY);
+  ctx.lineTo(W, groundY);
+  ctx.stroke();
+  ctx.shadowBlur = 0;
+
+  // Road markings (dashes)
+  const dashW = 40, dashGap = 30;
+  const totalW = dashW + dashGap;
+  const dashOffset = (frame * gameSpeed * 0.8) % totalW;
+  ctx.strokeStyle = 'rgba(255,255,255,.15)';
+  ctx.lineWidth = 2;
+  ctx.setLineDash([dashW, dashGap]);
+  ctx.lineDashOffset = -dashOffset;
+  ctx.beginPath();
+  ctx.moveTo(0, groundY + 18);
+  ctx.lineTo(W, groundY + 18);
+  ctx.stroke();
+  ctx.setLineDash([]);
+}
+
+function drawFgTrees(W, H, ox) {
+  const groundY = H - GROUND_OFFSET;
+  const treePositions = [0.05, 0.22, 0.38, 0.52, 0.68, 0.82, 0.96, 1.10, 1.24, 1.40, 1.55, 1.70, 1.85, 2.0];
+  treePositions.forEach(tp => {
+    const tx = (tp * W + ox) % (W * 2.2) - 20;
+    if (tx < -40 || tx > W + 40) return;
+    const th = 55 + Math.sin(tp * 17) * 12;
+    drawPalmTree(tx, groundY, th);
+  });
+
+  // Street lamps
+  const lampPos = [0.15, 0.45, 0.75, 1.05, 1.35, 1.65, 1.95];
+  lampPos.forEach(lp => {
+    const lx = (lp * W + ox) % (W * 2.2) - 10;
+    if (lx < -20 || lx > W + 20) return;
+    drawLamp(lx, groundY);
+  });
+}
+
+function drawPalmTree(x, groundY, h) {
+  // Trunk
+  ctx.strokeStyle = '#4a3520';
+  ctx.lineWidth = 5;
+  ctx.beginPath();
+  ctx.moveTo(x, groundY);
+  ctx.bezierCurveTo(x + 4, groundY - h * 0.4, x - 4, groundY - h * 0.7, x, groundY - h);
+  ctx.stroke();
+
+  // Leaves
+  const lc = '#2d6e2a';
+  const branches = [
+    {dx: -18, dy: -8, lx: -30, ly: -18},
+    {dx: 18, dy: -6, lx: 28, ly: -16},
+    {dx: -12, dy: -16, lx: -22, ly: -28},
+    {dx: 12, dy: -14, lx: 20, ly: -26},
+    {dx: 0, dy: -18, lx: 0, ly: -30},
+  ];
+  branches.forEach(b => {
+    ctx.strokeStyle = lc;
+    ctx.lineWidth = 3;
+    ctx.beginPath();
+    ctx.moveTo(x, groundY - h);
+    ctx.quadraticCurveTo(x + b.dx * 0.5, groundY - h + b.dy * 0.5, x + b.lx, groundY - h + b.ly);
+    ctx.stroke();
+
+    ctx.fillStyle = '#3a8c36';
+    ctx.beginPath();
+    ctx.ellipse(x + b.lx, groundY - h + b.ly, 9, 4, Math.atan2(b.ly, b.lx), 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawLamp(x, groundY) {
+  // Pole
+  ctx.strokeStyle = '#8aabb8';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x, groundY);
+  ctx.lineTo(x, groundY - 50);
+  ctx.lineTo(x + 14, groundY - 50);
+  ctx.stroke();
+
+  // Light
+  ctx.fillStyle = 'rgba(255,240,150,.9)';
+  ctx.beginPath();
+  ctx.arc(x + 14, groundY - 50, 5, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Glow
+  const lg = ctx.createRadialGradient(x + 14, groundY - 50, 0, x + 14, groundY - 50, 25);
+  lg.addColorStop(0, 'rgba(255,240,150,.2)');
+  lg.addColorStop(1, 'transparent');
+  ctx.fillStyle = lg;
+  ctx.beginPath();
+  ctx.arc(x + 14, groundY - 50, 25, 0, Math.PI * 2);
+  ctx.fill();
+}
+
+// ─── DRAW PLAYER ───────────────────────────────────────────────
+function drawPlayer() {
+  const p = player;
+  const cx = p.x + p.w / 2;
+  const cy = p.y + p.h / 2;
+
+  // Step animation
+  const step = Math.sin(p.stepPhase) * (p.onGround ? 1 : 0);
+
+  ctx.save();
+  ctx.translate(cx, p.y + p.h);
+  ctx.scale(1, 1);
+
+  // Jump glow
+  if (!p.onGround) {
+    const jg = ctx.createRadialGradient(0, -p.h / 2, 0, 0, -p.h / 2, 40);
+    jg.addColorStop(0, 'rgba(45,221,212,.3)');
+    jg.addColorStop(1, 'transparent');
+    ctx.fillStyle = jg;
+    ctx.beginPath();
+    ctx.arc(0, -p.h / 2, 40, 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Shadow
+  ctx.fillStyle = 'rgba(0,0,0,.4)';
+  ctx.beginPath();
+  ctx.ellipse(0, 2, 16 + (p.onGround ? 0 : 4), 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── LEGS ──
+  const legPhase = p.onGround ? p.stepPhase : Math.PI / 4;
+  ctx.strokeStyle = '#1a1a3a';
+  ctx.lineWidth = 7;
+  ctx.lineCap = 'round';
+
+  // Left leg
+  ctx.beginPath();
+  ctx.moveTo(-5, -12);
+  ctx.lineTo(-7 + Math.sin(legPhase) * 8, -12 + Math.cos(legPhase) * 6);
+  ctx.lineTo(-8 + Math.sin(legPhase) * 12, 0);
+  ctx.stroke();
+  // Left shoe
+  ctx.fillStyle = '#2DDDD4';
+  ctx.beginPath();
+  ctx.ellipse(-8 + Math.sin(legPhase) * 12, 1, 7, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Right leg
+  ctx.beginPath();
+  ctx.moveTo(5, -12);
+  ctx.lineTo(7 - Math.sin(legPhase) * 8, -12 + Math.cos(legPhase + Math.PI) * 6);
+  ctx.lineTo(8 - Math.sin(legPhase) * 12, 0);
+  ctx.stroke();
+  // Right shoe
+  ctx.fillStyle = '#2DDDD4';
+  ctx.beginPath();
+  ctx.ellipse(8 - Math.sin(legPhase) * 12, 1, 7, 4, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // ── BODY (Akdeniz Ü T-shirt) ──
+  // Shirt
+  const shirtG = ctx.createLinearGradient(-14, -p.h + 14, 14, -14);
+  shirtG.addColorStop(0, '#1e3a6e');
+  shirtG.addColorStop(1, '#0d2040');
+  ctx.fillStyle = shirtG;
+  ctx.beginPath();
+  ctx.roundRect(-14, -p.h + 14, 28, 28, [6, 6, 4, 4]);
+  ctx.fill();
+
+  // Akdeniz Ü logo circle on shirt
+  ctx.save();
+  // Outer ring
+  ctx.beginPath(); ctx.arc(0, -p.h+27, 8, 0, Math.PI*2);
+  ctx.strokeStyle='rgba(45,221,212,.9)'; ctx.lineWidth=1.5; ctx.stroke();
+  // Inner fill
+  ctx.beginPath(); ctx.arc(0, -p.h+27, 6, 0, Math.PI*2);
+  ctx.fillStyle='rgba(20,60,120,.9)'; ctx.fill();
+  // "A" letter
+  ctx.fillStyle='rgba(255,255,255,.95)'; ctx.font='bold 7px Arial';
+  ctx.textAlign='center'; ctx.textBaseline='middle';
+  ctx.fillText('A', 0, -p.h+27);
+  ctx.restore();
+
+  // Shirt collar
+  ctx.strokeStyle = 'rgba(45,221,212,.4)';
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(0, -p.h + 15, 5, 0, Math.PI);
+  ctx.stroke();
+
+  // ── ARMS ──
+  ctx.strokeStyle = '#c8a07a';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  // Left arm (with coffee!)
+  const armPhase = p.onGround ? -p.stepPhase * 0.5 : -0.8;
+  ctx.beginPath();
+  ctx.moveTo(-13, -p.h + 20);
+  ctx.lineTo(-18 + Math.sin(armPhase) * 6, -p.h + 30 + Math.cos(armPhase) * 4);
+  ctx.stroke();
+
+  // Coffee cup ☕
+  const cpx = -18 + Math.sin(armPhase) * 6;
+  const cpy = -p.h + 30 + Math.cos(armPhase) * 4;
+  ctx.fillStyle = '#e8d5b0';
+  ctx.beginPath();
+  ctx.roundRect(cpx - 6, cpy - 10, 12, 14, 2);
+  ctx.fill();
+  ctx.fillStyle = '#6b3a2a';
+  ctx.fillRect(cpx - 4, cpy - 8, 8, 8);
+  // Cup handle
+  ctx.strokeStyle = '#e8d5b0';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(cpx + 9, cpy - 3, 4, -Math.PI / 2, Math.PI / 2);
+  ctx.stroke();
+  // Steam
+  if (p.steamTimer > 0) {
+    p.steamTimer--;
+    ctx.strokeStyle = 'rgba(200,200,200,' + (p.steamTimer / 20) + ')';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(cpx - 2, cpy - 10);
+    ctx.bezierCurveTo(cpx - 5, cpy - 18, cpx + 3, cpy - 22, cpx, cpy - 28);
+    ctx.stroke();
+  }
+
+  // Right arm
+  ctx.strokeStyle = '#c8a07a';
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(13, -p.h + 20);
+  ctx.lineTo(18 - Math.sin(armPhase) * 6, -p.h + 30 + Math.cos(armPhase + Math.PI) * 4);
+  ctx.stroke();
+
+  // ── HEAD ──
+  ctx.fillStyle = '#c8a07a';
+  ctx.beginPath();
+  ctx.ellipse(0, -p.h + 10, 12, 13, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Hair
+  ctx.fillStyle = '#2a1a0a';
+  ctx.beginPath();
+  ctx.ellipse(0, -p.h + 2, 12, 8, 0, Math.PI, 0);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(0, -p.h + 1, 11, 6, 0, Math.PI, 0);
+  ctx.fill();
+
+  // Eyes
+  ctx.fillStyle = '#1a1a1a';
+  ctx.beginPath();
+  ctx.ellipse(-4, -p.h + 9, 2.5, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(4, -p.h + 9, 2.5, 3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // Eye shine
+  ctx.fillStyle = 'white';
+  ctx.beginPath();
+  ctx.ellipse(-3, -p.h + 8, 1, 1, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(5, -p.h + 8, 1, 1, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Mouth (running expression: open mouth)
+  ctx.fillStyle = '#8a2020';
+  ctx.beginPath();
+  ctx.ellipse(0, -p.h + 14, 4, p.onGround ? 2 : 3.5, 0, 0, Math.PI);
+  ctx.fill();
+
+  // Backpack
+  ctx.fillStyle = '#0d4a7e';
+  ctx.beginPath();
+  ctx.roundRect(11, -p.h + 14, 10, 18, 3);
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(45,221,212,.4)';
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(13, -p.h + 14);
+  ctx.lineTo(13, -p.h + 32);
+  ctx.stroke();
+
+  ctx.restore();
+}
+
+// ─── DRAW OBSTACLES ────────────────────────────────────────────
+const obstacleTypes = [
+  {id:'bicycle',   label:'Bisiklet!',  reason:'Bisiklete çarptın! Kaldırım sana mı ait?'},
+  {id:'desk',      label:'Masa!',      reason:'Masaya çarptın, hoca fark etti mi acaba?'},
+  {id:'tree',      label:'Ağaç!',      reason:'Ağaca çarptın! Kılavuzu görmez ağaca çarpar.'},
+  {id:'book',      label:'Kitap!',     reason:'Kitap yığınına takıldın. Belki okusaydın...'},
+  {id:'notebook',  label:'Defter!',    reason:'Defter torbası devrildi, dönem sonu problemi!'},
+  {id:'seagull',   label:'Martı!',     reason:'Martı çaldı bütün umutlarını! Tipik Akdeniz.'},
+  {id:'kykbed',    label:'KYK Yatağı!',reason:'Yataktan çıkamadın, ders kaçtı. Alarm kursan olmaz mıydı?'},
+  {id:'bench',     label:'Bank!',      reason:'Bankta overthink engeline takıldın. Hayatın anlamını düşünürken ders bitti.'},
+  {id:'friendgroup',label:'Arkadaş Grubu!',reason:'Arkadaşları gördün, "5 dk" dedin — ders kaçtı tabii.'},
+  {id:'cafe',      label:'Kafeterya!', reason:'Kafenin önünden geçemedin. Bir ice latte mahvetti seni.'},
+  {id:'beachpark', label:'Beachpark!', reason:'Beachparka akmaya gittin, sahil seni çekti. Ders notun da aktı.'},
+  {id:'lunapark',  label:'Lunapark!',  reason:'Ders diye çıktın Lunapark ne alaka :D?'},
+];
+
+function drawObstacle(ob) {
+  ctx.save();
+  const cx = ob.x + ob.w / 2;
+  const cy = ob.y + ob.h / 2;
+
+  if (ob.type === 'bicycle') drawBicycle(ob);
+  else if (ob.type === 'desk') drawDesk(ob);
+  else if (ob.type === 'tree') drawTree(ob);
+  else if (ob.type === 'book') drawBook(ob);
+  else if (ob.type === 'notebook') drawNotebook(ob);
+  else if (ob.type === 'seagull') drawSeagull(ob);
+  else if (ob.type === 'bench') drawBench(ob);
+  else if (ob.type === 'kykbed') drawKykBed(ob);
+  else if (ob.type === 'friendgroup') drawFriendGroup(ob);
+  else if (ob.type === 'cafe') drawCafeObstacle(ob);
+  else if (ob.type === 'beachpark') drawBeachpark(ob);
+  else if (ob.type === 'lunapark') drawLunapark(ob);
+
+  ctx.restore();
+}
+
+function drawBicycle(ob) {
+  const bx = ob.x + ob.w / 2;
+  const by = ob.y + ob.h;
+  const r = 20;
+
+  // Glow
+  ctx.shadowColor = 'rgba(45,221,212,.6)';
+  ctx.shadowBlur = 10;
+
+  // Wheels
+  ctx.strokeStyle = '#2DDDD4';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.arc(bx - 22, by - r, r, 0, Math.PI * 2); ctx.stroke();
+  ctx.beginPath(); ctx.arc(bx + 22, by - r, r, 0, Math.PI * 2); ctx.stroke();
+
+  // Spokes
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = 'rgba(45,221,212,.5)';
+  const spokeAng = (frame * gameSpeed * 0.05);
+  for (let i = 0; i < 6; i++) {
+    const a = spokeAng + i * Math.PI / 3;
+    ctx.beginPath();
+    ctx.moveTo(bx - 22, by - r);
+    ctx.lineTo(bx - 22 + Math.cos(a) * r, by - r + Math.sin(a) * r);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(bx + 22, by - r);
+    ctx.lineTo(bx + 22 + Math.cos(a) * r, by - r + Math.sin(a) * r);
+    ctx.stroke();
+  }
+
+  // Frame
+  ctx.strokeStyle = '#8aabb8';
+  ctx.lineWidth = 3;
+  ctx.shadowBlur = 0;
+  ctx.beginPath();
+  ctx.moveTo(bx - 22, by - r);
+  ctx.lineTo(bx, by - r - 8);
+  ctx.lineTo(bx + 22, by - r);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(bx, by - r - 8);
+  ctx.lineTo(bx - 5, by - r * 1.8);
+  ctx.lineTo(bx + 8, by - r * 1.8);
+  ctx.stroke();
+
+  // Handlebar
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(bx + 5, by - r * 1.8);
+  ctx.lineTo(bx + 16, by - r * 1.6);
+  ctx.stroke();
+}
+
+function drawDesk(ob) {
+  const dx = ob.x, dy = ob.y;
+  const dw = ob.w, dh = ob.h;
+
+  // Desk surface
+  ctx.fillStyle = '#8B5E3C';
+  ctx.beginPath();
+  ctx.roundRect(dx, dy, dw, 10, 3);
+  ctx.fill();
+  ctx.strokeStyle = '#6b4428';
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Legs
+  ctx.strokeStyle = '#6b4428';
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  ctx.beginPath(); ctx.moveTo(dx + 6, dy + 10); ctx.lineTo(dx + 6, dy + dh - 2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dx + dw - 6, dy + 10); ctx.lineTo(dx + dw - 6, dy + dh - 2); ctx.stroke();
+
+  // Chair
+  ctx.fillStyle = '#5a3e28';
+  ctx.beginPath();
+  ctx.roundRect(dx + dw + 4, dy + dh * 0.35, 22, 8, 3);
+  ctx.fill();
+  ctx.strokeStyle = '#3e2c1a';
+  ctx.lineWidth = 3;
+  ctx.beginPath(); ctx.moveTo(dx + dw + 7, dy + dh * 0.35 + 8); ctx.lineTo(dx + dw + 7, dy + dh); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dx + dw + 19, dy + dh * 0.35 + 8); ctx.lineTo(dx + dw + 19, dy + dh); ctx.stroke();
+  ctx.fillStyle = '#6b4428';
+  ctx.beginPath();
+  ctx.roundRect(dx + dw + 5, dy + dh * 0.1, 20, 26, 3);
+  ctx.fill();
+
+  // Book on desk
+  ctx.fillStyle = '#2DDDD4';
+  ctx.beginPath(); ctx.roundRect(dx + 6, dy - 12, 18, 12, 2); ctx.fill();
+  ctx.fillStyle = 'rgba(0,0,0,.3)';
+  ctx.fillRect(dx + 13, dy - 12, 1, 12);
+}
+
+function drawTree(ob) {
+  const tx = ob.x + ob.w / 2;
+  const ty = ob.y + ob.h;
+
+  // Trunk
+  ctx.fillStyle = '#5c3d1e';
+  ctx.beginPath();
+  ctx.roundRect(tx - 8, ty - 50, 16, 50, 4);
+  ctx.fill();
+
+  // Canopy layers
+  const layers = [
+    {r:28, yOff:0, color:'#2a7a26'},
+    {r:24, yOff:-22, color:'#35962f'},
+    {r:18, yOff:-42, color:'#40ad38'},
+  ];
+  layers.forEach(l => {
+    ctx.fillStyle = l.color;
+    ctx.beginPath();
+    ctx.arc(tx, ty - 50 + l.yOff, l.r, 0, Math.PI * 2);
+    ctx.fill();
+
+    // Highlight
+    ctx.fillStyle = 'rgba(255,255,255,.08)';
+    ctx.beginPath();
+    ctx.arc(tx - l.r * 0.25, ty - 50 + l.yOff - l.r * 0.25, l.r * 0.35, 0, Math.PI * 2);
+    ctx.fill();
+  });
+}
+
+function drawBook(ob) {
+  const bx = ob.x, by = ob.y;
+  const books = [
+    {y:0, w:ob.w, h:ob.h*0.4, color:'#e74c3c'},
+    {y:ob.h*0.38, w:ob.w*0.9, h:ob.h*0.35, color:'#3498db'},
+    {y:ob.h*0.7, w:ob.w*0.95, h:ob.h*0.32, color:'#f39c12'},
+  ];
+  books.forEach(b => {
+    ctx.fillStyle = b.color;
+    ctx.beginPath();
+    ctx.roundRect(bx + (ob.w - b.w)/2, by + b.y, b.w, b.h, 3);
+    ctx.fill();
+    ctx.strokeStyle = 'rgba(0,0,0,.3)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+    // Spine line
+    ctx.strokeStyle = 'rgba(255,255,255,.2)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(bx + (ob.w - b.w)/2 + 8, by + b.y + 2);
+    ctx.lineTo(bx + (ob.w - b.w)/2 + 8, by + b.y + b.h - 2);
+    ctx.stroke();
+  });
+}
+
+function drawNotebook(ob) {
+  const nx = ob.x, ny = ob.y;
+  const nw = ob.w, nh = ob.h;
+
+  ctx.fillStyle = '#27ae60';
+  ctx.beginPath();
+  ctx.roundRect(nx, ny, nw, nh, 4);
+  ctx.fill();
+
+  // Spiral rings
+  ctx.strokeStyle = 'rgba(255,255,255,.5)';
+  ctx.lineWidth = 2;
+  for (let i = 0; i < 5; i++) {
+    const ry = ny + 8 + i * (nh - 16) / 4;
+    ctx.beginPath();
+    ctx.arc(nx - 2, ry, 4, -Math.PI * 0.7, Math.PI * 0.7);
+    ctx.stroke();
+  }
+
+  // Lines on notebook
+  ctx.strokeStyle = 'rgba(255,255,255,.2)';
+  ctx.lineWidth = 1;
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.moveTo(nx + 12, ny + 10 + i * 9);
+    ctx.lineTo(nx + nw - 6, ny + 10 + i * 9);
+    ctx.stroke();
+  }
+}
+
+function drawSeagull(ob) {
+  const sx = ob.x + ob.w / 2;
+  const sy = ob.y + ob.h / 2;
+  const wingFlap = Math.sin(frame * 0.25) * 10;
+
+  ctx.save();
+  ctx.translate(sx, sy);
+
+  // Body
+  ctx.fillStyle = '#f0f0f0';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, 18, 8, 0, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Wings
+  ctx.fillStyle = '#e0e0e0';
+  // Left wing
+  ctx.beginPath();
+  ctx.moveTo(-5, 0);
+  ctx.quadraticCurveTo(-30, -8 - wingFlap, -38, 2 - wingFlap * 0.3);
+  ctx.quadraticCurveTo(-25, 4, -5, 0);
+  ctx.fill();
+  // Right wing (mirror)
+  ctx.beginPath();
+  ctx.moveTo(5, 0);
+  ctx.quadraticCurveTo(30, -8 - wingFlap, 38, 2 - wingFlap * 0.3);
+  ctx.quadraticCurveTo(25, 4, 5, 0);
+  ctx.fill();
+
+  // Wing tips dark
+  ctx.fillStyle = '#606060';
+  ctx.beginPath();
+  ctx.ellipse(-36, 2 - wingFlap * 0.3, 5, 3, -0.3, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(36, 2 - wingFlap * 0.3, 5, 3, 0.3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Head
+  ctx.fillStyle = '#f5f5f5';
+  ctx.beginPath();
+  ctx.arc(-14, -4, 8, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Beak
+  ctx.fillStyle = '#f0a020';
+  ctx.beginPath();
+  ctx.moveTo(-22, -3);
+  ctx.lineTo(-30, -2);
+  ctx.lineTo(-22, -1);
+  ctx.closePath();
+  ctx.fill();
+
+  // Eye
+  ctx.fillStyle = '#1a1a1a';
+  ctx.beginPath();
+  ctx.arc(-15, -5, 2, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawBench(ob) {
+  const bx = ob.x, by = ob.y;
+  const bw = ob.w, bh = ob.h;
+
+  // Seat slats
+  ctx.fillStyle = '#7a5230';
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.roundRect(bx, by + bh * 0.3 + i * 5, bw, 4, 2);
+    ctx.fill();
+  }
+
+  // Backrest slats
+  ctx.fillStyle = '#8b6340';
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.roundRect(bx + 2, by + i * 5, bw - 4, 4, 2);
+    ctx.fill();
+  }
+
+  // Metal frame
+  ctx.strokeStyle = '#4a4a5a';
+  ctx.lineWidth = 4;
+  ctx.lineCap = 'round';
+  // Left support
+  ctx.beginPath();
+  ctx.moveTo(bx + 8, by);
+  ctx.lineTo(bx + 8, by + bh * 0.3 + 12);
+  ctx.lineTo(bx + 6, by + bh);
+  ctx.stroke();
+  // Right support
+  ctx.beginPath();
+  ctx.moveTo(bx + bw - 8, by);
+  ctx.lineTo(bx + bw - 8, by + bh * 0.3 + 12);
+  ctx.lineTo(bx + bw - 6, by + bh);
+  ctx.stroke();
+}
+
+
+function drawKykBed(ob) {
+  const bx = ob.x, by = ob.y;
+  const bw = ob.w, bh = ob.h;
+  // Bed frame
+  const bg = ctx.createLinearGradient(bx, by, bx, by + bh);
+  bg.addColorStop(0, '#2a4a7a');
+  bg.addColorStop(1, '#1a2e4a');
+  ctx.fillStyle = bg;
+  ctx.beginPath(); ctx.roundRect(bx, by + bh*0.3, bw, bh*0.7, 4); ctx.fill();
+  // Pillow
+  ctx.fillStyle = '#e8e0d0';
+  ctx.beginPath(); ctx.roundRect(bx+4, by+bh*0.32, bw*0.38, bh*0.28, 5); ctx.fill();
+  // Blanket
+  const blg = ctx.createLinearGradient(bx, by+bh*0.5, bx, by+bh);
+  blg.addColorStop(0,'#c0392b'); blg.addColorStop(1,'#922b21');
+  ctx.fillStyle = blg;
+  ctx.beginPath(); ctx.roundRect(bx+2, by+bh*0.55, bw-4, bh*0.45, 4); ctx.fill();
+  // Stripe on blanket
+  ctx.strokeStyle='rgba(255,255,255,.2)'; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(bx+8, by+bh*0.65); ctx.lineTo(bx+bw-8, by+bh*0.65); ctx.stroke();
+  // Headboard
+  ctx.fillStyle='#1a3050';
+  ctx.beginPath(); ctx.roundRect(bx, by+bh*0.1, 10, bh*0.55, 3); ctx.fill();
+  // Legs
+  ctx.fillStyle='#555'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.roundRect(bx+4, by+bh*0.92, 6, bh*0.08, 2); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(bx+bw-10, by+bh*0.92, 6, bh*0.08, 2); ctx.fill();
+  // Zzz floating text
+  ctx.fillStyle='rgba(45,221,212,.7)'; ctx.font='bold 10px Outfit'; ctx.textAlign='center';
+  ctx.fillText('zzz...', bx+bw/2, by+bh*0.18);
+}
+
+function drawFriendGroup(ob) {
+  const bx = ob.x + ob.w/2, by = ob.y + ob.h;
+  const colors = ['#e74c3c','#3498db','#2ecc71','#f39c12'];
+  const xOff = [-22, -8, 8, 22];
+  for (let i = 0; i < 4; i++) {
+    const px = bx + xOff[i];
+    // body
+    ctx.fillStyle = colors[i];
+    ctx.beginPath(); ctx.roundRect(px-6, by-34, 12, 20, 4); ctx.fill();
+    // head
+    ctx.fillStyle = '#c8a07a';
+    ctx.beginPath(); ctx.arc(px, by-40, 8, 0, Math.PI*2); ctx.fill();
+    // hair
+    ctx.fillStyle = '#2a1a0a';
+    ctx.beginPath(); ctx.arc(px, by-44, 8, Math.PI, 0); ctx.fill();
+  }
+  ctx.fillStyle='rgba(255,255,150,.9)'; ctx.font='bold 8px Outfit'; ctx.textAlign='center';
+  ctx.fillText('😂😂', bx, by-54);
+}
+
+function drawCafeObstacle(ob) {
+  const cx = ob.x + ob.w/2, cy = ob.y + ob.h;
+  // Cup body
+  const cg = ctx.createLinearGradient(cx-14, cy-36, cx+14, cy);
+  cg.addColorStop(0,'#8B4513'); cg.addColorStop(1,'#5C2F0A');
+  ctx.fillStyle = cg;
+  ctx.beginPath(); ctx.roundRect(cx-14, cy-36, 28, 36, [3,3,8,8]); ctx.fill();
+  // Coffee inside
+  ctx.fillStyle='#3d1a00';
+  ctx.beginPath(); ctx.ellipse(cx, cy-32, 10, 4, 0, 0, Math.PI*2); ctx.fill();
+  // Handle
+  ctx.strokeStyle='#8B4513'; ctx.lineWidth=4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.arc(cx+18, cy-18, 8, -Math.PI/2, Math.PI/2); ctx.stroke();
+  // Saucer
+  ctx.fillStyle='#e8d5b0';
+  ctx.beginPath(); ctx.ellipse(cx, cy-2, 20, 5, 0, 0, Math.PI*2); ctx.fill();
+  // Steam
+  for (let i = -1; i <= 1; i++) {
+    ctx.strokeStyle='rgba(200,200,200,.5)'; ctx.lineWidth=1.5;
+    ctx.beginPath();
+    ctx.moveTo(cx+i*5, cy-38);
+    ctx.bezierCurveTo(cx+i*5-4, cy-46, cx+i*5+4, cy-52, cx+i*5, cy-58);
+    ctx.stroke();
+  }
+  ctx.fillStyle='rgba(255,255,255,.7)'; ctx.font='bold 7px Outfit'; ctx.textAlign='center';
+  ctx.fillText('NESCAFE', cx, cy-40);
+}
+
+function drawBeachpark(ob) {
+  const bx = ob.x + ob.w/2, by = ob.y + ob.h;
+  // Sandy ground hint
+  ctx.fillStyle='#f5d87a';
+  ctx.beginPath(); ctx.roundRect(ob.x, by-12, ob.w, 12, 3); ctx.fill();
+  // Umbrella pole
+  ctx.strokeStyle='#e67e22'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(bx, by-12); ctx.lineTo(bx, by-60); ctx.stroke();
+  // Umbrella top
+  ctx.fillStyle='#e74c3c';
+  ctx.beginPath(); ctx.arc(bx, by-60, 26, Math.PI, 0); ctx.fill();
+  ctx.fillStyle='#f39c12';
+  ctx.beginPath(); ctx.arc(bx, by-60, 18, Math.PI, 0); ctx.fill();
+  ctx.fillStyle='#e74c3c';
+  ctx.beginPath(); ctx.arc(bx, by-60, 10, Math.PI, 0); ctx.fill();
+  // Wave emoji
+  ctx.fillStyle='rgba(45,221,212,.9)'; ctx.font='bold 13px Outfit'; ctx.textAlign='center';
+  ctx.fillText('🌊', bx-22, by-30);
+  ctx.fillText('🌊', bx+18, by-22);
+}
+
+function drawLunapark(ob) {
+  const bx = ob.x + ob.w/2, by = ob.y + ob.h;
+  const t = frame * 0.05;
+  // Ferris wheel base
+  ctx.strokeStyle='#8B0000'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(bx-8, by); ctx.lineTo(bx, by-30); ctx.lineTo(bx+8, by); ctx.stroke();
+  // Wheel
+  ctx.strokeStyle='#e74c3c'; ctx.lineWidth=3;
+  ctx.beginPath(); ctx.arc(bx, by-55, 28, 0, Math.PI*2); ctx.stroke();
+  // Spokes
+  ctx.strokeStyle='rgba(231,76,60,.6)'; ctx.lineWidth=2;
+  for (let i = 0; i < 6; i++) {
+    const a = t + i * Math.PI / 3;
+    ctx.beginPath(); ctx.moveTo(bx, by-55);
+    ctx.lineTo(bx+Math.cos(a)*28, by-55+Math.sin(a)*28); ctx.stroke();
+  }
+  // Gondolas
+  const gondolaColors = ['#f39c12','#3498db','#2ecc71','#9b59b6'];
+  for (let i = 0; i < 4; i++) {
+    const a = t + i * Math.PI / 2;
+    const gx = bx + Math.cos(a)*28, gy = by-55 + Math.sin(a)*28;
+    ctx.fillStyle = gondolaColors[i];
+    ctx.beginPath(); ctx.roundRect(gx-5, gy, 10, 10, 3); ctx.fill();
+  }
+  ctx.fillStyle='rgba(255,255,0,.9)'; ctx.font='bold 7px Outfit'; ctx.textAlign='center';
+  ctx.fillText('LUNAPARK', bx, by-86);
+}
+
+// ─── SPAWN OBSTACLE ────────────────────────────────────────────
+function spawnObstacle() {
+  const W = canvas.width, H = canvas.height;
+  const groundY = H - GROUND_OFFSET;
+
+  // Unlock seagull after score 15
+  let available = obstacleTypes.filter(t => {
+    if (t.id === 'seagull') return score >= 15;
+    return true;
+  });
+
+  let typeObj = available[Math.floor(Math.random() * available.length)];
+
+  // Sometimes double bicycle at high speed
+  if (gameSpeed > 8 && Math.random() < 0.15 && typeObj.id === 'bicycle') {
+    // spawn double
+    spawnSingle('bicycle', W, groundY, 0);
+    spawnSingle('bicycle', W + 60, groundY, 0);
+    return;
+  }
+
+  spawnSingle(typeObj.id, W, groundY, typeObj.id === 'seagull' ? -1 : 0);
+}
+
+function spawnSingle(typeId, startX, groundY, flying) {
+  let ob = {type: typeId, x: startX, vx: -gameSpeed};
+  const typeObj = obstacleTypes.find(t => t.id === typeId);
+  ob.reason = typeObj ? typeObj.reason : 'Çarptın!';
+
+  if (typeId === 'bicycle') {
+    ob.w = 50; ob.h = 45;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'desk') {
+    ob.w = 55; ob.h = 36;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'tree') {
+    ob.w = 40; ob.h = 70;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'book') {
+    ob.w = 34; ob.h = 50;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'notebook') {
+    ob.w = 28; ob.h = 40;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'seagull') {
+    ob.w = 76; ob.h = 30;
+    ob.y = groundY - 80 - Math.random() * 50;
+  } else if (typeId === 'bench') {
+    ob.w = 54; ob.h = 44;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'kykbed') {
+    ob.w = 60; ob.h = 36;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'friendgroup') {
+    ob.w = 55; ob.h = 55;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'cafe') {
+    ob.w = 44; ob.h = 50;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'beachpark') {
+    ob.w = 60; ob.h = 70;
+    ob.y = groundY - ob.h;
+  } else if (typeId === 'lunapark') {
+    ob.w = 64; ob.h = 80;
+    ob.y = groundY - ob.h;
+  }
+
+  obstacles.push(ob);
+}
+
+// ─── PARTICLES ─────────────────────────────────────────────────
+function spawnParticles(x, y) {
+  for (let i = 0; i < 18; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = 1 + Math.random() * 4;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed - 2,
+      life: 1,
+      decay: 0.03 + Math.random() * 0.04,
+      size: 2 + Math.random() * 5,
+      color: `hsl(${170 + Math.random() * 30}, 80%, 60%)`,
+    });
+  }
+}
+
+// ─── COLLISION ─────────────────────────────────────────────────
+function checkCollision(ob) {
+  const p = player;
+  const margin = 8;
+  return (
+    p.x + margin < ob.x + ob.w - margin &&
+    p.x + p.w - margin > ob.x + margin &&
+    p.y + margin < ob.y + ob.h - margin &&
+    p.y + p.h - margin > ob.y + margin
+  );
+}
+
+// ─── GAME LOOP ─────────────────────────────────────────────────
+function gameLoop() {
+  if (state !== 'running') return;
+
+  const W = canvas.width, H = canvas.height;
+  const groundY = H - GROUND_OFFSET;
+
+  frame++;
+
+  // Speed increase every 450 frames
+  const speedLevel = Math.floor(frame / 450);
+  gameSpeed = Math.min(SPEED_BASE + speedLevel * 0.3, SPEED_MAX);
+
+  // Update HUD
+  document.getElementById('hud-score').textContent = score;
+  document.getElementById('hud-best').textContent = bestScore;
+  document.getElementById('hud-speed').textContent = (gameSpeed / SPEED_BASE).toFixed(1) + 'x';
+  document.getElementById('speed-bar').style.width = ((gameSpeed - SPEED_BASE) / (SPEED_MAX - SPEED_BASE) * 100) + '%';
+
+  // Background scroll
+  bgX1 -= gameSpeed * 0.2;
+  bgX2 -= gameSpeed * 0.5;
+  bgX3 -= gameSpeed * 0.9;
+
+  // Player physics
+  const gravity = 0.65;
+  player.vy += gravity;
+  player.y += player.vy;
+
+  if (player.y >= groundY - player.h) {
+    player.y = groundY - player.h;
+    player.vy = 0;
+    player.onGround = true;
+    player.jumping = false;
+    player.doubleJumped = false;
+    player.steamTimer = Math.max(player.steamTimer, 8);
+  } else {
+    player.onGround = false;
+  }
+
+  if (player.onGround) {
+    player.stepPhase += 0.18 * (gameSpeed / SPEED_BASE);
+  }
+
+  // Spawn obstacles
+  nextObstacleIn--;
+  if (nextObstacleIn <= 0) {
+    spawnObstacle();
+    const minGap = Math.max(55, 110 - score * 2);
+    nextObstacleIn = minGap + Math.random() * 80;
+  }
+
+  // Update obstacles
+  let passed = 0;
+  obstacles = obstacles.filter(ob => {
+    ob.x += -gameSpeed;
+    ob.vx = -gameSpeed;
+
+    if (ob.x + ob.w < 0) {
+      passed++;
+      return false;
+    }
+
+    // Seagull slight sine wave
+    if (ob.type === 'seagull') {
+      ob.y += Math.sin(frame * 0.05 + ob.x * 0.01) * 0.8;
+    }
+
+    if (checkCollision(ob)) {
+      die(ob.reason);
+    }
+    return true;
+  });
+
+  if (passed > 0) {
+    score += passed;
+    if (score > bestScore) {
+      bestScore = score;
+      localStorage.setItem('kk_best', bestScore);
+    }
+    // Float text
+    addFloatText(player.x + player.w + 10, player.y - 10, '+' + passed);
+  }
+
+  // Update particles
+  particles = particles.filter(p => {
+    p.x += p.vx; p.y += p.vy; p.vy += 0.1; p.life -= p.decay;
+    return p.life > 0;
+  });
+
+  // Draw everything
+  ctx.clearRect(0, 0, W, H);
+  drawBackground();
+
+  // Draw particles
+  particles.forEach(p => {
+    ctx.save();
+    ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+  });
+
+  // Draw obstacles
+  obstacles.forEach(drawObstacle);
+
+  // Draw player
+  drawPlayer();
+
+  raf = requestAnimationFrame(gameLoop);
+}
+
+// ─── ADD FLOAT TEXT ────────────────────────────────────────────
+function addFloatText(x, y, text) {
+  const el = document.createElement('div');
+  el.className = 'float-score';
+  el.textContent = text;
+  el.style.left = x + 'px';
+  el.style.top = (y + 62) + 'px'; // nav offset
+  document.getElementById('game-wrapper').appendChild(el);
+  el.addEventListener('animationend', () => el.remove());
+}
+
+// ─── DIE ───────────────────────────────────────────────────────
+function die(reason) {
+  state = 'dead';
+  cancelAnimationFrame(raf);
+  spawnParticles(player.x + player.w / 2, player.y + player.h / 2);
+
+  // Draw one last frame with particles
+  const W = canvas.width, H = canvas.height;
+  drawBackground();
+  particles.forEach(p => {
+    ctx.save(); ctx.globalAlpha = p.life;
+    ctx.fillStyle = p.color;
+    ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  });
+
+  document.getElementById('go-reason').textContent = reason;
+  document.getElementById('go-score').textContent = score;
+  document.getElementById('go-best').textContent = bestScore;
+  document.getElementById('gameover').classList.add('show');
+}
+
+// ─── JUMP ──────────────────────────────────────────────────────
+function jump() {
+  if (state === 'dead') { restartGame(); return; }
+  if (state === 'idle') { startGame(); return; }
+
+  if (player.onGround) {
+    player.vy = -14;
+    player.onGround = false;
+    player.jumping = true;
+    player.steamTimer = 20;
+    spawnParticles(player.x + player.w / 2, player.y + player.h);
+  } else if (!player.doubleJumped) {
+    player.vy = -11;
+    player.doubleJumped = true;
+    player.steamTimer = 20;
+    spawnParticles(player.x + player.w / 2, player.y + player.h);
+  }
+}
+
+// ─── START / RESTART ───────────────────────────────────────────
+function startGame() {
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('hud').classList.add('visible');
+  state = 'running';
+  score = 0;
+  frame = 0;
+  gameSpeed = SPEED_BASE;
+  obstacles = [];
+  particles = [];
+  nextObstacleIn = 100;
+  bgX1 = 0; bgX2 = 0; bgX3 = 0;
+  resize();
+  gameLoop();
+}
+
+function restartGame() {
+  document.getElementById('gameover').classList.remove('show');
+  document.getElementById('hud').classList.add('visible');
+  state = 'running';
+  score = 0;
+  frame = 0;
+  gameSpeed = SPEED_BASE;
+  obstacles = [];
+  particles = [];
+  nextObstacleIn = 100;
+  bgX1 = 0; bgX2 = 0; bgX3 = 0;
+  resize();
+  gameLoop();
+}
+
+// ─── EVENTS ────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
+    e.preventDefault();
+    if (state === 'dead') restartGame();
+    else jump();
+  }
+  if (e.code === 'Enter' && state === 'dead') restartGame();
+});
+
+canvas.addEventListener('click', () => {
+  if (state === 'dead') restartGame();
+  else jump();
+});
+
+document.getElementById('jump-btn').addEventListener('click', e => {
+  e.stopPropagation();
+  jump();
+});
+
+document.getElementById('start-btn').addEventListener('click', startGame);
+document.getElementById('restart-btn').addEventListener('click', restartGame);
+
+window.addEventListener('resize', () => {
+  if (state === 'running') resize();
+  else { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+});
+
+// ─── INIT ──────────────────────────────────────────────────────
+document.getElementById('hud-best').textContent = bestScore;
+
+window.addEventListener('load', () => {
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+
+  // Draw a static preview on idle
+  drawBackground();
+  resetPlayer();
+  drawPlayer();
+});
+
+resize();
+</script>
+</body>
+</html>

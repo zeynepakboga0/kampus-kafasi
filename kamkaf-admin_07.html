@@ -1302,6 +1302,49 @@ const ADMIN_EMAIL = "kampuskafasi07@gmail.com";
 const MAX_ATTEMPTS = 5;
 const LOCK_MS = 5 * 60 * 1000;
 
+/* ── Oturum Zaman Aşımı (5 dakika hareketsizlik) ── */
+const SESSION_TIMEOUT_MS = 5 * 60 * 1000; // 5 dakika
+const SESSION_KEY = '_kk_last_active';
+let _sessionTimer = null;
+
+function touchSession() {
+  localStorage.setItem(SESSION_KEY, Date.now().toString());
+  resetSessionTimer();
+}
+
+function resetSessionTimer() {
+  if (_sessionTimer) clearTimeout(_sessionTimer);
+  _sessionTimer = setTimeout(async () => {
+    // Oturum süresi doldu — kullanıcıya bildir ve çıkış yap
+    toast('Hareketsizlik nedeniyle oturum kapatıldı.', 'warn');
+    setTimeout(async () => {
+      localStorage.removeItem(SESSION_KEY);
+      await signOut(auth);
+    }, 1500);
+  }, SESSION_TIMEOUT_MS);
+}
+
+function checkSessionExpiry() {
+  const last = parseInt(localStorage.getItem(SESSION_KEY) || '0', 10);
+  if (!last) return false; // ilk giriş, kayıt yok
+  return (Date.now() - last) > SESSION_TIMEOUT_MS;
+}
+
+function startActivityTracking() {
+  ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+    window.addEventListener(evt, touchSession, { passive: true });
+  });
+  touchSession(); // ilk aktiviteyi kaydet
+}
+
+function stopActivityTracking() {
+  ['mousemove', 'keydown', 'click', 'scroll', 'touchstart'].forEach(evt => {
+    window.removeEventListener(evt, touchSession);
+  });
+  if (_sessionTimer) { clearTimeout(_sessionTimer); _sessionTimer = null; }
+  localStorage.removeItem(SESSION_KEY);
+}
+
 /* ── Brute-force ── */
 function getAttemptData() { try { return JSON.parse(localStorage.getItem('_kka') || '{}'); } catch { return {}; } }
 function setAttemptData(d) { localStorage.setItem('_kka', JSON.stringify(d)); }
@@ -1355,17 +1398,26 @@ window.doLogin = async function() {
 
 window.doLogout = async function() {
   if (!confirm('Çıkış yapmak istediğinizden emin misiniz?')) return;
+  stopActivityTracking();
   await signOut(auth); location.reload();
 };
 
 /* ── Auth State ── */
 onAuthStateChanged(auth, async (user) => {
   if (user) {
+    // Oturum süresi dolduysa hemen çıkış yap
+    if (checkSessionExpiry()) {
+      localStorage.removeItem(SESSION_KEY);
+      await signOut(auth);
+      return;
+    }
     document.getElementById('login-screen').style.display = 'none';
     document.getElementById('app').classList.add('on');
     document.getElementById('sb-user').textContent = user.email || '';
+    startActivityTracking();
     await loadAll();
   } else {
+    stopActivityTracking();
     document.getElementById('app').classList.remove('on');
     document.getElementById('login-screen').style.display = 'flex';
     const locked = checkLock();
