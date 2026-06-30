@@ -838,6 +838,7 @@ img { max-width: 100%; display: block; }
           <button class="btn btn-p btn-sm" onclick="openMemberModal('admins')">+ Admin Ekle</button>
           <button class="btn-reset" onclick="askReset('ekip-admins')">🗑 Tümünü Sıfırla</button>
         </div>
+        <div class="info-box info" style="margin-bottom:14px"><span>ℹ️</span><span>"Sıra Numarası" alanı, ekip sayfasındaki kart sırasını belirler. Düşük numara önce gösterilir.</span></div>
         <div id="admins-list"></div>
       </div>
     </div>
@@ -892,7 +893,6 @@ img { max-width: 100%; display: block; }
       <!-- Hero & CTA -->
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">🦸</span>Hero Bölümü</div></div>
-        <div class="fg"><label>Hero Eyebrow (üst küçük yazı)</label><input id="sp-heroEyebrow" type="text" placeholder="Kampüs'ün Kalbiyle Birlikte"></div>
         <div class="fg"><label>Hero Ana Başlık</label><input id="sp-heroTitle" type="text" placeholder="Kampüs Kafası ile Büyü"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="sp-heroSub" rows="2" placeholder="17.000'den fazla öğrenciyle güçlü bir topluluğun parçası ol."></textarea></div>
         <button class="btn btn-p" onclick="saveSpBasic()">Kaydet</button>
@@ -976,8 +976,6 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">🏠</span>Ana Sayfa — Hero</div></div>
         <div class="card-desc">Ziyaretçilerin ilk gördüğü başlık bölümü.</div>
-        <div class="fg"><label>Hero Başlık Satırı 1 (Kampüs)</label><input id="txt-heroLine1" type="text" placeholder="Kampüs"></div>
-        <div class="fg"><label>Hero Başlık Satırı 2 (Kafası)</label><input id="txt-heroLine2" type="text" placeholder="Kafası"></div>
         <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-heroBadge" type="text" placeholder="Akdeniz Üniversitesi · Antalya"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-heroSub" rows="3" placeholder="Kampüs yaşamını birlikte inşa ediyoruz…"></textarea></div>
         <div class="fg"><label>Hero Buton 1 Metni</label><input id="txt-heroBtn1" type="text" placeholder="Etkinlikleri Keşfet"></div>
@@ -1042,24 +1040,6 @@ img { max-width: 100%; display: block; }
         </div>
       </div>
 
-      <!-- Site Kimliği -->
-
-      <!-- Site Kimliği -->
-      <div class="card">
-        <div class="card-head"><div class="card-title"><span class="card-title-ico">🌐</span>Site Kimliği & SEO</div></div>
-        <div class="g2">
-          <div class="fg"><label>Site Başlığı</label><input id="g-siteTitle" type="text" placeholder="Kampüs Kafası"></div>
-          <div class="fg"><label>Logo URL</label>
-            <div class="img-row">
-              <input id="g-logoUrl" type="url" placeholder="https://... veya logo.jpg" oninput="previewLogo()">
-            </div>
-            <img id="g-logo-preview" class="img-preview" alt="Logo Önizleme">
-          </div>
-          <div class="fg" style="grid-column:1/-1"><label>SEO Meta Açıklaması</label><textarea id="g-metaDesc" rows="2" placeholder="Kampüs Kafası — Akdeniz Üniversitesi'nin en büyük öğrenci topluluğu."></textarea></div>
-        </div>
-        <button class="btn btn-p" onclick="saveSiteIdentity()">Kaydet</button>
-      </div>
-
       <!-- Sayaçlar -->
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">🔢</span>Animasyonlu Sayaçlar</div></div>
@@ -1082,7 +1062,6 @@ img { max-width: 100%; display: block; }
           <div class="fg"><label>📸 Instagram Kullanıcı Adı</label><input id="g-instagram" type="text" placeholder="kampuskafasii"></div>
           <div class="fg"><label>💼 LinkedIn URL</label><input id="g-linkedin" type="url" placeholder="https://linkedin.com/company/..."></div>
           <div class="fg"><label>🎵 TikTok URL (opsiyonel)</label><input id="g-tiktok" type="url" placeholder="https://tiktok.com/@..."></div>
-          <div class="fg"><label>🐦 Twitter/X URL (opsiyonel)</label><input id="g-twitter" type="url" placeholder="https://twitter.com/..."></div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px">
           <button class="btn btn-p" onclick="saveGlobalSettings()">Kaydet</button>
@@ -1140,12 +1119,14 @@ img { max-width: 100%; display: block; }
       <div class="fg" style="grid-column:1/-1"><label>Konum</label><input id="ev-loc" type="text" placeholder="Yer, bina adı veya adres…"></div>
       <div class="fg" style="grid-column:1/-1"><label>Açıklama</label><textarea id="ev-desc" rows="4" placeholder="Etkinlik hakkında detaylı bilgi…"></textarea></div>
       <div class="fg" style="grid-column:1/-1">
-        <label>Fotoğraf URL</label>
+        <label>Fotoğraf</label>
         <div class="img-row">
-          <input id="ev-img" type="url" placeholder="https://…" oninput="previewImg('ev-img','ev-img-preview')">
+          <input id="ev-img" type="url" placeholder="https://… (veya bilgisayarından dosya seç)" oninput="previewImg('ev-img','ev-img-preview')">
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('ev-img-file').click()">📁 Dosya Seç</button>
+          <input id="ev-img-file" type="file" accept="image/*" style="display:none" onchange="handleFilePick('ev-img-file','ev-img','ev-img-preview')">
         </div>
         <img id="ev-img-preview" class="img-preview" alt="">
-        <div class="fg-hint">İnternetten bir fotoğraf linki yapıştır.</div>
+        <div class="fg-hint">İnternetten bir fotoğraf linki yapıştır, ya da "Dosya Seç" ile bilgisayarından doğrudan yükle.</div>
       </div>
     </div>
     <div class="toggle-row">
@@ -1175,13 +1156,20 @@ img { max-width: 100%; display: block; }
       <div class="fg"><label>Unvan / Görev <span class="req">*</span></label><input id="m-role" type="text" placeholder="Başkan…"></div>
     </div>
     <div class="fg" id="m-order-wrap">
-      <label>Hiyerarşi Sırası</label>
-      <input id="m-order" type="number" min="1" placeholder="1=Başkan · 2=Yrd. · 3=Koordinatör…">
-      <div class="fg-hint">Düşük numara = üstte görünür.</div>
+      <label>Sıra Numarası</label>
+      <input id="m-order" type="number" min="1" placeholder="1, 2, 3…">
+      <div class="fg-hint" id="m-order-hint">Düşük numara = üstte/önce görünür.</div>
     </div>
     <div class="fg-row">
       <div class="fg"><label>Avatar Harfleri</label><input id="m-initials" type="text" placeholder="AY" maxlength="3"></div>
-      <div class="fg"><label>Fotoğraf URL</label><input id="m-img" type="url" placeholder="https://…" oninput="previewImg('m-img','m-img-preview')"></div>
+      <div class="fg">
+        <label>Fotoğraf</label>
+        <div class="img-row">
+          <input id="m-img" type="url" placeholder="https://…" oninput="previewImg('m-img','m-img-preview')">
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('m-img-file').click()">📁 Seç</button>
+          <input id="m-img-file" type="file" accept="image/*" style="display:none" onchange="handleFilePick('m-img-file','m-img','m-img-preview')">
+        </div>
+      </div>
     </div>
     <img id="m-img-preview" class="img-preview" alt="">
     <div class="fg-row">
@@ -1301,6 +1289,27 @@ const auth = getAuth(app);
 const ADMIN_EMAIL = "kampuskafasi07@gmail.com";
 const MAX_ATTEMPTS = 5;
 const LOCK_MS = 5 * 60 * 1000;
+
+/* ── Cloudinary ayarları (fotoğraf yükleme) ── */
+const CLOUDINARY_CLOUD_NAME = 't5mv3fwn';
+const CLOUDINARY_UPLOAD_PRESET = 'kampus-kafasi';
+
+async function uploadToCloudinary(blob) {
+  const formData = new FormData();
+  formData.append('file', blob);
+  formData.append('upload_preset', CLOUDINARY_UPLOAD_PRESET);
+  const res = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+    method: 'POST',
+    body: formData
+  });
+  if (!res.ok) {
+    let msg = 'Cloudinary yükleme hatası';
+    try { const data = await res.json(); if (data?.error?.message) msg = data.error.message; } catch {}
+    throw new Error(msg);
+  }
+  const data = await res.json();
+  return data.secure_url;
+}
 
 /* ── Oturum Zaman Aşımı (5 dakika hareketsizlik) ── */
 const SESSION_TIMEOUT_MS = 5 * 60 * 1000; // 5 dakika
@@ -1475,12 +1484,7 @@ async function loadSettings() {
     set('c-address', s.address); set('c-email', s.email); set('c-instagram', s.ig);
     set('c-whatsapp', s.wa); set('c-linkedin', s.linkedin); set('c-maps', s.maps);
     set('g-email', s.email); set('g-wa', s.wa); set('g-instagram', s.ig); set('g-linkedin', s.linkedin);
-    set('g-tiktok', s.tiktok); set('g-twitter', s.twitter);
-    set('g-siteTitle', s.siteTitle); set('g-logoUrl', s.logoUrl); set('g-metaDesc', s.metaDesc);
-    if (s.logoUrl) {
-      const prev = document.getElementById('g-logo-preview');
-      if (prev) { prev.src = s.logoUrl; prev.style.display = 'block'; }
-    }
+    set('g-tiktok', s.tiktok);
   } catch(e) { console.warn('loadSettings:', e); }
 }
 
@@ -1503,7 +1507,6 @@ async function loadTexts() {
     const m = snap.data();
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
     set('txt-heroBadge', m.heroBadge); set('txt-heroSub', m.heroSub);
-    set('txt-heroLine1', m.heroLine1); set('txt-heroLine2', m.heroLine2);
     set('txt-heroBtn1', m.heroBtn1); set('txt-heroBtn2', m.heroBtn2);
     set('txt-evTitle', m.evTitle); set('txt-footerSub', m.footerSub);
     set('txt-who1', m.who1); set('txt-who2', m.who2);
@@ -1520,7 +1523,7 @@ async function loadSpBasic() {
     if (!snap.exists()) return;
     const s = snap.data();
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    set('sp-heroSub', s.heroSub); set('sp-heroTitle', s.heroTitle); set('sp-heroEyebrow', s.heroEyebrow);
+    set('sp-heroSub', s.heroSub); set('sp-heroTitle', s.heroTitle);
     set('sp-ctaTitle', s.ctaTitle); set('sp-ctaText', s.ctaText);
     set('sp-whyTitle', s.whyTitle); set('sp-whyDesc', s.whyDesc);
     set('sp-colTitle', s.colTitle); set('sp-colDesc', s.colDesc);
@@ -1703,7 +1706,7 @@ async function loadTeamList(type) {
     const members = [];
     snap.forEach(d => members.push({ id: d.id, ...d.data() }));
     if (type === 'board') { _boardCache = members; _boardCache.sort((a,b) => (a.order||99)-(b.order||99)); }
-    else { _adminsCache = members; }
+    else { _adminsCache = members; _adminsCache.sort((a,b) => (a.order||99)-(b.order||99)); }
     if (snap.empty) { listEl.innerHTML = `<div class="empty"><div class="empty-ico">⊙</div><div class="empty-title">Henüz üye eklenmedi.</div></div>`; return; }
     renderTeamList(type, type === 'board' ? _boardCache : _adminsCache, listEl);
   } catch(e) { toast('Ekip yüklenemedi: ' + e.message, 'err'); }
@@ -1717,7 +1720,7 @@ function renderTeamList(type, members, listEl) {
     div.className = 'li';
     div.innerHTML = `
       <div class="li-body">
-        <div class="li-title">${esc(m.name)}${type==='board'&&m.order?`<span class="badge" style="margin-left:6px;font-size:.58rem">#${m.order}</span>`:''}</div>
+        <div class="li-title">${esc(m.name)}${m.order?`<span class="badge" style="margin-left:6px;font-size:.58rem">#${m.order}</span>`:''}</div>
         <div class="li-sub">${esc(m.role)}${m.ig?' · @'+esc(m.ig):''}${m.linkedin?' · LinkedIn':''}</div>
       </div>
       <div class="li-acts">
@@ -1749,8 +1752,9 @@ window.openMemberModal = function(type) {
   ['m-name','m-role','m-img','m-ig','m-linkedin','m-order','m-edit-id','m-initials'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   document.getElementById('m-type').value = type;
   document.getElementById('member-modal-title').textContent = type === 'board' ? '⊙ Yönetim Kurulu Üyesi Ekle' : '⊙ Admin Ekle';
-  document.getElementById('m-order-wrap').style.display = type === 'board' ? 'flex' : 'none';
+  document.getElementById('m-order-wrap').style.display = 'flex';
   document.getElementById('m-order-wrap').style.flexDirection = 'column';
+  document.getElementById('m-order-hint').textContent = type === 'board' ? 'Düşük numara = üstte görünür. (1=Başkan, 2=Yrd. gibi)' : 'Düşük numara = önce görünür.';
   document.getElementById('m-img-preview').style.display = 'none';
   document.getElementById('member-modal').classList.add('on');
 };
@@ -1771,8 +1775,9 @@ window.editMember = async function(type, id) {
     document.getElementById('m-name').value     = m.name     || '';
     document.getElementById('m-order').value    = m.order    || '';
     document.getElementById('member-modal-title').textContent = type === 'board' ? '⊙ YK Üyesini Düzenle' : '⊙ Admini Düzenle';
-    document.getElementById('m-order-wrap').style.display = type === 'board' ? 'flex' : 'none';
+    document.getElementById('m-order-wrap').style.display = 'flex';
     document.getElementById('m-order-wrap').style.flexDirection = 'column';
+    document.getElementById('m-order-hint').textContent = type === 'board' ? 'Düşük numara = üstte görünür. (1=Başkan, 2=Yrd. gibi)' : 'Düşük numara = önce görünür.';
     const prev = document.getElementById('m-img-preview');
     if (m.img) { prev.src = m.img; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
     document.getElementById('member-modal').classList.add('on');
@@ -2075,26 +2080,10 @@ window.saveGlobalSettings = async function() {
       ig:       document.getElementById('g-instagram').value.trim().replace('@',''),
       linkedin: document.getElementById('g-linkedin').value.trim(),
       tiktok:   document.getElementById('g-tiktok').value.trim(),
-      twitter:  document.getElementById('g-twitter').value.trim(),
     });
     await setDoc(doc(db, "ayarlar", "kk_sett"), mevcut);
     addLog('Global bağlantılar güncellendi', 'ok');
     toast('Global bağlantılar kaydedildi!', 'ok');
-  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
-};
-
-window.saveSiteIdentity = async function() {
-  try {
-    const snap = await getDoc(doc(db, "ayarlar", "kk_sett"));
-    const mevcut = snap.exists() ? snap.data() : {};
-    Object.assign(mevcut, {
-      siteTitle: document.getElementById('g-siteTitle').value.trim(),
-      logoUrl:   document.getElementById('g-logoUrl').value.trim(),
-      metaDesc:  document.getElementById('g-metaDesc').value.trim(),
-    });
-    await setDoc(doc(db, "ayarlar", "kk_sett"), mevcut);
-    addLog('Site kimliği güncellendi', 'ok');
-    toast('Site kimliği kaydedildi!', 'ok');
   } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
 };
 
@@ -2116,7 +2105,7 @@ window.saveTexts = async function(group) {
     const snap = await getDoc(doc(db, "ayarlar", "kk_metin_v1"));
     const mevcut = snap.exists() ? snap.data() : {};
     const get = id => document.getElementById(id)?.value.trim() || '';
-    if      (group === 'hero')  { mevcut.heroBadge=get('txt-heroBadge'); mevcut.heroSub=get('txt-heroSub'); mevcut.heroLine1=get('txt-heroLine1'); mevcut.heroLine2=get('txt-heroLine2'); mevcut.heroBtn1=get('txt-heroBtn1'); mevcut.heroBtn2=get('txt-heroBtn2'); }
+    if      (group === 'hero')  { mevcut.heroBadge=get('txt-heroBadge'); mevcut.heroSub=get('txt-heroSub'); mevcut.heroBtn1=get('txt-heroBtn1'); mevcut.heroBtn2=get('txt-heroBtn2'); }
     else if (group === 'extra') { mevcut.evTitle=get('txt-evTitle'); mevcut.footerSub=get('txt-footerSub'); }
     else if (group === 'who')   { mevcut.who1=get('txt-who1'); mevcut.who2=get('txt-who2'); }
     else if (group === 'about') { mevcut.about1=get('txt-about1'); mevcut.about2=get('txt-about2'); mevcut.about3=get('txt-about3'); }
@@ -2135,7 +2124,6 @@ window.saveSpBasic = async function() {
     Object.assign(mevcut, {
       heroSub:    get('sp-heroSub'),
       heroTitle:  get('sp-heroTitle'),
-      heroEyebrow:get('sp-heroEyebrow'),
       ctaTitle:   get('sp-ctaTitle'),
       ctaText:    get('sp-ctaText'),
       whyTitle:   get('sp-whyTitle'),
@@ -2237,11 +2225,57 @@ window.previewImg = function(inputId, previewId) {
   if (url) { prev.src = url; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
 };
 
-window.previewLogo = function() {
-  const url = document.getElementById('g-logoUrl')?.value.trim();
-  const prev = document.getElementById('g-logo-preview');
-  if (!prev) return;
-  if (url) { prev.src = url; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
+/* ── Dosyadan fotoğraf seçilince sıkıştırıp Cloudinary'e yükle, dönen URL'i ilgili input'a yaz ── */
+window.handleFilePick = function(fileInputId, urlInputId, previewId, maxDim = 1280, quality = 0.82) {
+  const fileInput = document.getElementById(fileInputId);
+  const file = fileInput?.files?.[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    toast('Lütfen bir görsel dosyası seç.', 'err');
+    fileInput.value = '';
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+        else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(async (blob) => {
+        if (!blob) {
+          toast('Görsel işlenemedi, başka bir dosya dene.', 'err');
+          fileInput.value = '';
+          return;
+        }
+        toast('Fotoğraf yükleniyor…', 'ok');
+        try {
+          const url = await uploadToCloudinary(blob);
+          const urlInput = document.getElementById(urlInputId);
+          if (urlInput) urlInput.value = url;
+          const prev = document.getElementById(previewId);
+          if (prev) { prev.src = url; prev.style.display = 'block'; }
+          toast('Fotoğraf yüklendi ✓', 'ok');
+        } catch (err) {
+          toast('Yükleme başarısız: ' + err.message, 'err');
+        } finally {
+          fileInput.value = '';
+        }
+      }, 'image/jpeg', quality);
+    };
+    img.onerror = () => toast('Görsel okunamadı, başka bir dosya dene.', 'err');
+    img.src = e.target.result;
+  };
+  reader.onerror = () => toast('Dosya okunamadı.', 'err');
+  reader.readAsDataURL(file);
 };
 
 function checkDashLayout() {

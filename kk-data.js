@@ -75,6 +75,16 @@ if (ekipData.length === 0) ekipData = null;
       const cEmail = document.getElementById('contact-email-val');
       if (cEmail) { cEmail.href = 'mailto:' + sett.email; cEmail.textContent = sett.email; }
     }
+    if (sett.linkedin) {
+      document.querySelectorAll('a[href*="linkedin.com"]').forEach(el => {
+        if (!el.classList.contains('no-overwrite')) el.href = sett.linkedin;
+      });
+    }
+    if (sett.tiktok) {
+      document.querySelectorAll('a[href*="tiktok.com"]').forEach(el => {
+        if (!el.classList.contains('no-overwrite')) el.href = sett.tiktok;
+      });
+    }
   }
 
   /* ── 2. SAYFA BAZLI YÜKLEMELER ── */

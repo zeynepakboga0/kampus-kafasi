@@ -433,6 +433,7 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
       <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">Instagram</a>
       <a href="#" id="footer-wa">WhatsApp</a>
       <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.tiktok.com/@kampuskafasi" target="_blank" rel="noopener noreferrer">TikTok</a>
     </div>
   </div>
   <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
@@ -478,6 +479,11 @@ import { firebaseConfig } from "./firebase-config.js";
 const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 // Hero ve CTA metinleri
 const spSnap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
 if (spSnap.exists()) {
@@ -517,7 +523,7 @@ if (!whySnap.empty) {
       whyGrid.innerHTML += `
         <div class="sp-why-item reveal visible">
           <div class="sp-why-dot"></div>
-          <div class="sp-why-text"><strong>${w.ico||''} ${w.title}</strong><span>${w.desc||''}</span></div>
+          <div class="sp-why-text"><strong>${w.ico||''} ${escHtml(w.title)}</strong><span>${escHtml(w.desc||'')}</span></div>
         </div>`;
     });
     whyGrid.querySelectorAll('.reveal').forEach(el => {
@@ -538,9 +544,9 @@ if (!optSnap.empty) {
       optGrid.innerHTML += `
         <div class="sp-option-card reveal visible">
           <div class="sp-option-icon" style="font-size:1.5rem">${o.ico||'🤝'}</div>
-          <h3>${o.title}</h3>
-          <p>${o.desc||''}</p>
-          <a href="mailto:${o.email||'iletisim@kampuskafasi.com'}?subject=${encodeURIComponent((o.title||'')+ ' Teklifi')}" class="btn-card-offer">
+          <h3>${escHtml(o.title)}</h3>
+          <p>${escHtml(o.desc||'')}</p>
+          <a href="mailto:${encodeURIComponent(o.email||'iletisim@kampuskafasi.com')}?subject=${encodeURIComponent((o.title||'')+ ' Teklifi')}" class="btn-card-offer">
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
           </a>
         </div>`;
@@ -575,8 +581,8 @@ if (!stepsSnap.empty) {
         </div>
         <div class="sp-step-right">
           <div class="sp-step-tag">Adım 0${s.order || i + 1}</div>
-          <h4>${s.ico || ''} ${s.title}</h4>
-          <p>${s.desc || ''}</p>
+          <h4>${s.ico || ''} ${escHtml(s.title)}</h4>
+          <p>${escHtml(s.desc || '')}</p>
         </div>
       </div>`).join('');
     stepsContainer.querySelectorAll('.reveal').forEach(el => {
