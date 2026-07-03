@@ -421,15 +421,13 @@ function loadActivities(eventsFromFirebase) {
     card.appendChild(body);
     grid.appendChild(card);
 
-    card.addEventListener('mousemove', e => {
-      const r = card.getBoundingClientRect();
-      const x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5;
-      card.style.transform = `translateY(-6px) perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
-      card.style.background = `radial-gradient(260px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.07),transparent 55%),var(--card)`;
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
+      card.style.transform = 'translateY(-6px)';
     });
     card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
       card.style.transform = '';
-      card.style.background = '';
     });
   });
 

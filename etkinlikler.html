@@ -442,19 +442,14 @@ function appendCards(cards, gridId){
   const grid = document.getElementById(gridId);
   cards.forEach((card,i) => {
     grid.appendChild(card);
-    // 3D tilt + glow
-    card.addEventListener('mousemove', e => {
-      card.style.transition = '';
-      const r=card.getBoundingClientRect();
-      const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-      card.style.transform=`translateY(-6px) perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
-      card.style.background=`radial-gradient(260px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.07),transparent 55%),var(--card)`;
+    // Sadece yukarı hareket
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
+      card.style.transform = 'translateY(-6px)';
     });
     card.addEventListener('mouseleave', () => {
       card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform='';
-      card.style.background='';
-      card.addEventListener('transitionend', () => { card.style.transition = ''; }, { once: true });
+      card.style.transform = '';
     });
     setTimeout(()=>{card.style.opacity='1'; card.classList.remove('card-enter');}, i*40+20);
   });
