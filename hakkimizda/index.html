@@ -5,10 +5,10 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Hakkımızda — Kampüs Kafası</title>
-<link rel="icon" type="image/jpeg" href="logo.jpg">
+<link rel="icon" type="image/jpeg" href="/logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="/style.css">
 <style>
 /* BİZ KİMİZ */
 #intro{padding:80px 32px;background:rgba(10,15,21,.82)}
@@ -112,7 +112,7 @@
   <div class="loader-glow"></div>
   <div class="loader-content">
     <div class="loader-logo-wrap">
-      <img src="logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
+      <img src="/logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
       <div class="loader-img-ring"></div><div class="loader-img-ring2"></div><div class="loader-img-ring3"></div>
     </div>
     <div class="loader-text-wrap">
@@ -126,14 +126,14 @@
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="index.html" class="nav-logo"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
+  <a href="/" class="nav-logo"><img src="/logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
   <ul class="nav-links">
-    <li><a href="index.html">Ana Sayfa</a></li>
-    <li><a href="hakkimizda.html" class="active">Hakkımızda</a></li>
-    <li><a href="etkinlikler.html">Etkinlikler</a></li>
-    <li><a href="ekip.html">Ekip</a></li>
-    <li><a href="iletisim.html">İletişim</a></li>
-    <li><a href="sponsorluk.html">Sponsorluk</a></li>
+    <li><a href="/">Ana Sayfa</a></li>
+    <li><a href="/hakkimizda/" class="active">Hakkımızda</a></li>
+    <li><a href="/etkinlikler/">Etkinlikler</a></li>
+    <li><a href="/ekip/">Ekip</a></li>
+    <li><a href="/iletisim/">İletişim</a></li>
+    <li><a href="/sponsorluk/">Sponsorluk</a></li>
   </ul>
   <div class="nav-right">
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
@@ -141,28 +141,28 @@
 </nav>
 
 <div id="mobile-nav-strip">
-  <a href="index.html" class="mn-link">Ana Sayfa</a>
-  <a href="hakkimizda.html" class="mn-link active">Hakkımızda</a>
-  <a href="etkinlikler.html" class="mn-link">Etkinlikler</a>
-  <a href="ekip.html" class="mn-link">Ekip</a>
-  <a href="iletisim.html" class="mn-link">İletişim</a>
-  <a href="sponsorluk.html" class="mn-link">Sponsorluk</a>
+  <a href="/" class="mn-link">Ana Sayfa</a>
+  <a href="/hakkimizda/" class="mn-link active">Hakkımızda</a>
+  <a href="/etkinlikler/" class="mn-link">Etkinlikler</a>
+  <a href="/ekip/" class="mn-link">Ekip</a>
+  <a href="/iletisim/" class="mn-link">İletişim</a>
+  <a href="/sponsorluk/" class="mn-link">Sponsorluk</a>
 </div>
 
 <!-- DRAWER -->
 <div id="drawer-overlay" onclick="closeDrawer()"></div>
 <aside id="drawer">
   <div class="drawer-top">
-    <div class="drawer-logo"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
+    <div class="drawer-logo"><img src="/logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <nav class="drawer-links">
-    <a href="index.html" class="drawer-link" onclick="closeDrawer()">Ana Sayfa</a>
-    <a href="hakkimizda.html" class="drawer-link active" onclick="closeDrawer()">Hakkımızda</a>
-    <a href="etkinlikler.html" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
-    <a href="ekip.html" class="drawer-link" onclick="closeDrawer()">Ekip</a>
-    <a href="iletisim.html" class="drawer-link" onclick="closeDrawer()">İletişim</a>
-    <a href="sponsorluk.html" class="drawer-link">Sponsorluk & İş Birliği</a>
+    <a href="/" class="drawer-link" onclick="closeDrawer()">Ana Sayfa</a>
+    <a href="/hakkimizda/" class="drawer-link active" onclick="closeDrawer()">Hakkımızda</a>
+    <a href="/etkinlikler/" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
+    <a href="/ekip/" class="drawer-link" onclick="closeDrawer()">Ekip</a>
+    <a href="/iletisim/" class="drawer-link" onclick="closeDrawer()">İletişim</a>
+    <a href="/sponsorluk/" class="drawer-link">Sponsorluk & İş Birliği</a>
   </nav>
 
   <div class="drawer-bottom">
@@ -247,7 +247,7 @@
         <h3>Tüm Etkinlikleri Keşfet</h3>
         <p>Yaklaşan ve geçmiş tüm etkinliklerimizi detaylarıyla görmek için etkinlikler sayfasına gidebilirsin.</p>
       </div>
-      <a href="etkinlikler.html" class="btn-primary">
+      <a href="/etkinlikler/" class="btn-primary">
         Tüm Etkinlikleri Gör
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
@@ -325,12 +325,12 @@
     </div>
     <div class="footer-col">
       <h5>Navigasyon</h5>
-      <a href="index.html">Ana Sayfa</a>
-      <a href="hakkimizda.html">Hakkımızda</a>
-      <a href="etkinlikler.html">Etkinlikler</a>
-      <a href="ekip.html">Ekip</a>
-      <a href="sponsorluk.html">Sponsorluk</a>
-      <a href="iletisim.html">İletişim</a>
+      <a href="/">Ana Sayfa</a>
+      <a href="/hakkimizda/">Hakkımızda</a>
+      <a href="/etkinlikler/">Etkinlikler</a>
+      <a href="/ekip/">Ekip</a>
+      <a href="/sponsorluk/">Sponsorluk</a>
+      <a href="/iletisim/">İletişim</a>
     </div>
     <div class="footer-col">
       <h5>Sosyal Medya</h5>
@@ -502,7 +502,7 @@ document.querySelectorAll('.vm-card').forEach(card => {
   draw();
 })();
 </script>
-<script src="main.js" defer></script>
-<script type="module" src="kk-data.js"></script>
+<script src="/main.js" defer></script>
+<script type="module" src="/kk-data.js"></script>
 </body>
 </html>

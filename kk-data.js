@@ -15,7 +15,19 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   let ekipData = null;
   let eventsList = [];
 
-  const page = location.pathname.split('/').pop() || 'index.html';
+  // Temiz URL yapısı (ör: /hakkimizda/) ile eski dosya adı yapısını (ör: /hakkimizda.html)
+  // birlikte destekler. Klasör adını veya dosya adını bulup ".html" ekleyerek
+  // aşağıdaki sayfa-özel kontrollerle uyumlu hale getirir.
+  const segments = location.pathname.split('/').filter(Boolean); // boş parçaları at
+  const lastSeg = segments.pop() || '';
+  let page;
+  if (lastSeg === '' || lastSeg === 'index.html') {
+    page = 'index.html';
+  } else if (lastSeg.endsWith('.html')) {
+    page = lastSeg; // eski dosya-adı tabanlı linkler hâlâ çalışsın
+  } else {
+    page = lastSeg + '.html'; // /hakkimizda/  ->  hakkimizda.html
+  }
 
   try {
     // Sayaçları en önce çek ve hemen başlat
@@ -141,7 +153,7 @@ if (ekipData.length === 0) ekipData = null;
     container.innerHTML = list.map(m => `
       <div class="board-card reveal">
         <div class="bc-img-wrap">
-          <img src="${m.img || 'logo.jpg'}" alt="${esc(m.name)}">
+          <img src="${m.img || '/logo.jpg'}" alt="${esc(m.name)}">
         </div>
         <h3 class="bc-name">${esc(m.name)}</h3>
         <span class="bc-role">${esc(m.role)}</span>
