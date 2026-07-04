@@ -2,16 +2,138 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://www.gstatic.com https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<link rel="stylesheet" href="../style.css"> 
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kampüs Kafası — Antalya</title>
-<link rel="icon" type="image/jpeg" href="logo.jpg">
+<title>Sponsorluk & İş Birliği — Kampüs Kafası</title>
+<link rel="icon" type="image/jpeg" href="../logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="style.css">
+<style>
+/* PAGE HERO */
+.page-hero{padding:130px 32px 70px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
+.page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
+.page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
+.page-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:18px;opacity:0;animation:fadeUp .7s .3s ease forwards}
+.page-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.page-title{font-family:'Dancing Script',cursive;font-size:clamp(2.8rem,6.5vw,5.5rem);font-weight:700;line-height:1.2;margin-bottom:14px;padding-bottom:6px;overflow:visible;background:linear-gradient(135deg,var(--cl) 0%,#fff 50%,var(--cl) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .45s ease forwards,shimmerAnim 3s 1.5s linear infinite;text-align:left}
+.page-subtitle{font-size:.95rem;color:rgba(255,255,255,.4);font-weight:400;max-width:520px;line-height:1.75;opacity:0;animation:fadeUp .7s .6s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
+/* SECTIONS */
+.section-wrap{max-width:1100px;margin:0 auto}
+.section-lbl{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:8px}
+.section-lbl::before{content:'';display:block;width:14px;height:1.5px;background:var(--cl)}
+.section-h{font-size:clamp(1.55rem,3.2vw,2.2rem);font-weight:800;line-height:1.15;margin-bottom:6px}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease}
+.reveal.visible{opacity:1;transform:translateY(0)}
 
+/* STATS BAR - index-style animated counters */
+#sp-stats{padding:0 32px 52px;background:transparent}
+.sp-stats-grid{display:flex;gap:0;border:1px solid var(--bd);border-radius:18px;overflow:hidden;max-width:540px;background:rgba(255,255,255,.02)}
+.sp-stat-item{flex:1;padding:28px 16px;text-align:center;border-right:1px solid var(--bd);transition:background .3s}
+.sp-stat-item:last-child{border-right:none}
+.sp-stat-item:hover{background:rgba(45,221,212,.03)}
+.sp-stat-num{font-size:2.2rem;font-weight:900;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;white-space:nowrap;word-break:normal;overflow-wrap:normal}
+.sp-stat-icon{display:none}
+.sp-stat-lbl{font-size:.7rem;color:var(--muted);font-weight:500;margin-top:3px;letter-spacing:.04em}
 
+/* NEDEN BİZ */
+#sp-why{padding:72px 32px;background:rgba(7,9,11,.82)}
+.sp-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;max-width:780px;grid-auto-rows:1fr}
+.sp-why-item{display:flex;align-items:flex-start;gap:12px;padding:16px 18px;border-left:2px solid rgba(45,216,240,.3);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;transition:border-color .2s,background .2s;box-sizing:border-box;height:100%;word-wrap:break-word;overflow-wrap:break-word}
+.sp-why-item:hover{border-left-color:var(--cl);background:rgba(45,216,240,.04)}
+.sp-why-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);flex-shrink:0;margin-top:6px}
+.sp-why-text{font-size:.84rem;color:rgba(255,255,255,.55);line-height:1.65;word-wrap:break-word;overflow-wrap:break-word;white-space:normal;flex:1}
+.sp-why-text strong{color:rgba(255,255,255,.85);font-weight:600;display:block;margin-bottom:2px;font-size:.86rem}
+
+/* İŞ BİRLİĞİ SEÇENEKLERİ */
+#sp-options{padding:80px 32px;background:rgba(10,15,21,.82)}
+.sp-options-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
+.sp-option-card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:30px 24px 24px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default;display:flex;flex-direction:column}
+.sp-option-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
+.sp-option-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
+.sp-option-card:hover{border-color:rgba(45,216,240,.28);box-shadow:0 16px 48px rgba(0,0,0,.4);transform:translateY(-4px)}
+.sp-option-card:hover::after{opacity:.6}
+.sp-option-icon{width:50px;height:50px;border-radius:14px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.18);display:flex;align-items:center;justify-content:center;color:var(--cl);margin-bottom:18px;font-size:1.3rem}
+.sp-option-card h3{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:10px}
+.sp-option-card p{font-size:.84rem;color:rgba(255,255,255,.42);line-height:1.75;flex:1;margin-bottom:20px}
+.btn-card-offer{display:inline-flex;align-items:center;gap:7px;background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.22);color:var(--cl);padding:9px 18px;border-radius:100px;font-size:.82rem;font-weight:600;transition:background .2s,border-color .2s,transform .2s;cursor:pointer;align-self:flex-start;text-decoration:none}
+.btn-card-offer:hover{background:rgba(45,216,240,.15);border-color:var(--cl);transform:translateY(-1px)}
+
+/* SÜREÇ - yeni tasarım */
+#sp-process{padding:80px 32px;background:rgba(7,9,11,.82)}
+.sp-steps{display:grid;grid-template-columns:1fr;gap:0;margin-top:52px;max-width:700px;position:relative}
+.sp-step{display:flex;align-items:flex-start;gap:28px;padding:0 0 40px 0;position:relative;opacity:0;transform:translateX(-18px);transition:opacity .55s ease,transform .55s ease}
+.sp-step.visible{opacity:1;transform:translateX(0)}
+.sp-step:nth-child(2){transition-delay:.12s}
+.sp-step:nth-child(3){transition-delay:.24s}
+.sp-step:nth-child(4){transition-delay:.36s}
+.sp-step:last-child{padding-bottom:0}
+/* vertical connector */
+.sp-step-left{display:flex;flex-direction:column;align-items:center;flex-shrink:0}
+.sp-step-circle{width:52px;height:52px;border-radius:14px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.18));border:1px solid rgba(45,216,240,.3);display:flex;align-items:center;justify-content:center;position:relative;transition:border-color .3s,box-shadow .3s,background .3s;flex-shrink:0}
+.sp-step:hover .sp-step-circle{border-color:rgba(45,216,240,.6);background:linear-gradient(135deg,rgba(45,216,240,.2),rgba(13,110,106,.25));box-shadow:0 0 28px rgba(45,221,212,.18)}
+.sp-step-n{font-size:1.1rem;font-weight:900;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.sp-connector{width:1px;flex:1;min-height:24px;background:linear-gradient(180deg,rgba(45,216,240,.4),rgba(45,216,240,.05));margin-top:6px}
+.sp-step:last-child .sp-connector{display:none}
+.sp-step-right{padding-top:10px;flex:1}
+.sp-step-tag{display:inline-block;font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cl);background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.18);padding:3px 10px;border-radius:100px;margin-bottom:8px}
+.sp-step h4{font-size:1rem;font-weight:700;color:var(--white);margin-bottom:7px;line-height:1.3}
+.sp-step p{font-size:.84rem;color:rgba(255,255,255,.4);line-height:1.75}
+/* eski .sp-step-badge & icon gerekirse */
+.sp-step-badge{display:none}
+.sp-step-icon{display:none}
+
+/* İLETİŞİM */
+#sp-contact{padding:80px 32px;background:rgba(7,9,11,.82)}
+.sp-contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px}
+.sp-cc{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 20px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default}
+.sp-cc::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
+.sp-cc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
+.sp-cc:hover{box-shadow:0 14px 40px rgba(0,0,0,.4);border-color:rgba(45,216,240,.22);transform:translateY(-3px)}
+.sp-cc:hover::after{opacity:.55}
+.sp-cc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.16);display:flex;align-items:center;justify-content:center;margin-bottom:14px;flex-shrink:0;color:var(--cl)}
+.sp-cc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:4px}
+.sp-cc-value{font-size:.9rem;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:4px;word-break:break-word}
+.sp-cc-value a{color:var(--white);transition:color .2s}
+.sp-cc-value a:hover{color:var(--cl)}
+.sp-cc-sub{font-size:.76rem;color:rgba(255,255,255,.32);line-height:1.5}
+
+/* FOOTER */
+footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 32px 32px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.footer-brand .fl{font-family:'Dancing Script',cursive;font-size:1.5rem;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
+.footer-brand p{font-size:.83rem;color:rgba(255,255,255,.3);line-height:1.7}
+.footer-col h5{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cl);margin-bottom:16px}
+.footer-col a{display:block;font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:9px;transition:color .2s}
+.footer-col a:hover{color:var(--cl)}
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:24px;border-top:1px solid var(--bd);text-align:center;font-size:.75rem;color:rgba(255,255,255,.2)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .sp-options-grid{grid-template-columns:1fr;gap:14px}
+  .sp-steps{max-width:100%}
+  .sp-stats-grid{width:100%}
+  .sp-contact-grid{grid-template-columns:1fr}
+  .footer-inner{grid-template-columns:1fr;gap:28px}
+  #nav{padding:0 18px}.nav-links{display:none}
+  #sp-why,#sp-options,#sp-process,#sp-cta,#sp-contact{padding:60px 18px}
+  #sp-stats{padding:0 18px 40px}
+  .sp-why-grid{grid-template-columns:1fr}
+  .page-hero{padding:110px 18px 56px}
+  footer{padding:48px 18px 32px}
+  .sp-cta-box{padding:36px 24px}
+}
+@media(max-width:520px){
+  .sp-stats-grid{border-radius:12px}
+  .sp-cta-btns{flex-direction:column;align-items:center}
+  .sp-stat-num{font-size:1.4rem !important}
+  .sp-stat-item{padding:16px 8px}
+}
+</style>
 </head>
 <body>
 
@@ -22,62 +144,57 @@
   <div class="loader-glow"></div>
   <div class="loader-content">
     <div class="loader-logo-wrap">
-      <img src="logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
-      <div class="loader-img-ring"></div>
-      <div class="loader-img-ring2"></div>
-      <div class="loader-img-ring3"></div>
+      <img src="../logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
+      <div class="loader-img-ring"></div><div class="loader-img-ring2"></div><div class="loader-img-ring3"></div>
     </div>
     <div class="loader-text-wrap">
       <div class="loader-title">Kampüs Kafası</div>
       <div class="loader-divider"></div>
-      <div class="loader-sub">Akdeniz Üniversitesi · Antalya</div>
-      <div class="loader-dots">
-        <div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div>
-      </div>
+      <div class="loader-sub">Sponsorluk</div>
+      <div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
     </div>
   </div>
 </div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="./" class="nav-logo" id="nav-logo-link"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
+  <a href="../" class="nav-logo"><img src="../logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
   <ul class="nav-links">
-    <li><a href="./" class="active">Ana Sayfa</a></li>
-    <li><a href="hakkimizda/">Hakkımızda</a></li>
-    <li><a href="etkinlikler/">Etkinlikler</a></li>
-    <li><a href="ekip/">Ekip</a></li>
-    <li><a href="iletisim/">İletişim</a></li>
-    <li><a href="sponsorluk/">Sponsorluk</a></li>
+    <li><a href="../">Ana Sayfa</a></li>
+    <li><a href="../hakkimizda/">Hakkımızda</a></li>
+    <li><a href="../etkinlikler/">Etkinlikler</a></li>
+    <li><a href="../ekip/">Ekip</a></li>
+    <li><a href="../iletisim/">İletişim</a></li>
+    <li><a href="../sponsorluk/" class="active">Sponsorluk</a></li>
   </ul>
   <div class="nav-right">
-    <a href="oyun/" class="btn-primary nav-game-btn">🏃 Kampüste Koş</a>
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
   </div>
 </nav>
-
 <div id="mobile-nav-strip">
-  <a href="./" class="mn-link active">Ana Sayfa</a>
-  <a href="hakkimizda/" class="mn-link">Hakkımızda</a>
-  <a href="etkinlikler/" class="mn-link">Etkinlikler</a>
-  <a href="ekip/" class="mn-link">Ekip</a>
-  <a href="iletisim/" class="mn-link">İletişim</a>
-  <a href="sponsorluk/" class="mn-link">Sponsorluk</a>
+  <a href="../" class="mn-link">Ana Sayfa</a>
+  <a href="../hakkimizda/" class="mn-link">Hakkımızda</a>
+  <a href="../etkinlikler/" class="mn-link">Etkinlikler</a>
+  <a href="../ekip/" class="mn-link">Ekip</a>
+  <a href="../iletisim/" class="mn-link">İletişim</a>
+  <a href="../sponsorluk/" class="mn-link active">Sponsorluk</a>
 </div>
+
 
 <!-- DRAWER -->
 <div id="drawer-overlay" onclick="closeDrawer()"></div>
 <aside id="drawer">
   <div class="drawer-top">
-    <div class="drawer-logo"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
+    <div class="drawer-logo"><img src="../logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <nav class="drawer-links">
-    <a href="./" class="drawer-link active" onclick="closeDrawer()">Ana Sayfa</a>
-    <a href="hakkimizda/" class="drawer-link" onclick="closeDrawer()">Hakkımızda</a>
-    <a href="etkinlikler/" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
-    <a href="ekip/" class="drawer-link" onclick="closeDrawer()">Ekip</a>
-    <a href="iletisim/" class="drawer-link" onclick="closeDrawer()">İletişim</a>
-    <a href="sponsorluk/" class="drawer-link">Sponsorluk</a>
+    <a href="../" class="drawer-link" onclick="closeDrawer()">Ana Sayfa</a>
+    <a href="../hakkimizda/" class="drawer-link" onclick="closeDrawer()">Hakkımızda</a>
+    <a href="../etkinlikler/" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
+    <a href="../ekip/" class="drawer-link" onclick="closeDrawer()">Ekip</a>
+    <a href="../iletisim/" class="drawer-link" onclick="closeDrawer()">İletişim</a>
+    <a href="../sponsorluk/" class="drawer-link active" onclick="closeDrawer()">Sponsorluk & İş Birliği</a>
   </nav>
   <div class="drawer-bottom">
     <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="drawer-ig">
@@ -88,217 +205,216 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp Grubuna Katıl
     </a>
-    <script>
-    (function(){
-      try{
-        /* wa linki veriBaslat() içinde applySettings() ile güncelleniyor */
-      }catch(e){}
-    })();
-    </script>
-  </div>
+</div>
 </aside>
 
-<!-- HERO -->
-<section id="hero">
-  <canvas id="particle-canvas"></canvas>
-  <div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div>
-  <div class="hero-grid-bg"></div>
-  <div class="hero-inner">
-    <div>
-      <div class="hero-eyebrow"><span class="hero-dot"></span><span id="hero-badge-text">Akdeniz Üniversitesi · Antalya</span></div>
-      <h1 class="hero-title" id="hero-title-el">Kampüs<br>Kafası</h1>
-      <p class="hero-sub" id="hero-sub-el">Üniversite hayatının tam merkezinde. WhatsApp gruplarımızda 17.000'den fazla öğrenciyle buluşuyor, yeni gelenlere kampüs ve şehir hayatında yol gösteriyoruz.</p>
-      <div class="hero-btns">
-        <a href="etkinlikler/" class="btn-primary">Etkinlikleri Gör</a>
-        <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="btn-outline">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@kampuskafasii
-        </a>
-        <a href="#" id="wa-btn-hero" class="btn-outline">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp
-        </a>
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="page-eyebrow"><span class="page-dot"></span>Fırsatlar · Kampüs Kafası</div>
+    <h1 class="page-title">Sponsorluk</h1>
+<div class="page-subtitle sp-hero-sub">17.000'den fazla üniversite öğrencisine ulaşmak istiyorsanız doğru yerdesiniz.</div>
+        <div class="sp-stats-grid" style="margin-top:32px;opacity:0;animation:fadeUp .7s .75s ease forwards">
+      <div class="sp-stat-item">
+        <div class="sp-stat-num" id="st-members">0</div>
+        <div class="sp-stat-lbl">Aktif Üye</div>
       </div>
-      <div class="hero-stats">
-        <div class="stat-item"><div class="stat-num" id="sc-members">0</div><div class="stat-lbl">Üye</div></div>
-        <div class="stat-item"><div class="stat-num" id="sc-events">0</div><div class="stat-lbl">Etkinlik</div></div>
-        <div class="stat-item"><div class="stat-num" id="sc-year">0</div><div class="stat-lbl">Yıl</div></div>
+      <div class="sp-stat-item">
+        <div class="sp-stat-num" id="st-events">0</div>
+        <div class="sp-stat-lbl">Etkinlik</div>
       </div>
-    </div>
-    <div class="hero-visual">
-      <div class="logo-glow-bg"></div>
-      <div class="orbit orbit-1"></div>
-      <div class="orbit orbit-2"></div>
-      <div class="orbit orbit-3"></div>
-      <img src="logo.jpg" class="hero-logo-img" alt="Kampüs Kafası" onerror="this.style.display='none'">
+      <div class="sp-stat-item">
+        <div class="sp-stat-num" id="st-exp">0</div>
+        <div class="sp-stat-lbl">Yıllık Deneyim</div>
+      </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- BİZ KİMİZ -->
-<section id="who">
+<!-- STATS SECTION (hidden, for counter trigger) -->
+<section id="sp-stats" style="display:none"></section>
+
+<!-- NEDEN BİZ -->
+<section id="sp-why">
   <div class="section-wrap">
     <div class="reveal">
-      <span class="section-lbl">Biz Kimiz?</span>
-      <h2 class="section-h" style="color:var(--white)">Kampüs Kafası ile Tanış</h2>
+      <span class="section-lbl">Neden Biz?</span>
+      <h2 class="section-h" style="color:var(--white)">Doğru Kitleye Doğrudan Ulaş</h2>
     </div>
-    <div class="who-inner" style="grid-template-columns:1fr;max-width:760px">
-      <div class="reveal">
-        <p style="font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.9;margin-bottom:20px">Kampüs Kafası, Gençlik ve Spor Bakanlığı (GSB) ile ortak projeler yürüten, resmi olarak tanınan bir Akdeniz Üniversitesi öğrenci topluluğudur. Öğrencilerin birbirine bağlandığı, yeni gelenlere yol gösterdiği ve kampüs hayatını kolaylaştırdığı bir platform olarak faaliyet gösteriyoruz.</p>
-        <p style="font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.9;margin-bottom:32px">WhatsApp ağımız üzerinden 17.000'den fazla öğrenciye ulaşıyor; yurt, şehir ve kampüs hayatında anlık bilgi sunuyoruz. Etkinlikler, geziler, anketler ve partilerle öğrenci yaşamını daha renkli kılıyoruz.</p>
-        <div style="margin-top:8px">
-          <a href="hakkimizda/" class="btn-outline">Daha Fazla Bilgi →</a>
-        </div>
+    <div class="sp-why-grid">
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+<div class="sp-why-text"><strong>Geniş & Sadık Kitle</strong><span>17.000'i aşkın aktif öğrenci, anlık görünürlük.</span></div>
+      </div>
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Güvenilir Platform</strong>GSB ortaklığıyla resmi tanınan öğrenci topluluğu.</div>
+      </div>
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Hedefli Erişim</strong>Üniversite öğrencisi demografisine tam isabet.</div>
+      </div>
+      <div class="sp-why-item reveal">
+        <div class="sp-why-dot"></div>
+        <div class="sp-why-text"><strong>Doğrudan Etkileşim</strong>Sahada, dijitalde ve görsel içerikte aktif temas.</div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ETKİNLİKLER (PREVIEW) -->
-<section id="events">
+<!-- İŞ BİRLİĞİ SEÇENEKLERİ -->
+<section id="sp-options">
   <div class="section-wrap">
-    <div class="events-header reveal">
-      <div>
-        <span class="section-lbl">Neler Oluyor?</span>
-        <h2 class="section-h" style="color:var(--white)">Etkinlikler</h2>
-      </div>
+    <div class="reveal">
+      <span class="section-lbl">İş Birliği Seçenekleri</span>
+      <h2 class="section-h" style="color:var(--white)">Nasıl Çalışabiliriz?</h2>
+      <p style="font-size:.92rem;color:rgba(255,255,255,.4);line-height:1.8;margin-top:10px;max-width:600px">İhtiyacınıza göre şekillenen üç farklı iş birliği modeliyle markanızı öğrenci kitlesine taşıyoruz.</p>
     </div>
-    <div class="events-grid" id="events-grid"></div>
-    <div class="events-cta reveal">
-      <a href="etkinlikler/" class="btn-events-page">
-        Tüm Etkinlikleri Gör
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-      </a>
-    </div>
-  </div>
-</section>
-
-<!-- EVENT MODAL -->
-<div id="event-modal" onclick="closeModalOutside(event)">
-  <div class="modal-box">
-    <button class="modal-x" onclick="closeModal()">✕</button>
-    <div class="modal-hero">
-      <div class="modal-hero-glow"></div>
-      <img id="m-img" class="modal-hero-img" alt="">
-      <div class="modal-hero-emoji" id="m-emoji">🎉</div>
-      <div class="modal-hero-overlay"></div>
-    </div>
-    <div class="modal-content">
-      <div class="modal-tag-row">
-        <span class="modal-cat-badge" id="m-cat">Kategori</span>
-        <span class="modal-status-badge" id="m-status">Yaklaşan</span>
-      </div>
-      <div class="modal-title" id="m-title">Etkinlik</div>
-      <div class="modal-info-grid">
-        <div class="modal-info-item">
-          <span class="modal-info-label">📅 Tarih</span>
-          <span class="modal-info-value" id="m-date">—</span>
+    <div class="sp-options-grid">
+      <div class="sp-option-card reveal">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
         </div>
-        <div class="modal-info-item" id="m-loc-wrap">
-          <span class="modal-info-label">📍 Konum</span>
-          <span class="modal-info-value" id="m-loc">—</span>
-        </div>
+        <h3>Etkinlik Sponsorluğu</h3>
+        <p>Düzenlediğimiz kampüs etkinliklerinde markanızı ön plana çıkarın. Logo yerleşimi, afiş ve stant alanı, sahne tanıtımı ve öğrencilerle birebir etkileşim fırsatı sunar. Etkinlik öncesi ve sonrası sosyal medya paylaşımlarıyla görünürlüğünüz katlanır.</p>
+        <a href="mailto:iletisim@kampuskafasi.com?subject=Etkinlik Sponsorluğu Teklifi" class="btn-card-offer" id="sp-email-btn-1">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
       </div>
-      <div class="modal-divider"></div>
-      <div class="modal-desc-label">Açıklama</div>
-      <div class="modal-desc" id="m-desc"></div>
-    </div>
-  </div>
-</div>
-
-<!-- İLETİŞİM -->
-<section id="contact">
-  <div class="section-wrap">
-    <div class="reveal" style="text-align:center">
-      <span class="section-lbl" style="justify-content:center;display:flex">Bize Ulaşın</span>
-      <h2 class="section-h" style="font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,5vw,4rem);color:var(--white)">İletişim</h2>
-      <p class="contact-intro">Sorularınız, önerileriniz veya iş birliği teklifleriniz için bizimle iletişime geçin.</p>
-    </div>
-    <div class="contact-cards reveal">
-      <a href="mailto:iletisim@kampuskafasi.com" id="email-link" class="contact-card">
-        <div class="cc-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
-        </div>
-        <div class="cc-label">E-POSTA</div>
-        <div class="cc-value" id="email-sub-text">iletisim@kampuskafasi.com</div>
-      </a>
-      <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="contact-card">
-        <div class="cc-icon-wrap">
+      <div class="sp-option-card reveal">
+        <div class="sp-option-icon">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
         </div>
-        <div class="cc-label">INSTAGRAM</div>
-        <div class="cc-value">@kampuskafasii</div>
-      </a>
-      <a href="#" id="wa-link" class="contact-card">
-        <div class="cc-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <h3>Sosyal Medya İş Birliği</h3>
+        <p>Instagram sayfamız ve 17.000+ üyeli WhatsApp ağımızda markanızı tanıtın. Organik içerik üretimi, story ve reels paylaşımları ile geniş öğrenci kitlesine özgün ve etkili bir şekilde ulaşın.</p>
+        <a href="mailto:iletisim@kampuskafasi.com?subject=Sosyal Medya İş Birliği Teklifi" class="btn-card-offer" id="sp-email-btn-2">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
+      </div>
+      <div class="sp-option-card reveal">
+        <div class="sp-option-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
         </div>
-        <div class="cc-label">WHATSAPP</div>
-        <div class="cc-value" id="wa-value-text">Grubumuza Katıl</div>
-      </a>
-      <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer" class="contact-card">
-        <div class="cc-icon-wrap">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
-        </div>
-        <div class="cc-label">LİNKEDİN</div>
-        <div class="cc-value">Kampüs Kafası</div>
-      </a>
+        <h3>Kampüs Tanıtımı</h3>
+        <p>Ürün veya hizmetinizi doğrudan hedef kitlenize duyurun. WhatsApp gruplarımız üzerinden anlık erişim, üniversite ortamında marka bilinirliği ve öğrenci geri bildirimiyle organik büyüme sağlayın.</p>
+        <a href="mailto:iletisim@kampuskafasi.com?subject=Kampüs Tanıtımı Teklifi" class="btn-card-offer" id="sp-email-btn-3">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
+      </div>
     </div>
   </div>
 </section>
 
-<!-- SPONSOR MODAL -->
-<div id="sponsor-modal" onclick="closeSponsorOutside(event)">
-  <div class="sponsor-modal-box">
-    <button class="sponsor-modal-close" onclick="closeSponsor()">✕</button>
-    <div class="section-lbl" style="margin-bottom:10px">Fırsatlar</div>
-    <div class="sponsor-modal-title">Sponsorluk & İş Birliği</div>
-    <p class="sponsor-modal-sub">17.000'den fazla üniversite öğrencisine ulaşmak için doğru platform. Markanı genç nesille buluştur.</p>
-    <div class="sponsor-grid">
-      <div class="sponsor-card">
-        <div class="sponsor-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
-        <h3>Etkinlik Sponsorluğu</h3>
-        <p>Düzenlediğimiz kampüs etkinliklerinde markanızı ön plana çıkarın. Logo yerleşimi, tanıtım ve doğrudan öğrenci etkileşimi.</p>
-      </div>
-      <div class="sponsor-card">
-        <div class="sponsor-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
-        <h3>Sosyal Medya İş Birliği</h3>
-        <p>Instagram sayfamız ve WhatsApp ağımızda markanızı tanıtın. Geniş öğrenci kitlesine doğrudan ulaşın.</p>
-      </div>
-      <div class="sponsor-card">
-        <div class="sponsor-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
-        <h3>Kampüs Tanıtımı</h3>
-        <p>WhatsApp gruplarımız üzerinden ürün veya hizmetinizi doğrudan hedef kitlenize duyurun.</p>
-      </div>
+<!-- SÜREÇ -->
+<section id="sp-process">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">Süreç</span>
+      <h2 class="section-h" style="color:var(--white)">Nasıl İlerleriz?</h2>
     </div>
-    <div class="sponsor-cta">
-      <h3>Bizimle İş Birliği Yapmak İster misiniz?</h3>
-      <p>Sponsorluk paketlerimiz ve iş birliği seçeneklerimiz hakkında bilgi almak için bizimle iletişime geçin.</p>
-      <div class="sponsor-btns">
-        <a href="mailto:iletisim@kampuskafasi.com" id="sponsor-email" class="btn-sponsor-primary">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
-        </a>
-        <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="btn-sponsor-outline">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Instagram'dan Yaz
-        </a>
+    <div class="sp-steps">
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">1</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 01</div>
+          <h4>İletişime Geç</h4>
+          <p>E-posta veya Instagram üzerinden bize ulaş, hedeflerini ve beklentilerini paylaş. Sana en kısa sürede geri döneceğiz.</p>
+        </div>
+      </div>
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">2</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 02</div>
+          <h4>Teklif & Planlama</h4>
+          <p>İhtiyaçlarına özel bir iş birliği modeli ve detaylı bir plan birlikte oluşturuyoruz. Bütçe ve hedeflerine göre şekillenen esnek seçenekler sunuyoruz.</p>
+        </div>
+      </div>
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">3</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 03</div>
+          <h4>Uygulama</h4>
+          <p>Anlaşılan plan doğrultusunda etkinliği veya dijital içerikleri hayata geçiriyoruz. Süreç boyunca seni bilgilendiriyoruz.</p>
+        </div>
+      </div>
+      <div class="sp-step reveal">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">4</span></div>
+          <div class="sp-connector"></div>
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 04</div>
+          <h4>Birlikte Değerlendirme</h4>
+          <p>Süreci seninle birlikte değerlendiriyor, sonuçları ve öğrenilenleri paylaşıyoruz. Uzun vadeli iş birliği için temel atıyoruz.</p>
+        </div>
       </div>
     </div>
   </div>
-</div>
+</section>
+
+
+
+<!-- İLETİŞİM -->
+<section id="sp-contact">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">İletişim</span>
+      <h2 class="section-h" style="color:var(--white)">Bize Ulaşın</h2>
+      <p style="font-size:.92rem;color:rgba(255,255,255,.4);line-height:1.8;margin-top:10px;max-width:500px">Sponsorluk teklifleriniz ve sorularınız için aşağıdaki kanallardan bizimle iletişime geçebilirsiniz.</p>
+    </div>
+    <div class="sp-contact-grid">
+      <div class="sp-cc reveal">
+        <div class="sp-cc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </div>
+        <div class="sp-cc-label">E-Posta</div>
+        <div class="sp-cc-value"><a href="mailto:iletisim@kampuskafasi.com" id="contact-email-val">iletisim@kampuskafasi.com</a></div>
+        <div class="sp-cc-sub">Sponsorluk teklifleri için tercih edilen kanal</div>
+      </div>
+      <div class="sp-cc reveal">
+        <div class="sp-cc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="sp-cc-label">Instagram</div>
+        <div class="sp-cc-value"><a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">@kampuskafasii</a></div>
+        <div class="sp-cc-sub">DM ile hızlı iletişim için</div>
+      </div>
+      <div class="sp-cc reveal">
+        <div class="sp-cc-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </div>
+        <div class="sp-cc-label">WhatsApp</div>
+        <div class="sp-cc-value"><a href="#" id="sp-wa-link">Mesaj Gönder</a></div>
+        <div class="sp-cc-sub">Hızlı görüşme için WhatsApp'tan ulaşın</div>
+      </div>
+    </div>
+  </div>
+</section>
 
 <!-- FOOTER -->
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="fl" id="footer-logo-el">Kampüs Kafası · Antalya</div>
-      <p id="footer-sub-el">Akdeniz Üniversitesi öğrenci topluluğu<br>17.000+ üye · Antalya</p>
+      <div class="fl">Kampüs Kafası · Antalya</div>
+      <p>Akdeniz Üniversitesi öğrenci topluluğu<br>17.000+ üye · Antalya</p>
     </div>
     <div class="footer-col">
       <h5>Navigasyon</h5>
-      <a href="./">Ana Sayfa</a>
-      <a href="hakkimizda/">Hakkımızda</a>
-      <a href="etkinlikler/">Etkinlikler</a>
-      <a href="ekip/">Ekip</a>
-      <a href="sponsorluk/">Sponsorluk</a>
-      <a href="iletisim/">İletişim</a>
+      <a href="../">Ana Sayfa</a>
+      <a href="../hakkimizda/">Hakkımızda</a>
+      <a href="../etkinlikler/">Etkinlikler</a>
+      <a href="../ekip/">Ekip</a>
+      <a href="../iletisim/">İletişim</a>
     </div>
     <div class="footer-col">
       <h5>Sosyal Medya</h5>
@@ -311,190 +427,161 @@
   <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
 </footer>
 
-
 <script>
+// Sayaçları doğrudan sayfa yüklenince başlat (loader bittikten sonra)
+window.addEventListener('load', function() {
+  setTimeout(function() {
+    // main.js'in animCountEl fonksiyonu hazır olana kadar bekle
+    var tries = 0;
+    function tryStart() {
+      if (typeof window.animCountEl === 'function') {
+        window.animCountEl(document.getElementById('st-members'), 17000, '+', true);
+        window.animCountEl(document.getElementById('st-events'),  50,    '+', false);
+        window.animCountEl(document.getElementById('st-exp'),     4,     '+', false);
+      } else if (tries++ < 20) {
+        setTimeout(tryStart, 100);
+      }
+    }
+    tryStart();
+  }, 1900); // loader'ın kapanma süresiyle eşleşiyor (1800ms)
+});
 
-  function escHtml(str) {
+window.renderEvents = function() {};
+
+// kk-data.js'ten gerçek verilerle çağrılırsa override et
+window.startCounters = function(m, e, y) {
+  if (window._spCountersStarted) return;
+  window._spCountersStarted = true;
+  if (typeof window.animCountEl !== 'function') return;
+  window.animCountEl(document.getElementById('st-members'), m || 17000, '+', true);
+  window.animCountEl(document.getElementById('st-events'),  e || 50,    '+', false);
+  window.animCountEl(document.getElementById('st-exp'),     y || 4,     '+', false);
+};
+</script>
+
+<script type="module">
+import { getApps, initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getFirestore, doc, getDoc, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { firebaseConfig } from "../firebase-config.js";
+
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+function escHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-/* ── INDEX SAYFASINA ÖZGÜ VERİ & FONKSİYONLAR ── */
-
-// sett ve events main.js tarafından tanımlanıyor, burada sadece başlangıç değeri veriyoruz
-sett = { wa: '', email: '' };
-events = [];
-
-
-
-// ── ETKİNLİK KARTI ──
-const EMOJI = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
-
-function buildEventCard(ev, isPast, delay) {
-  const card = document.createElement('div');
-  card.className = 'event-card reveal' + (isPast ? ' ev-past' : '');
-  card.style.transitionDelay = delay + 's';
-  card.addEventListener('click', () => openModal(ev.id));
-
-  if (!isPast) {
-    const badge = document.createElement('div');
-    badge.className = 'ev-upcoming-bar';
-    badge.textContent = 'Yaklaşan';
-    card.appendChild(badge);
+// Hero ve CTA metinleri
+const spSnap = await getDoc(doc(db, "ayarlar", "kk_sponsorluk_v1"));
+if (spSnap.exists()) {
+  const s = spSnap.data();
+  const heroSub  = document.querySelector('.sp-hero-sub');
+  const heroTitle = document.querySelector('.page-title');
+  const ctaTitle = document.querySelector('.sp-cta-title');
+  const ctaText  = document.querySelector('.sp-cta-text');
+  if (heroSub    && s.heroSub)     heroSub.textContent     = s.heroSub;
+  if (heroTitle  && s.heroTitle)   heroTitle.textContent   = s.heroTitle;
+  if (ctaTitle   && s.ctaTitle)    ctaTitle.textContent    = s.ctaTitle;
+  if (ctaText    && s.ctaText)     ctaText.textContent     = s.ctaText;
+  const whySection = document.querySelector('#sp-why');
+  if (whySection) {
+    const wh = whySection.querySelector('.section-h');
+    const wd = whySection.querySelector('p');
+    if (wh && s.whyTitle) wh.textContent = s.whyTitle;
+    if (wd && s.whyDesc)  wd.textContent = s.whyDesc;
   }
-
-  const thumb = document.createElement('div');
-  thumb.className = 'ev-thumb';
-  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-    const img = document.createElement('img');
-    img.src = ev.img; img.alt = ev.title;
-    thumb.appendChild(img);
-  } else {
-    const emoji = document.createElement('div');
-    emoji.className = 'ev-thumb-emoji';
-    emoji.textContent = EMOJI[ev.cat] || '📌';
-    thumb.appendChild(emoji);
+  const colSection = document.querySelector('#sp-options');
+  if (colSection) {
+    const ch = colSection.querySelector('.section-h');
+    const cd = colSection.querySelector('p[style]');
+    if (ch && s.colTitle) ch.textContent = s.colTitle;
+    if (cd && s.colDesc)  cd.textContent = s.colDesc;
   }
-  card.appendChild(thumb);
-
-  const body = document.createElement('div');
-  body.className = 'ev-body';
-
-  const catRow = document.createElement('div'); catRow.className = 'ev-cat-row';
-  const evBadge = document.createElement('span'); evBadge.className = 'ev-badge';
-  evBadge.textContent = (EMOJI[ev.cat]||'') + ' ' + ev.cat;
-  catRow.appendChild(evBadge);
-  body.appendChild(catRow);
-
-  const title = document.createElement('div'); title.className = 'ev-title'; title.textContent = ev.title;
-  body.appendChild(title);
-
-  const meta = document.createElement('div'); meta.className = 'ev-meta';
-  const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-  meta.innerHTML = `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${ds}</div>`
-    + (ev.loc ? `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : '');
-  body.appendChild(meta);
-
-  if (ev.desc) {
-    const desc = document.createElement('div'); desc.className = 'ev-desc'; desc.textContent = ev.desc;
-    body.appendChild(desc);
-  }
-
-  const more = document.createElement('div'); more.className = 'ev-read-more';
-  more.innerHTML = 'Detayları Gör <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-  body.appendChild(more);
-
-  card.appendChild(body);
-  return card;
 }
 
-function renderEvents() {
-  const g = document.getElementById('events-grid');
-  g.textContent = '';
-  if (!events.length) {
-    const msg = document.createElement('div');
-    msg.className = 'no-events-msg';
-    msg.textContent = 'Henüz etkinlik eklenmedi.';
-    g.appendChild(msg);
-    return;
-  }
-  const now = new Date();
-  const featured = events.filter(e => e.featured);
-  const preview = featured.length
-    ? featured.slice(0,6)
-    : [...events].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
-  preview.forEach((ev, i) => {
-    const isPast = new Date(ev.date) < now;
-    const card = buildEventCard(ev, isPast, i*0.07);
-    // Yıldız rozeti gizle
-    const featuredBadge = card.querySelector('.ev-featured-badge');
-    if (featuredBadge) featuredBadge.remove();
-    g.appendChild(card);
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = 'translateY(-6px)';
+// Neden Biz
+const whySnap = await getDocs(collection(db, "kk_sp_why"));
+if (!whySnap.empty) {
+  const whyGrid = document.querySelector('.sp-why-grid');
+  if (whyGrid) {
+    whyGrid.innerHTML = '';
+    whySnap.forEach(d => {
+      const w = d.data();
+      whyGrid.innerHTML += `
+        <div class="sp-why-item reveal visible">
+          <div class="sp-why-dot"></div>
+          <div class="sp-why-text"><strong>${w.ico||''} ${escHtml(w.title)}</strong><span>${escHtml(w.desc||'')}</span></div>
+        </div>`;
     });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = '';
+    whyGrid.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
+      if (window.revealObs) window.revealObs.observe(el);
     });
-    if (typeof revealObs !== 'undefined') revealObs.observe(card);
-  });
-}
-
-// ── MODAL ──
-function openModal(id) {
-    const ev = events.find(e => e.id === id);
-  if (!ev) return;
-  const now = new Date();
-  const isPast = new Date(ev.date) < now;
-  const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-
-  const imgEl = document.getElementById('m-img');
-  const emojiEl = document.getElementById('m-emoji');
-  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-    imgEl.src = ev.img; imgEl.style.display = 'block';
-    emojiEl.style.display = 'none';
-  } else {
-    imgEl.style.display = 'none';
-    emojiEl.style.display = 'flex';
-    emojiEl.textContent = EMOJI[ev.cat]||'📌';
-  }
-
-  document.getElementById('m-cat').textContent   = (EMOJI[ev.cat]||'') + ' ' + ev.cat;
-  document.getElementById('m-title').textContent = ev.title;
-  document.getElementById('m-date').textContent  = ds;
-
-  const locWrap = document.getElementById('m-loc-wrap');
-  if (ev.loc) { document.getElementById('m-loc').textContent = ev.loc; locWrap.style.display='flex'; }
-  else { locWrap.style.display = 'none'; }
-
-  const statusEl = document.getElementById('m-status');
-  if (isPast) { statusEl.textContent = '✓ Tamamlandı'; statusEl.className = 'modal-status-badge past'; }
-  else { statusEl.textContent = '🟢 Yaklaşan'; statusEl.className = 'modal-status-badge upcoming'; }
-
-  document.getElementById('m-desc').textContent = ev.desc || '';
-  document.getElementById('event-modal').classList.add('open');
-  document.querySelector('#event-modal .modal-box').scrollTop = 0;
-  document.body.style.overflow = 'hidden';
-}
-function closeModal() { document.getElementById('event-modal').classList.remove('open'); document.body.style.overflow=''; }
-function closeModalOutside(e) { if(e.target===document.getElementById('event-modal')) closeModal(); }
-
-// ── AYARLAR ──
-function applySettings() {
-  if (sett.wa) {
-    ['wa-btn-hero','wa-link','footer-wa','drawer-wa'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=sett.wa;});
-  }
-  if (sett.email) {
-    const el=document.getElementById('email-link'),es=document.getElementById('email-sub-text'),sp=document.getElementById('sponsor-email');
-    if(el)el.href='mailto:'+sett.email; if(es)es.textContent=sett.email; if(sp)sp.href='mailto:'+sett.email;
   }
 }
 
-// kk-data.js'den gelen metin verilerini uygula
-function applyIndexTexts() {
-  // Hero buton metinleri
-  const btn1 = document.querySelector('.hero-btns a.btn-primary');
-  const btn2 = document.querySelector('.hero-btns a.btn-outline');
-  if (btn1 && window._kkMetin && window._kkMetin.heroBtn1) btn1.childNodes[0].textContent = window._kkMetin.heroBtn1;
-  if (btn2 && window._kkMetin && window._kkMetin.heroBtn2) {
-    // SVG'yi koruyarak sadece metin kısmını değiştir
-    const svg = btn2.querySelector('svg');
-    btn2.textContent = window._kkMetin.heroBtn2;
-    if (svg) btn2.prepend(svg);
+// İş Birliği Kartları
+const optSnap = await getDocs(collection(db, "kk_sp_options"));
+if (!optSnap.empty) {
+  const optGrid = document.querySelector('.sp-options-grid');
+  if (optGrid) {
+    optGrid.innerHTML = '';
+    optSnap.forEach(d => {
+      const o = d.data();
+      optGrid.innerHTML += `
+        <div class="sp-option-card reveal visible">
+          <div class="sp-option-icon" style="font-size:1.5rem">${o.ico||'🤝'}</div>
+          <h3>${escHtml(o.title)}</h3>
+          <p>${escHtml(o.desc||'')}</p>
+          <a href="mailto:${encodeURIComponent(o.email||'iletisim@kampuskafasi.com')}?subject=${encodeURIComponent((o.title||'')+ ' Teklifi')}" class="btn-card-offer">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+          </a>
+        </div>`;
+    });
+    optGrid.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
+      if (window.revealObs) window.revealObs.observe(el);
+    });
+    optGrid.querySelectorAll('.sp-option-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.background = `radial-gradient(300px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.1),transparent 60%),var(--card)`;
+      });
+      card.addEventListener('mouseleave', () => { card.style.background = ''; });
+    });
   }
-  // Etkinlikler bölüm başlığı
-  const evTitle = document.querySelector('#events .section-h');
-  if (evTitle && window._kkMetin && window._kkMetin.evTitle) evTitle.textContent = window._kkMetin.evTitle;
-  // Footer alt metni
-  const footerSub = document.getElementById('footer-sub-el');
-  if (footerSub && window._kkMetin && window._kkMetin.footerSub) footerSub.textContent = window._kkMetin.footerSub;}
-window.applyIndexTexts = applyIndexTexts;
+}
 
+// Süreç Adımları
+const stepsSnap = await getDocs(collection(db, "kk_sp_steps"));
+if (!stepsSnap.empty) {
+  const stepsContainer = document.querySelector('.sp-steps');
+  if (stepsContainer) {
+    const steps = [];
+    stepsSnap.forEach(d => steps.push({ id: d.id, ...d.data() }));
+    steps.sort((a, b) => (a.order || 99) - (b.order || 99));
+    stepsContainer.innerHTML = steps.map((s, i) => `
+      <div class="sp-step reveal visible">
+        <div class="sp-step-left">
+          <div class="sp-step-circle"><span class="sp-step-n">${s.order || i + 1}</span></div>
+          ${i < steps.length - 1 ? '<div class="sp-connector"></div>' : ''}
+        </div>
+        <div class="sp-step-right">
+          <div class="sp-step-tag">Adım 0${s.order || i + 1}</div>
+          <h4>${s.ico || ''} ${escHtml(s.title)}</h4>
+          <p>${escHtml(s.desc || '')}</p>
+        </div>
+      </div>`).join('');
+    stepsContainer.querySelectorAll('.reveal').forEach(el => {
+      el.classList.add('visible');
+      if (window.revealObs) window.revealObs.observe(el);
+    });
+  }
+}
 
 </script>
-<script src="main.js" defer></script>
-<script type="module" src="kk-data.js"></script>
+<script src="../main.js" defer></script>
+<script type="module" src="../kk-data.js"></script>
 </body>
 </html>

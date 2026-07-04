@@ -35,20 +35,14 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // ileride alınacak özel bir domain'de (site.com/) değişiklik yapmadan çalışır.
   const assetPrefix = (page === 'index.html') ? '' : '../';
 
-  // Sayaçları ayrı bir try/catch içinde çek: bu adım hata verse bile
-  // (izin hatası, doküman yok, ağ hatası vb.) sayaçlar varsayılan
-  // değerlerle (17000 / 50 / 4) yine de başlasın.
   try {
+    // Sayaçları en önce çek ve hemen başlat
     const cntSnap = await getDoc(doc(db, "ayarlar", "kk_counters"));
     if (cntSnap.exists()) cnt = cntSnap.data();
-  } catch (error) {
-    console.error("Sayaç verisi çekilirken hata oluştu, varsayılan değerler kullanılacak: ", error);
-  }
-  if (page === 'index.html' || page === 'sponsorluk.html' || page === '') {
-    applyCounters();
-  }
+    if (page === 'index.html' || page === 'sponsorluk.html' || page === '') {
+      applyCounters();
+    }
 
-  try {
     // Ayarları çek
     const settSnap = await getDoc(doc(db, "ayarlar", "kk_sett"));
     if (settSnap.exists()) sett = settSnap.data();
