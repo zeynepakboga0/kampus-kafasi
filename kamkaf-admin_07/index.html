@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <meta name="robots" content="noindex, nofollow">
 <title>Admin — Kampüs Kafası</title>
-<link rel="icon" type="image/jpeg" href="/logo.jpg">
+<link rel="icon" type="image/jpeg" href="../logo.jpg">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* ══════════════════════════════════════
@@ -623,7 +623,7 @@ img { max-width: 100%; display: block; }
   <div class="lbox">
     <div class="lbox-accent"></div>
     <div class="lbox-logo-wrap">
-      <img src="/logo.jpg" class="lbox-img" alt="Kampüs Kafası" onerror="this.style.display='none'">
+      <img src="../logo.jpg" class="lbox-img" alt="Kampüs Kafası" onerror="this.style.display='none'">
       <div class="lbox-name">Kampüs Kafası</div>
       <div class="lbox-tag">Admin Paneli</div>
     </div>
@@ -655,7 +655,7 @@ img { max-width: 100%; display: block; }
   <aside id="sidebar">
     <div class="sb-top">
       <div class="sb-brand">
-        <img src="/logo.jpg" class="sb-brand-img" alt="KK" onerror="this.style.display='none'">
+        <img src="../logo.jpg" class="sb-brand-img" alt="KK" onerror="this.style.display='none'">
         <div class="sb-brand-txt">Kampüs Kafası</div>
       </div>
       <div class="sb-status">
@@ -692,7 +692,7 @@ img { max-width: 100%; display: block; }
   <!-- Mobile Header -->
   <header id="mob-hdr">
     <div class="mh-brand">
-      <img src="/logo.jpg" class="mh-img" alt="KK" onerror="this.style.display='none'">
+      <img src="../logo.jpg" class="mh-img" alt="KK" onerror="this.style.display='none'">
       <div class="mh-name">Kampüs Kafası</div>
     </div>
     <button class="mh-btn" id="mob-menu-btn" onclick="toggleMobDrawer()">
@@ -705,7 +705,7 @@ img { max-width: 100%; display: block; }
   <div id="mob-drawer">
     <div class="mbd-top">
       <div class="mbd-brand">
-        <img src="/logo.jpg" class="mbd-img" alt="KK" onerror="this.style.display='none'">
+        <img src="../logo.jpg" class="mbd-img" alt="KK" onerror="this.style.display='none'">
         <div class="mbd-name">Kampüs Kafası</div>
       </div>
     </div>
@@ -1280,7 +1280,7 @@ import { getFirestore, doc, setDoc, getDoc, collection, addDoc, deleteDoc, getDo
 import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut }
   from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 
-import { firebaseConfig } from "/firebase-config.js";
+import { firebaseConfig } from "../firebase-config.js";
 
 const app  = initializeApp(firebaseConfig);
 const db   = getFirestore(app);

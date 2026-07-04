@@ -28,6 +28,12 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   } else {
     page = lastSeg + '.html'; // /hakkimizda/  ->  hakkimizda.html
   }
+  // Bu betiğin (ve style.css, main.js gibi ortak dosyaların) bulunduğu kök dizine göre
+  // sayfanın kaç seviye altta olduğunu belirler. Ana sayfa hariç tüm sayfalar
+  // birer klasörün içinde (ör. /ekip/) olduğu için tek seviye yukarı çıkmak gerekir.
+  // Bu, hem GitHub Pages proje adresinde (kullanici.github.io/repo/) hem de
+  // ileride alınacak özel bir domain'de (site.com/) değişiklik yapmadan çalışır.
+  const assetPrefix = (page === 'index.html') ? '' : '../';
 
   try {
     // Sayaçları en önce çek ve hemen başlat
@@ -153,7 +159,7 @@ if (ekipData.length === 0) ekipData = null;
     container.innerHTML = list.map(m => `
       <div class="board-card reveal">
         <div class="bc-img-wrap">
-          <img src="${m.img || '/logo.jpg'}" alt="${esc(m.name)}">
+          <img src="${m.img || assetPrefix + 'logo.jpg'}" alt="${esc(m.name)}">
         </div>
         <h3 class="bc-name">${esc(m.name)}</h3>
         <span class="bc-role">${esc(m.role)}</span>
