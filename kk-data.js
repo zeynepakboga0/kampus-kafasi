@@ -15,14 +15,19 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   let ekipData = null;
   let eventsList = [];
 
+  const page = location.pathname.split('/').pop() || 'index.html';
+
   try {
+    // Sayaçları en önce çek ve hemen başlat
+    const cntSnap = await getDoc(doc(db, "ayarlar", "kk_counters"));
+    if (cntSnap.exists()) cnt = cntSnap.data();
+    if (page === 'index.html' || page === 'sponsorluk.html' || page === '') {
+      applyCounters();
+    }
+
     // Ayarları çek
     const settSnap = await getDoc(doc(db, "ayarlar", "kk_sett"));
     if (settSnap.exists()) sett = settSnap.data();
-
-    // Sayaçları çek
-    const cntSnap = await getDoc(doc(db, "ayarlar", "kk_counters"));
-    if (cntSnap.exists()) cnt = cntSnap.data();
 
     // Metinleri çek
     const metinSnap = await getDoc(doc(db, "ayarlar", "kk_metin_v1"));
@@ -48,7 +53,6 @@ if (ekipData.length === 0) ekipData = null;
     console.error("Firebase'den veri çekilirken hata oluştu: ", error);
   }
 
-  const page = location.pathname.split('/').pop() || 'index.html';
 
   /* ── 1. GLOBAL: WA / Email / Instagram linklerini uygula ── */
   function applyGlobalSettings() {
@@ -87,12 +91,6 @@ if (ekipData.length === 0) ekipData = null;
     }
   }
 
-  /* ── 2. SAYFA BAZLI YÜKLEMELER ── */
-  
-  // INDEX veya SPONSORLUK sayfasında sayaçları çalıştır
-  if (page === 'index.html' || page === 'sponsorluk.html' || page === '') {
-    applyCounters();
-  }
 
   // INDEX sayfasındaki özel alanlar
  if (page === 'index.html' || page === '') {

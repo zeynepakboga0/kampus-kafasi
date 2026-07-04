@@ -36,7 +36,7 @@ function veriBaslat() {
   }
 
 window.addEventListener('load', () => {
-  setTimeout(hideLoader, 1800);
+  setTimeout(hideLoader, 1500);
 });
 })();
 
@@ -53,7 +53,7 @@ function startCounters(m, e, y) {
 window.animCountEl = function animCountEl(el, target, suffix, fmt) {
     if (!el) return;
   el.textContent = '0+';
-  const dur = 3500, start = performance.now();
+  const dur = 3000, start = performance.now();
   const run = now => {
     const p = Math.min((now - start) / dur, 1);
     const ease = 1 - Math.pow(1 - p, 3);
