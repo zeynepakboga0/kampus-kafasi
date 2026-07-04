@@ -33,6 +33,11 @@ function veriBaslat() {
 
   function hideLoader() {
     loader.classList.add('hidden');
+    // Loader tam bu anda kapanıyor; sayaçlar da tam bu anda başlasın.
+    // O ana kadar Firebase'den gerçek sayı gelmişse onu, gelmemişse
+    // varsayılan (17000/50/4) sayıları kullan.
+    const c = window._kkCounters || {};
+    startCounters(c.members || 17000, c.events || 50, c.years || 4);
   }
 
 window.addEventListener('load', () => {

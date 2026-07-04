@@ -35,14 +35,83 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // ileride alınacak özel bir domain'de (site.com/) değişiklik yapmadan çalışır.
   const assetPrefix = (page === 'index.html') ? '' : '../';
 
+  /* ── YARDIMCI PROSES FONKSİYONLARI ── */
+
+  function applyCounters() {
+    // Sayaç animasyonunu burada TETİKLEMİYORUZ.
+    // Sadece gerçek sayıyı saklıyoruz; ne zaman başlayacağına
+    // main.js'teki loader kapanma anı karar veriyor.
+    window._kkCounters = {
+      members: cnt.members || 17000,
+      events:  cnt.events  || 50,
+      years:   cnt.years   || 4
+    };
+  }
+
+  function renderEkipPage(list) {
+    const container = document.getElementById('ekip-container');
+    if (!container) return;
+    container.innerHTML = list.map(m => `
+      <div class="board-card reveal">
+        <div class="bc-img-wrap">
+          <img src="${m.img || assetPrefix + 'logo.jpg'}" alt="${esc(m.name)}">
+        </div>
+        <h3 class="bc-name">${esc(m.name)}</h3>
+        <span class="bc-role">${esc(m.role)}</span>
+        <p class="bc-bio">${esc(m.bio || '')}</p>
+      </div>
+    `).join('');
+  }
+
+  async function applySponsorPage() {
+    // sponsorluk.html kendi inline script'i ile hallediyor
+  }
+
+  function applyAboutTexts() {
+    const introPSel = document.querySelectorAll('#intro .intro-text p');
+    if (metin.about1 && introPSel[0]) introPSel[0].textContent = metin.about1;
+    if (metin.about2 && introPSel[1]) introPSel[1].textContent = metin.about2;
+    if (metin.about3 && introPSel[2]) introPSel[2].textContent = metin.about3;
+
+    const vmCards = document.querySelectorAll('.vm-card');
+    if (vmCards[0]) {
+      const vps = vmCards[0].querySelectorAll('.vm-text');
+      if (metin.vision1 && vps[0]) vps[0].textContent = metin.vision1;
+      if (metin.vision2 && vps[1]) vps[1].textContent = metin.vision2;
+    }
+    if (vmCards[1]) {
+      const mps = vmCards[1].querySelectorAll('.vm-text');
+      if (metin.mission1 && mps[0]) mps[0].textContent = metin.mission1;
+      if (metin.mission2 && mps[1]) mps[1].textContent = metin.mission2;
+    }
+  }
+
+  function esc(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function formatDate(d) {
+    if (!d) return '—';
+    const parts = d.split('-');
+    const months = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
+    return parseInt(parts[2]) + ' ' + months[parseInt(parts[1]) - 1] + ' ' + parts[0];
+  }
+
+  // ── Sayaçları ayrı bir try/catch içinde çek ──
+  // Bu adım hata verse bile (izin hatası, doküman yok, ağ hatası vb.)
+  // sayaçlar varsayılan değerlerle (17000 / 50 / 4) yine de başlasın.
   try {
-    // Sayaçları en önce çek ve hemen başlat
     const cntSnap = await getDoc(doc(db, "ayarlar", "kk_counters"));
     if (cntSnap.exists()) cnt = cntSnap.data();
-    if (page === 'index.html' || page === 'sponsorluk.html' || page === '') {
-      applyCounters();
-    }
+  } catch (error) {
+    console.error("Sayaç verisi çekilirken hata oluştu, varsayılan değerler kullanılacak: ", error);
+  }
+  // Sayaç verisini her sayfada hazırla; kullanıp kullanmamaya o sayfanın kendi kodu karar verir
+  applyCounters();
 
+  // ── Diğer tüm veriler ayrı bir try/catch içinde ──
+  try {
     // Ayarları çek
     const settSnap = await getDoc(doc(db, "ayarlar", "kk_sett"));
     if (settSnap.exists()) sett = settSnap.data();
@@ -56,11 +125,11 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
     if (spSnap.exists()) spData = spSnap.data();
 
     // Ekip verilerini çek (admin board koleksiyonundan)
-const ekipSnap = await getDocs(collection(db, "kk_team_board"));
-ekipData = [];
-ekipSnap.forEach(d => ekipData.push({ id: d.id, ...d.data() }));
-ekipData.sort((a, b) => (a.order || 99) - (b.order || 99));
-if (ekipData.length === 0) ekipData = null;
+    const ekipSnap = await getDocs(collection(db, "kk_team_board"));
+    ekipData = [];
+    ekipSnap.forEach(d => ekipData.push({ id: d.id, ...d.data() }));
+    ekipData.sort((a, b) => (a.order || 99) - (b.order || 99));
+    if (ekipData.length === 0) ekipData = null;
 
     // Etkinlikler listesini çek (Koleksiyondan)
     const querySnapshot = await getDocs(collection(db, "kk_events"));
@@ -70,7 +139,6 @@ if (ekipData.length === 0) ekipData = null;
   } catch (error) {
     console.error("Firebase'den veri çekilirken hata oluştu: ", error);
   }
-
 
   /* ── 1. GLOBAL: WA / Email / Instagram linklerini uygula ── */
   function applyGlobalSettings() {
@@ -109,9 +177,8 @@ if (ekipData.length === 0) ekipData = null;
     }
   }
 
-
   // INDEX sayfasındaki özel alanlar
- if (page === 'index.html' || page === '') {
+  if (page === 'index.html' || page === '') {
     if (metin.heroBadge) {
       const badge = document.getElementById('hero-badge-text');
       if (badge) badge.textContent = metin.heroBadge;
@@ -126,8 +193,6 @@ if (ekipData.length === 0) ekipData = null;
     if (metin.who2 && whoPs[1]) whoPs[1].textContent = metin.who2;
   }
 
-  
-
   // EKİP sayfası
   if (page === 'ekip.html' && ekipData) {
     renderEkipPage(ekipData);
@@ -138,73 +203,15 @@ if (ekipData.length === 0) ekipData = null;
     await applySponsorPage();
   }
 
- // HAKKIMIZDA sayfası
+  // HAKKIMIZDA sayfası
   if (page === 'hakkimizda.html') {
     applyAboutTexts();
     if (typeof window.loadActivities === 'function') {
       window.loadActivities(eventsList);
-    }   
-  }
-
-  /* ── YARDIMCI PROSES FONKSİYONLARI ── */
-
-  function applyCounters() {
-    window._countersStarted = false;
-    if (typeof window.startCounters === 'function') window.startCounters(cnt.members, cnt.events, cnt.years);
-  }
-  
-  function renderEkipPage(list) {
-    const container = document.getElementById('ekip-container');
-    if (!container) return;
-    container.innerHTML = list.map(m => `
-      <div class="board-card reveal">
-        <div class="bc-img-wrap">
-          <img src="${m.img || assetPrefix + 'logo.jpg'}" alt="${esc(m.name)}">
-        </div>
-        <h3 class="bc-name">${esc(m.name)}</h3>
-        <span class="bc-role">${esc(m.role)}</span>
-        <p class="bc-bio">${esc(m.bio || '')}</p>
-      </div>
-    `).join('');
-  }
-
-  async function applySponsorPage() {
-    // sponsorluk.html kendi inline script'i ile hallediyor
-
-  }
-
-  function applyAboutTexts() {
-    const introPSel = document.querySelectorAll('#intro .intro-text p');
-    if (metin.about1 && introPSel[0]) introPSel[0].textContent = metin.about1;
-    if (metin.about2 && introPSel[1]) introPSel[1].textContent = metin.about2;
-    if (metin.about3 && introPSel[2]) introPSel[2].textContent = metin.about3;
-    
-    const vmCards = document.querySelectorAll('.vm-card');
-    if (vmCards[0]) {
-      const vps = vmCards[0].querySelectorAll('.vm-text');
-      if (metin.vision1 && vps[0]) vps[0].textContent = metin.vision1;
-      if (metin.vision2 && vps[1]) vps[1].textContent = metin.vision2;
-    }
-    if (vmCards[1]) {
-      const mps = vmCards[1].querySelectorAll('.vm-text');
-      if (metin.mission1 && mps[0]) mps[0].textContent = metin.mission1;
-      if (metin.mission2 && mps[1]) mps[1].textContent = metin.mission2;
     }
   }
 
-  function esc(str) {
-    if (!str) return '';
-    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-  }
-
-  function formatDate(d) {
-    if (!d) return '—';
-    const parts = d.split('-');
-    const months = ['Oca','Şub','Mar','Nis','May','Haz','Tem','Ağu','Eyl','Eki','Kas','Ara'];
-    return parseInt(parts[2]) + ' ' + months[parseInt(parts[1]) - 1] + ' ' + parts[0];
-  }
-
-// Global tetikleyiciler
+  // Global tetikleyiciler
   applyGlobalSettings();
 
   // main.js'e verileri aktar ve UI'ı başlat
