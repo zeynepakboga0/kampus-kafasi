@@ -68,6 +68,15 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   }
 
   function applyAboutTexts() {
+    // Hero (rozet + alt başlık) — hakkımızda sayfasının kendine ait hero'su,
+    // ana sayfanın hero'sundan bağımsız. Sayfada aşağıdaki id'ler bulunmalı:
+    // #about-badge-text  -> rozet metni (ör: "Akdeniz Üniversitesi · Antalya")
+    // #about-hero-sub    -> hero alt başlığı
+    const aboutBadge = document.getElementById('about-badge-text');
+    if (metin.aboutBadge && aboutBadge) aboutBadge.textContent = metin.aboutBadge;
+    const aboutHeroSub = document.getElementById('about-hero-sub');
+    if (metin.aboutSub && aboutHeroSub) aboutHeroSub.textContent = metin.aboutSub;
+
     const introPSel = document.querySelectorAll('#intro .intro-text p');
     if (metin.about1 && introPSel[0]) introPSel[0].textContent = metin.about1;
     if (metin.about2 && introPSel[1]) introPSel[1].textContent = metin.about2;
@@ -84,6 +93,47 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
       if (metin.mission1 && mps[0]) mps[0].textContent = metin.mission1;
       if (metin.mission2 && mps[1]) mps[1].textContent = metin.mission2;
     }
+
+    // "Son Etkinlikler" bölüm başlığı/açıklaması. Sayfada gerekli id'ler:
+    // #about-ev-title -> bölüm başlığı, #about-ev-sub -> bölüm açıklaması
+    const aboutEvTitle = document.getElementById('about-ev-title');
+    if (metin.aboutEvTitle && aboutEvTitle) aboutEvTitle.textContent = metin.aboutEvTitle;
+    const aboutEvSub = document.getElementById('about-ev-sub');
+    if (metin.aboutEvSub && aboutEvSub) aboutEvSub.textContent = metin.aboutEvSub;
+  }
+
+  // Etkinlikler sayfası hero'su. Gerekli id'ler:
+  // #events-badge-text -> rozet metni, #events-hero-sub -> alt başlık
+  function applyEventsHero() {
+    const badge = document.getElementById('events-badge-text');
+    if (metin.eventsBadge && badge) badge.textContent = metin.eventsBadge;
+    const sub = document.getElementById('events-hero-sub');
+    if (metin.eventsSub && sub) sub.textContent = metin.eventsSub;
+  }
+
+  // Ekip sayfası hero'su. Gerekli id'ler:
+  // #ekip-badge-text -> rozet metni, #ekip-hero-sub -> alt başlık
+  function applyEkipHero() {
+    const badge = document.getElementById('ekip-badge-text');
+    if (metin.ekipBadge && badge) badge.textContent = metin.ekipBadge;
+    const sub = document.getElementById('ekip-hero-sub');
+    if (metin.ekipSub && sub) sub.textContent = metin.ekipSub;
+  }
+
+  // İletişim sayfası hero'su. Gerekli id'ler:
+  // #iletisim-badge-text -> rozet metni, #iletisim-hero-sub -> alt başlık
+  function applyIletisimHero() {
+    const badge = document.getElementById('iletisim-badge-text');
+    if (metin.iletisimBadge && badge) badge.textContent = metin.iletisimBadge;
+    const sub = document.getElementById('iletisim-hero-sub');
+    if (metin.iletisimSub && sub) sub.textContent = metin.iletisimSub;
+  }
+
+  // Sponsorluk sayfası hero rozeti (başlık/alt başlık kendi inline script'inde
+  // işleniyor; sadece rozeti buradan tamamlıyoruz). Gerekli id: #sp-badge-text
+  function applySponsorHeroBadge() {
+    const badge = document.getElementById('sp-badge-text');
+    if (spData.heroBadge && badge) badge.textContent = spData.heroBadge;
   }
 
   function esc(str) {
@@ -201,6 +251,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // SPONSORLUK sayfası
   if (page === 'sponsorluk.html') {
     await applySponsorPage();
+    applySponsorHeroBadge();
   }
 
   // HAKKIMIZDA sayfası
@@ -209,6 +260,21 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
     if (typeof window.loadActivities === 'function') {
       window.loadActivities(eventsList);
     }
+  }
+
+  // ETKİNLİKLER sayfası
+  if (page === 'etkinlikler.html') {
+    applyEventsHero();
+  }
+
+  // EKİP sayfası — hero rozeti/alt başlığı (üye kartları renderEkipPage ile ayrı uygulanıyor)
+  if (page === 'ekip.html') {
+    applyEkipHero();
+  }
+
+  // İLETİŞİM sayfası
+  if (page === 'iletisim.html') {
+    applyIletisimHero();
   }
 
   // Global tetikleyiciler
