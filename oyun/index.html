@@ -26,7 +26,7 @@
   --r: 20px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden}
+html,body{width:100%;height:100%;overflow:hidden;touch-action:manipulation;}
 body {
   font-family: 'Outfit', sans-serif;
   background: var(--black);
@@ -338,12 +338,25 @@ body {
   #hud{gap:8px;}
   .hud-box{padding:5px 10px;}
 }
+
+#rotate-hint {
+  display:none; position:fixed; inset:0; z-index:9999;
+  background:var(--black); color:#fff; text-align:center;
+  flex-direction:column; align-items:center; justify-content:center;
+  font-family:'Outfit',sans-serif; font-size:1.1rem; line-height:1.6; gap:8px;
+}
+@media (max-width:768px) and (orientation:portrait) {
+  #rotate-hint { display:flex; }
+  #page { display:none; }
+}
+
 </style>
 </head>
 <body>
 
 <!-- NAV -->
 <nav id="nav">
+  <div id="rotate-hint">📱↻<br>Daha iyi bir deneyim için telefonunu yatay çevir</div>
   <a href="../" class="nav-logo">Kampüs Kafası</a>
   <div class="nav-right">
     <button class="sound-btn" id="sound-btn" title="Sesi Aç/Kapat">🔊</button>
@@ -427,6 +440,7 @@ let audioCtx = null;
 
 function ensureAudio() {
   if (!audioCtx) { try { audioCtx = new AudioCtx(); } catch(e){} }
+  if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(()=>{}); }
 }
 
 function playTone(freq, type, duration, volume=0.08, fadeOut=true) {
@@ -495,6 +509,11 @@ let frame = 0;
 let gameSpeed = 3.5;
 const SPEED_BASE = 3.5;
 const SPEED_MAX = 13;
+const REF_WIDTH = 1280; // masaüstü referans genişliği
+function effSpeed() {
+  const scale = Math.min(1, canvas.width / REF_WIDTH);
+  return gameSpeed * Math.max(scale, 0.42); // mobilde aşırı yavaşlamasın diye alt sınır
+}
 let raf;
 const GROUND_OFFSET = 90;
 
@@ -1525,9 +1544,9 @@ function gameLoop() {
   document.getElementById('speed-bar').style.width = ((gameSpeed - SPEED_BASE) / (SPEED_MAX - SPEED_BASE) * 100) + '%';
 
   // Background scroll
-  bgX1 -= gameSpeed * 0.2;
-  bgX2 -= gameSpeed * 0.5;
-  bgX3 -= gameSpeed * 0.9;
+  bgX1 -= effSpeed() * 0.2;
+bgX2 -= effSpeed() * 0.5;
+bgX3 -= effSpeed() * 0.9;
 
   // Player physics
   const gravity = 0.65;
@@ -1566,8 +1585,8 @@ function gameLoop() {
   // Update obstacles
   let passed = 0;
   obstacles = obstacles.filter(ob => {
-    ob.x += -gameSpeed;
-    ob.vx = -gameSpeed;
+    ob.x += -effSpeed();
+    ob.vx = -effSpeed();
     if (ob.x + ob.w < 0) { passed++; return false; }
     if (ob.type === 'seagull') ob.y += Math.sin(frame * 0.05 + ob.x * 0.01) * 0.8;
     if (checkCollision(ob)) die(ob.reason);
@@ -1691,8 +1710,6 @@ function startGame() {
   currentZoneIdx = 0; zoneChangeScore = 0;
   ensureAudio();
   resize();
-  // Show first zone
-  setTimeout(() => showZoneLabel('MELTEM KAPISI'), 500);
   gameLoop();
 }
 

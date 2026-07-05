@@ -154,7 +154,35 @@ button { font-family: 'Outfit', sans-serif; }
 .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); }
 
 .nav-right { display: flex; align-items: center; gap: 12px; }
-.nav-game-btn { padding: 10px 20px; font-size: .82rem; }
+
+.nav-game-btn {
+  position: relative;
+  display: inline-flex; align-items: center; gap: 9px;
+  padding: 9px 20px;
+  font-size: .82rem; font-weight: 600; letter-spacing: .01em;
+  color: var(--cl);
+  background: rgba(45,221,212,.07);
+  border: 1px solid rgba(45,221,212,.28);
+  border-radius: 100px;
+  white-space: nowrap;
+  transition: background .25s ease, border-color .25s ease, transform .25s ease, box-shadow .25s ease;
+}
+.nav-game-btn:hover {
+  background: rgba(45,221,212,.13);
+  border-color: var(--cl);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 22px rgba(45,221,212,.22);
+}
+.ngb-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--cl);
+  box-shadow: 0 0 8px var(--cl);
+  animation: ngbPulse 1.8s ease-in-out infinite;
+}
+@keyframes ngbPulse {
+  0%, 100% { opacity: .45; transform: scale(.85); }
+  50% { opacity: 1; transform: scale(1.15); }
+}
 
 .hamburger {
   display: flex; flex-direction: column; gap: 5px;

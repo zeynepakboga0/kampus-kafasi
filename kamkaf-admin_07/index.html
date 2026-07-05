@@ -1538,12 +1538,15 @@ window.renderDashboard = function() {
   const events  = parseInt(document.getElementById('cnt-events')?.value) || 50;
   const years   = parseInt(document.getElementById('cnt-years')?.value) || 4;
   const boardEl = document.getElementById('board-list');
-  const boardCount = boardEl ? boardEl.querySelectorAll('.li').length : '—';
+  const boardCount = boardEl ? boardEl.querySelectorAll('.li').length : 0;
+  const adminsEl = document.getElementById('admins-list');
+  const adminsCount = adminsEl ? adminsEl.querySelectorAll('.li').length : 0;
+  const totalTeamCount = boardCount + adminsCount;
   document.getElementById('dash-grid').innerHTML = `
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">👥</div><div class="stat-val">${parseInt(members).toLocaleString('tr-TR')}+</div><div class="stat-lbl">Topluluk Üyesi</div></div>
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">📅</div><div class="stat-val">${events}</div><div class="stat-lbl">Etkinlik Hedefi</div></div>
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">⏳</div><div class="stat-val">${years}</div><div class="stat-lbl">Deneyim Yılı</div></div>
-    <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">🏆</div><div class="stat-val">${boardCount}</div><div class="stat-lbl">YK Üyesi</div></div>
+    <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">🏆</div><div class="stat-val">${totalTeamCount}</div><div class="stat-lbl">Toplam Ekip</div></div>
   `;
   checkDashLayout();
 };
