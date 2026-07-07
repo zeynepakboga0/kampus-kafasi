@@ -138,7 +138,16 @@ button { font-family: 'Outfit', sans-serif; }
   -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
   cursor: pointer;
 }
-.nav-logo img { width:28px; height:28px; border-radius:7px; object-fit:cover; border:1px solid rgba(45,216,240,.25); flex-shrink:0; }
+
+.nav-logo img {
+  width:28px; height:28px; border-radius:7px; object-fit:cover;
+  border:1px solid rgba(45,216,240,.25); flex-shrink:0;
+  opacity:0; transform:scale(.4) rotate(-12deg);
+  animation: navLogoIn .6s .15s cubic-bezier(.34,1.56,.64,1) forwards;
+}
+@keyframes navLogoIn {
+  to { opacity:1; transform:scale(1) rotate(0deg); }
+}
 
 .nav-links { display: flex; gap: 26px; list-style: none; }
 .nav-links a {
@@ -661,6 +670,7 @@ margin-bottom: 6px; white-space: normal;}
   .page-hero { padding: 100px 18px 50px; }
   footer { padding: 48px 18px 32px; }
   .events-grid { grid-template-columns: 1fr; }
+  .nav-logo img { width:24px; height:24px; }
 }
 
 @media (max-width: 520px) {
@@ -673,7 +683,8 @@ margin-bottom: 6px; white-space: normal;}
   .counter-item { border-right: none; border-bottom: 1px solid var(--bd); }
   .counter-item:last-child { border-bottom: none; }
   .sponsor-modal-box { padding: 28px 18px; }
-
+  .nav-logo { gap:6px; font-size:1.2rem; }
+  .nav-logo img { width:22px; height:22px; }
 }
 
 
