@@ -8,9 +8,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-
-
-
 :root {
   --cl: #2DDDD4;
   --cm: #1BBAB2;
@@ -26,7 +23,7 @@
   --r: 20px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{width:100%;height:100%;overflow:hidden;touch-action:manipulation;}
+html,body{width:100%;height:100%;height:100dvh;overflow:hidden;overscroll-behavior:none}
 body {
   font-family: 'Outfit', sans-serif;
   background: var(--black);
@@ -144,19 +141,8 @@ body {
 }
 #speed-bar{height:100%;width:0%;background:linear-gradient(90deg,var(--cm),var(--cl));transition:width .3s;}
 
-/* ── BG ZONE LABEL ── */
-#zone-label {
-  position:absolute;top:60px;left:50%;transform:translateX(-50%);
-  z-index:22;pointer-events:none;
-  font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;
-  color:rgba(255,255,255,.35);
-  opacity:0;transition:opacity .8s;
-  text-shadow: 0 0 10px rgba(45,221,212,.3);
-}
-#zone-label.show{opacity:1;}
-
 /* ── GAME CANVAS ── */
-#gc{display:block;width:100%;height:100%;}
+#gc{display:block;width:100%;height:100%;touch-action:none;-webkit-user-select:none;user-select:none;}
 
 /* ── FLOAT SCORE TEXT ── */
 .float-score {
@@ -277,6 +263,7 @@ body {
   -webkit-tap-highlight-color:transparent;
   transition:transform .12s, border-color .12s, box-shadow .12s;
   overflow:hidden;
+  touch-action:none;
 }
 #jump-btn::before {
   content:'';
@@ -315,7 +302,6 @@ body {
   .hud-label{font-size:.55rem;}
   .hud-val{font-size:1rem;}
 
-  #zone-label{font-size:.62rem;top:54px;}
   #easter-toast{font-size:.75rem;padding:8px 16px;white-space:normal;text-align:center;max-width:80%;}
 
   .go-title{font-size:2rem;}
@@ -338,9 +324,6 @@ body {
   #hud{gap:8px;}
   .hud-box{padding:5px 10px;}
 }
-
-
-
 </style>
 </head>
 <body>
@@ -372,7 +355,6 @@ body {
   <!-- GAME -->
   <div id="game-wrapper">
     <div id="speed-bar-wrap"><div id="speed-bar"></div></div>
-    <div id="zone-label"></div>
     <div id="easter-toast"></div>
     <div id="hud">
       <div class="hud-box">
@@ -430,7 +412,12 @@ let audioCtx = null;
 
 function ensureAudio() {
   if (!audioCtx) { try { audioCtx = new AudioCtx(); } catch(e){} }
-  if (audioCtx && audioCtx.state === 'suspended') { audioCtx.resume().catch(()=>{}); }
+  // Mobil tarayıcılar (özellikle iOS Safari) AudioContext'i "suspended"
+  // durumda başlatır ve kullanıcı etkileşimi içinde resume() çağrılmazsa
+  // ses hiç çıkmaz. Her etkileşimde tekrar denemek güvenlidir.
+  if (audioCtx && audioCtx.state === 'suspended') {
+    audioCtx.resume().catch(() => {});
+  }
 }
 
 function playTone(freq, type, duration, volume=0.08, fadeOut=true) {
@@ -499,11 +486,6 @@ let frame = 0;
 let gameSpeed = 3.5;
 const SPEED_BASE = 3.5;
 const SPEED_MAX = 13;
-const REF_WIDTH = 1280; // masaüstü referans genişliği
-function effSpeed() {
-  const scale = Math.min(1, canvas.width / REF_WIDTH);
-  return gameSpeed * Math.max(scale, 0.42); // mobilde aşırı yavaşlamasın diye alt sınır
-}
 let raf;
 const GROUND_OFFSET = 90;
 
@@ -523,7 +505,6 @@ const BG_ZONES = [
 let currentZoneIdx = 0;
 let zoneChangeScore = 0;
 const ZONE_CHANGE_INTERVAL = 15;
-let zoneLabelTimer = 0;
 
 // ── Player ──
 let player = {};
@@ -562,13 +543,6 @@ function resetPlayer() {
 
 // ─── ZONE SYSTEM ───────────────────────────────────────────────
 function getZone() { return BG_ZONES[currentZoneIdx % BG_ZONES.length]; }
-
-function showZoneLabel(name) {
-  const el = document.getElementById('zone-label');
-  el.textContent = '📍 ' + name;
-  el.classList.add('show');
-  zoneLabelTimer = 180;
-}
 
 // ─── DRAW BACKGROUND ───────────────────────────────────────────
 function drawBackground() {
@@ -960,153 +934,147 @@ function drawPlayer() {
   ctx.fillStyle='rgba(0,0,0,.35)';
   ctx.beginPath(); ctx.ellipse(0,1,14+(p.onGround?0:3),3,0,0,Math.PI*2); ctx.fill();
 
-  // ── LEGS — slim trousers + neat shoes ──
+  // ── LEGS — kısa, tatlı chibi bacaklar ──
   const lp = p.onGround ? p.stepPhase : Math.PI/4;
   function drawLeg(side) {
     const s  = Math.sin(lp) * side;
-    const kx = side*2 + s*5,  ky = -17;   // knee
-    const fx = side*2 + s*9,  fy = -2;    // foot
-    // Trouser segment
-    ctx.strokeStyle='#1e2d50'; ctx.lineWidth=7; ctx.lineCap='round';
+    const kx = side*3 + s*4,  ky = -9;    // knee
+    const fx = side*3 + s*7,  fy = -2;    // foot
+    ctx.strokeStyle='#2a3a5c'; ctx.lineWidth=8; ctx.lineCap='round';
     ctx.beginPath();
-    ctx.moveTo(side*3, -20);
+    ctx.moveTo(side*4, -17);
     ctx.quadraticCurveTo(kx, ky, fx, fy);
     ctx.stroke();
-    // Shoe — rounded rect feels nicer than ellipse
+    // Şeker gibi beyaz spor ayakkabı
     ctx.save();
     ctx.translate(fx + side*2, fy+1);
-    ctx.rotate(side * 0.1);
-    ctx.fillStyle='#1a1a2a';
-    ctx.beginPath(); ctx.roundRect(-5,-3,12,6,3); ctx.fill();
-    // Sole highlight
-    ctx.fillStyle='rgba(45,221,212,.7)';
-    ctx.beginPath(); ctx.roundRect(-4,-3,9,2.5,1); ctx.fill();
+    ctx.rotate(side * 0.12);
+    ctx.fillStyle='#ffffff';
+    ctx.beginPath(); ctx.roundRect(-6,-3,13,6,3); ctx.fill();
+    ctx.fillStyle='rgba(45,221,212,.75)';
+    ctx.beginPath(); ctx.roundRect(-5,-3,10,2.5,1); ctx.fill();
     ctx.restore();
   }
   drawLeg(-1);
   drawLeg(1);
 
-  // ── BACKPACK ──
+  // ── BACKPACK — mercan rengi, sevimli sırt çantası ──
   const bps = Math.sin(p.backpackSwing)*(p.onGround?2:0.4);
   ctx.save();
-  ctx.translate(12,-36);
+  ctx.translate(15,-32);
   ctx.rotate(bps*0.03);
-  // Main bag
-  ctx.fillStyle='#0a3d6b';
-  ctx.beginPath(); ctx.roundRect(0,0,11,20,4); ctx.fill();
-  // Pocket
-  ctx.fillStyle='#0d4a80';
-  ctx.beginPath(); ctx.roundRect(1.5,13,8,6,2); ctx.fill();
-  // Strap accent
-  ctx.strokeStyle='rgba(45,221,212,.5)'; ctx.lineWidth=1.5;
-  ctx.beginPath(); ctx.moveTo(2,0); ctx.lineTo(2,20); ctx.stroke();
+  ctx.fillStyle='#ff8f78';
+  ctx.beginPath(); ctx.roundRect(0,0,12,18,5); ctx.fill();
+  ctx.fillStyle='#ff7058';
+  ctx.beginPath(); ctx.roundRect(2,11,8,6,2); ctx.fill();
+  ctx.strokeStyle='rgba(255,255,255,.55)'; ctx.lineWidth=1.5;
+  ctx.beginPath(); ctx.moveTo(2,1); ctx.lineTo(2,18); ctx.stroke();
   ctx.restore();
 
-  // ── BODY — slimmer torso ──
-  const sg = ctx.createLinearGradient(-13,-47,13,-18);
-  sg.addColorStop(0,'#1d3c72'); sg.addColorStop(1,'#0c1f44');
+  // ── BODY — yuvarlak, sevimli chibi gövde (turkuaz kazak) ──
+  const sg = ctx.createLinearGradient(-16,-42,16,-16);
+  sg.addColorStop(0,'#2DDDD4'); sg.addColorStop(1,'#0D8A85');
   ctx.fillStyle=sg;
-  ctx.beginPath(); ctx.roundRect(-13,-47,26,30,[7,7,5,5]); ctx.fill();
-  // Shirt collar highlight
-  ctx.fillStyle='rgba(255,255,255,.12)';
-  ctx.beginPath(); ctx.roundRect(-13,-47,26,6,[7,7,0,0]); ctx.fill();
+  ctx.beginPath(); ctx.roundRect(-16,-42,32,26,[14,14,9,9]); ctx.fill();
+  // Yaka parlaklığı
+  ctx.fillStyle='rgba(255,255,255,.18)';
+  ctx.beginPath(); ctx.roundRect(-16,-42,32,7,[14,14,0,0]); ctx.fill();
 
-  // Akdeniz logo badge on shirt
+  // Akdeniz logo rozeti — DOKUNULMADI
   ctx.save();
-  ctx.beginPath(); ctx.arc(0,-33,8,0,Math.PI*2);
+  ctx.beginPath(); ctx.arc(0,-30,8,0,Math.PI*2);
   ctx.strokeStyle='rgba(45,221,212,.85)'; ctx.lineWidth=1.5; ctx.stroke();
-  ctx.beginPath(); ctx.arc(0,-33,6.5,0,Math.PI*2);
+  ctx.beginPath(); ctx.arc(0,-30,6.5,0,Math.PI*2);
   ctx.fillStyle='rgba(15,50,110,.9)'; ctx.fill();
   ctx.clip();
   if (akdenizLogo.complete && akdenizLogo.naturalWidth>0) {
-    ctx.drawImage(akdenizLogo,-6.5,-39.5,13,13);
+    ctx.drawImage(akdenizLogo,-6.5,-36.5,13,13);
   } else {
     ctx.fillStyle='rgba(255,255,255,.9)'; ctx.font='bold 7px Arial';
-    ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('A',0,-33);
+    ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('A',0,-30);
   }
   ctx.restore();
 
   // ── ARMS ──
   const ap = p.onGround ? -p.stepPhase*0.5 : -0.7;
-  ctx.strokeStyle='#c4a07a'; ctx.lineWidth=6; ctx.lineCap='round';
+  ctx.strokeStyle='#f2cda3'; ctx.lineWidth=7; ctx.lineCap='round';
 
-  // Left arm (holds coffee)
-  const lax = -14 + Math.sin(ap)*5,  lay = -30 + Math.cos(ap)*4;
-  ctx.beginPath(); ctx.moveTo(-12,-40); ctx.lineTo(lax, lay); ctx.stroke();
+  // Sol kol (kahve tutuyor)
+  const lax = -17 + Math.sin(ap)*5,  lay = -25 + Math.cos(ap)*4;
+  ctx.beginPath(); ctx.moveTo(-15,-35); ctx.lineTo(lax, lay); ctx.stroke();
 
-  // Coffee cup
-  ctx.fillStyle='#e0d0b0';
-  ctx.beginPath(); ctx.roundRect(lax-6,lay-11,12,14,2); ctx.fill();
-  ctx.fillStyle='#5a3020'; ctx.fillRect(lax-4,lay-9,8,8);
-  ctx.strokeStyle='#e0d0b0'; ctx.lineWidth=2;
+  // Kahve bardağı
+  ctx.fillStyle='#ffffff';
+  ctx.beginPath(); ctx.roundRect(lax-6,lay-11,12,14,3); ctx.fill();
+  ctx.fillStyle='#8a5a3a'; ctx.fillRect(lax-4,lay-9,8,8);
+  ctx.strokeStyle='#ffffff'; ctx.lineWidth=2;
   ctx.beginPath(); ctx.arc(lax+9,lay-3,4,-Math.PI/2,Math.PI/2); ctx.stroke();
-  // Steam
+  // Buhar
   const sa = 0.3 + Math.sin(frame*0.09)*0.18;
-  ctx.strokeStyle=`rgba(210,210,210,${sa})`; ctx.lineWidth=1.5;
+  ctx.strokeStyle=`rgba(220,220,220,${sa})`; ctx.lineWidth=1.5;
   ctx.beginPath(); ctx.moveTo(lax-2,lay-11);
-  ctx.bezierCurveTo(lax-5,lay-20,lax+3,lay-25,lax,lay-32); ctx.stroke();
+  ctx.bezierCurveTo(lax-5,lay-19,lax+3,lay-23,lax,lay-29); ctx.stroke();
   if (p.steamTimer>0) p.steamTimer--;
 
-  // Right arm
-  ctx.strokeStyle='#c4a07a'; ctx.lineWidth=6;
-  ctx.beginPath(); ctx.moveTo(12,-40);
-  ctx.lineTo(14+Math.sin(ap+Math.PI)*5, -30+Math.cos(ap+Math.PI)*4); ctx.stroke();
+  // Sağ kol
+  ctx.strokeStyle='#f2cda3'; ctx.lineWidth=7;
+  ctx.beginPath(); ctx.moveTo(15,-35);
+  ctx.lineTo(17+Math.sin(ap+Math.PI)*5, -25+Math.cos(ap+Math.PI)*4); ctx.stroke();
 
-  // ── HEAD — rounder, softer ──
-  // Neck
-  ctx.fillStyle='#c4a07a';
-  ctx.beginPath(); ctx.roundRect(-4,-49,8,6,2); ctx.fill();
+  // ── HEAD — büyük, yuvarlak, sevimli chibi kafa ──
+  // Boyun
+  ctx.fillStyle='#f2cda3';
+  ctx.beginPath(); ctx.roundRect(-4,-45,8,6,2); ctx.fill();
 
-  // Head base
-  ctx.fillStyle='#c4a07a';
-  ctx.beginPath(); ctx.ellipse(0,-56,11,12,0,0,Math.PI*2); ctx.fill();
+  // Kafa tabanı
+  ctx.fillStyle='#f2cda3';
+  ctx.beginPath(); ctx.ellipse(0,-57,15,15,0,0,Math.PI*2); ctx.fill();
 
-  // Hair cap (dark, full top half)
-  ctx.fillStyle='#241508';
-  ctx.beginPath(); ctx.ellipse(0,-59,11.5,9,0,Math.PI,0); ctx.fill();
-  // Hair side wisps
-  ctx.beginPath(); ctx.ellipse(-10,-56,3,5,-0.4,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse( 10,-56,3,5, 0.4,0,Math.PI*2); ctx.fill();
-  // Jump hair flutter
+  // Saç — yumuşak, dolgun bob kesim
+  ctx.fillStyle='#4a2e18';
+  ctx.beginPath(); ctx.ellipse(0,-61,16,13,0,Math.PI,0); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(-14,-53,5.2,9,-0.15,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse( 14,-53,5.2,9, 0.15,0,Math.PI*2); ctx.fill();
+  // Yumuşak kâkül
+  ctx.beginPath(); ctx.ellipse(0,-64,12,6,0,Math.PI,0); ctx.fill();
+  // Zıplarken uçuşan saç telleri
   if (!p.onGround) {
     const hw = Math.sin(frame*0.15)*2.5;
-    ctx.strokeStyle='#241508'; ctx.lineWidth=2.2; ctx.lineCap='round';
-    [[-9,-60],[-1,-62],[7,-60]].forEach(([ox2,oy2],i)=>{
+    ctx.strokeStyle='#4a2e18'; ctx.lineWidth=2.4; ctx.lineCap='round';
+    [[-11,-65],[0,-68],[11,-65]].forEach(([ox2,oy2],i)=>{
       ctx.beginPath(); ctx.moveTo(ox2,oy2);
-      ctx.quadraticCurveTo(ox2+(i-1)*4+hw,-67+i,ox2+(i-1)*3+hw,-73); ctx.stroke();
+      ctx.quadraticCurveTo(ox2+(i-1)*4+hw,-73+i,ox2+(i-1)*3+hw,-79); ctx.stroke();
     });
   }
 
-  // Eyes — big, round, cute
-  ctx.fillStyle='#1a1520';
-  ctx.beginPath(); ctx.ellipse(-4,-57,2.8,3.2,0,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse( 4,-57,2.8,3.2,0,0,Math.PI*2); ctx.fill();
-  // Iris highlight
+  // Gözler — büyük, yuvarlak, parlak
+  ctx.fillStyle='#2a1c14';
+  ctx.beginPath(); ctx.ellipse(-6,-56,3.2,3.8,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse( 6,-56,3.2,3.8,0,0,Math.PI*2); ctx.fill();
   ctx.fillStyle='white';
-  ctx.beginPath(); ctx.ellipse(-3,-58,1,1,0,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse( 5,-58,1,1,0,0,Math.PI*2); ctx.fill();
-  // Eyelashes (tiny arcs on top)
-  ctx.strokeStyle='#1a1520'; ctx.lineWidth=1.2;
-  ctx.beginPath(); ctx.arc(-4,-57,3.2,-Math.PI*0.95,-Math.PI*0.15); ctx.stroke();
-  ctx.beginPath(); ctx.arc( 4,-57,3.2,-Math.PI*0.85,-Math.PI*0.05); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(-7.2,-57.4,1.3,1.3,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse( 4.8,-57.4,1.3,1.3,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='rgba(255,255,255,.6)';
+  ctx.beginPath(); ctx.ellipse(-5,-54.5,0.8,0.8,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse( 7,-54.5,0.8,0.8,0,0,Math.PI*2); ctx.fill();
 
-  // Eyebrows — soft arched
-  ctx.strokeStyle='#3a2008'; ctx.lineWidth=1.4; ctx.lineCap='round';
-  ctx.beginPath(); ctx.moveTo(-7,-61.5); ctx.quadraticCurveTo(-4,-63,-1,-61.5); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(1,-61.5);  ctx.quadraticCurveTo(4,-63,7,-61.5); ctx.stroke();
+  // Kaşlar — yumuşak
+  ctx.strokeStyle='#3a2410'; ctx.lineWidth=1.4; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(-9,-62); ctx.quadraticCurveTo(-6,-64,-3,-62.5); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(3,-62.5);  ctx.quadraticCurveTo(6,-64,9,-62); ctx.stroke();
 
-  // Blush
-  ctx.fillStyle='rgba(240,150,120,.22)';
-  ctx.beginPath(); ctx.ellipse(-7,-54.5,4,2.5,0,0,Math.PI*2); ctx.fill();
-  ctx.beginPath(); ctx.ellipse( 7,-54.5,4,2.5,0,0,Math.PI*2); ctx.fill();
+  // Al yanaklar
+  ctx.fillStyle='rgba(255,150,140,.35)';
+  ctx.beginPath(); ctx.ellipse(-10,-52,4,2.6,0,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse( 10,-52,4,2.6,0,0,Math.PI*2); ctx.fill();
 
-  // Nose — tiny dot
-  ctx.fillStyle='rgba(180,120,80,.6)';
-  ctx.beginPath(); ctx.ellipse(0,-53,1.2,0.8,0,0,Math.PI*2); ctx.fill();
+  // Burun
+  ctx.fillStyle='rgba(200,140,100,.55)';
+  ctx.beginPath(); ctx.ellipse(0,-51,1,0.7,0,0,Math.PI*2); ctx.fill();
 
-  // Mouth — warm smile arc
-  ctx.strokeStyle='#b05030'; ctx.lineWidth=1.6; ctx.lineCap='round';
-  ctx.beginPath(); ctx.arc(0,-51,3.5,0.1*Math.PI,0.9*Math.PI); ctx.stroke();
+  // Ağız — sıcak gülümseme
+  ctx.strokeStyle='#c05840'; ctx.lineWidth=1.8; ctx.lineCap='round';
+  ctx.beginPath(); ctx.arc(0,-49,3.2,0.15*Math.PI,0.85*Math.PI); ctx.stroke();
 
   ctx.restore();
 }
@@ -1515,12 +1483,6 @@ function gameLoop() {
   if (score - zoneChangeScore >= ZONE_CHANGE_INTERVAL) {
     zoneChangeScore = score;
     currentZoneIdx++;
-    const zone = getZone();
-    showZoneLabel(zone.name);
-  }
-  if (zoneLabelTimer > 0) {
-    zoneLabelTimer--;
-    if (zoneLabelTimer === 0) document.getElementById('zone-label').classList.remove('show');
   }
 
   // Speed increase
@@ -1534,9 +1496,9 @@ function gameLoop() {
   document.getElementById('speed-bar').style.width = ((gameSpeed - SPEED_BASE) / (SPEED_MAX - SPEED_BASE) * 100) + '%';
 
   // Background scroll
-  bgX1 -= effSpeed() * 0.2;
-bgX2 -= effSpeed() * 0.5;
-bgX3 -= effSpeed() * 0.9;
+  bgX1 -= gameSpeed * 0.2;
+  bgX2 -= gameSpeed * 0.5;
+  bgX3 -= gameSpeed * 0.9;
 
   // Player physics
   const gravity = 0.65;
@@ -1575,8 +1537,8 @@ bgX3 -= effSpeed() * 0.9;
   // Update obstacles
   let passed = 0;
   obstacles = obstacles.filter(ob => {
-    ob.x += -effSpeed();
-    ob.vx = -effSpeed();
+    ob.x += -gameSpeed;
+    ob.vx = -gameSpeed;
     if (ob.x + ob.w < 0) { passed++; return false; }
     if (ob.type === 'seagull') ob.y += Math.sin(frame * 0.05 + ob.x * 0.01) * 0.8;
     if (checkCollision(ob)) die(ob.reason);
@@ -1671,6 +1633,7 @@ function die(reason) {
 
 // ─── JUMP ──────────────────────────────────────────────────────
 function jump() {
+  ensureAudio(); // mobilde ilk dokunuşta sesi kilitten açmak için
   if (state === 'dead') { restartGame(); return; }
   if (state === 'idle') { startGame(); return; }
 
@@ -1743,6 +1706,16 @@ document.getElementById('restart-btn').addEventListener('click', restartGame);
 window.addEventListener('resize', () => {
   if (state === 'running') resize();
   else { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; }
+});
+
+// Mobil cihazlarda döndürme sonrası boyut/scroll düzeltmesi (bazı tarayıcılar
+// resize olayını orientationchange'den biraz sonra tetikler, bu yüzden ikisini
+// de dinleyip kısa bir gecikmeyle tekrar hesaplıyoruz).
+window.addEventListener('orientationchange', () => {
+  setTimeout(() => {
+    if (state === 'running') resize();
+    else { canvas.width = canvas.offsetWidth; canvas.height = canvas.offsetHeight; drawBackground(); resetPlayer(); drawPlayer(); }
+  }, 200);
 });
 
 // ─── INIT ──────────────────────────────────────────────────────
