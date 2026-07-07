@@ -18,15 +18,23 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // Temiz URL yapısı (ör: /hakkimizda/) ile eski dosya adı yapısını (ör: /hakkimizda.html)
   // birlikte destekler. Klasör adını veya dosya adını bulup ".html" ekleyerek
   // aşağıdaki sayfa-özel kontrollerle uyumlu hale getirir.
+  // Bilinen alt sayfa isimleri. Bu listede olmayan her şey ana sayfa
+  // kabul edilir. Bu liste olmadan, GitHub Pages proje adresinde
+  // (kullanici.github.io/kampus-kafasi/) ana sayfanın son URL parçası
+  // repo adı ("kampus-kafasi") olduğu için kod bunu yanlışlıkla bir alt
+  // sayfa sanıyor ve ana sayfaya özel metinler (Biz Kimiz paragrafları
+  // gibi) hiç uygulanmıyordu.
+  const KNOWN_PAGES = ['hakkimizda', 'ekip', 'etkinlikler', 'iletisim', 'sponsorluk'];
   const segments = location.pathname.split('/').filter(Boolean); // boş parçaları at
   const lastSeg = segments.pop() || '';
   let page;
   if (lastSeg === '' || lastSeg === 'index.html') {
     page = 'index.html';
   } else if (lastSeg.endsWith('.html')) {
-    page = lastSeg; // eski dosya-adı tabanlı linkler hâlâ çalışsın
+    const slug = lastSeg.replace(/\.html$/, '');
+    page = KNOWN_PAGES.includes(slug) ? lastSeg : 'index.html';
   } else {
-    page = lastSeg + '.html'; // /hakkimizda/  ->  hakkimizda.html
+    page = KNOWN_PAGES.includes(lastSeg) ? lastSeg + '.html' : 'index.html';
   }
   // Bu betiğin (ve style.css, main.js gibi ortak dosyaların) bulunduğu kök dizine göre
   // sayfanın kaç seviye altta olduğunu belirler. Ana sayfa hariç tüm sayfalar
@@ -72,8 +80,6 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
     // ana sayfanın hero'sundan bağımsız. Sayfada aşağıdaki id'ler bulunmalı:
     // #about-badge-text  -> rozet metni (ör: "Akdeniz Üniversitesi · Antalya")
     // #about-hero-sub    -> hero alt başlığı
-    const aboutBadge = document.getElementById('about-badge-text');
-    if (metin.aboutBadge && aboutBadge) aboutBadge.textContent = metin.aboutBadge;
     const aboutHeroSub = document.getElementById('about-hero-sub');
     if (metin.aboutSub && aboutHeroSub) aboutHeroSub.textContent = metin.aboutSub;
 
@@ -105,8 +111,6 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // Etkinlikler sayfası hero'su. Gerekli id'ler:
   // #events-badge-text -> rozet metni, #events-hero-sub -> alt başlık
   function applyEventsHero() {
-    const badge = document.getElementById('events-badge-text');
-    if (metin.eventsBadge && badge) badge.textContent = metin.eventsBadge;
     const sub = document.getElementById('events-hero-sub');
     if (metin.eventsSub && sub) sub.textContent = metin.eventsSub;
   }
@@ -114,8 +118,6 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // Ekip sayfası hero'su. Gerekli id'ler:
   // #ekip-badge-text -> rozet metni, #ekip-hero-sub -> alt başlık
   function applyEkipHero() {
-    const badge = document.getElementById('ekip-badge-text');
-    if (metin.ekipBadge && badge) badge.textContent = metin.ekipBadge;
     const sub = document.getElementById('ekip-hero-sub');
     if (metin.ekipSub && sub) sub.textContent = metin.ekipSub;
   }
@@ -123,18 +125,11 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // İletişim sayfası hero'su. Gerekli id'ler:
   // #iletisim-badge-text -> rozet metni, #iletisim-hero-sub -> alt başlık
   function applyIletisimHero() {
-    const badge = document.getElementById('iletisim-badge-text');
-    if (metin.iletisimBadge && badge) badge.textContent = metin.iletisimBadge;
     const sub = document.getElementById('iletisim-hero-sub');
     if (metin.iletisimSub && sub) sub.textContent = metin.iletisimSub;
   }
 
-  // Sponsorluk sayfası hero rozeti (başlık/alt başlık kendi inline script'inde
-  // işleniyor; sadece rozeti buradan tamamlıyoruz). Gerekli id: #sp-badge-text
-  function applySponsorHeroBadge() {
-    const badge = document.getElementById('sp-badge-text');
-    if (spData.heroBadge && badge) badge.textContent = spData.heroBadge;
-  }
+  
 
   function esc(str) {
     if (!str) return '';
@@ -229,10 +224,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
 
   // INDEX sayfasındaki özel alanlar
   if (page === 'index.html' || page === '') {
-    if (metin.heroBadge) {
-      const badge = document.getElementById('hero-badge-text');
-      if (badge) badge.textContent = metin.heroBadge;
-    }
+
     if (metin.heroSub) {
       const sub = document.getElementById('hero-sub-el');
       if (sub) sub.textContent = metin.heroSub;
@@ -251,7 +243,6 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // SPONSORLUK sayfası
   if (page === 'sponsorluk.html') {
     await applySponsorPage();
-    applySponsorHeroBadge();
   }
 
   // HAKKIMIZDA sayfası
