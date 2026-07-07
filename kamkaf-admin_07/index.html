@@ -893,7 +893,6 @@ img { max-width: 100%; display: block; }
       <!-- Hero & CTA -->
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">🦸</span>Hero Bölümü</div></div>
-        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="sp-heroBadge" type="text" placeholder="Fırsatlar · Kampüs Kafası"></div>
         <div class="fg"><label>Hero Ana Başlık</label><input id="sp-heroTitle" type="text" placeholder="Kampüs Kafası ile Büyü"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="sp-heroSub" rows="2" placeholder="17.000'den fazla öğrenciyle güçlü bir topluluğun parçası ol."></textarea></div>
         <button class="btn btn-p" onclick="saveSpBasic()">Kaydet</button>
@@ -977,7 +976,6 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">🏠</span>Ana Sayfa — Hero</div></div>
         <div class="card-desc">Ziyaretçilerin ilk gördüğü başlık bölümü.</div>
-        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-heroBadge" type="text" placeholder="Akdeniz Üniversitesi · Antalya"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-heroSub" rows="3" placeholder="Kampüs yaşamını birlikte inşa ediyoruz…"></textarea></div>
         <div class="fg"><label>Hero Buton 1 Metni</label><input id="txt-heroBtn1" type="text" placeholder="Etkinlikleri Keşfet"></div>
         <div class="fg"><label>Hero Buton 2 Metni</label><input id="txt-heroBtn2" type="text" placeholder="Sponsorluk Fırsatları"></div>
@@ -1004,7 +1002,6 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">📖</span>Hakkımızda — Hero</div></div>
         <div class="card-desc">Hakkımızda sayfasının en üstündeki rozet ve alt başlık (ana sayfanınkinden bağımsızdır).</div>
-        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-aboutBadge" type="text" placeholder="Akdeniz Üniversitesi · Antalya"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-aboutSub" rows="2" placeholder="Öğrenciler için, öğrenciler tarafından. 17.000+ üye, onlarca etkinlik, tek bir topluluk."></textarea></div>
         <button class="btn btn-p" onclick="saveTexts('aboutHero')">Kaydet</button>
       </div>
@@ -1048,7 +1045,6 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">📅</span>Etkinlikler Sayfası — Hero</div></div>
         <div class="card-desc">Etkinlikler sayfasının en üstündeki rozet ve alt başlık.</div>
-        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-eventsBadge" type="text" placeholder="Kampüs Kafası"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-eventsSub" rows="2" placeholder="Yaklaşan etkinliklerimizi kaçırma, geçmişe bak — topluluğumuz her zaman aktif."></textarea></div>
         <button class="btn btn-p" onclick="saveTexts('eventsHero')">Kaydet</button>
       </div>
@@ -1057,7 +1053,6 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">👥</span>Ekip Sayfası — Hero</div></div>
         <div class="card-desc">Ekip sayfasının en üstündeki rozet ve alt başlık.</div>
-        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-ekipBadge" type="text" placeholder="Akdeniz Üniversitesi · Antalya"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-ekipSub" rows="2" placeholder="Topluluğumuzu büyüten, her adımda yanınızda olan ve Kampüs Kafası'nı var eden insanlarla tanışın."></textarea></div>
         <button class="btn btn-p" onclick="saveTexts('ekipHero')">Kaydet</button>
       </div>
@@ -1066,7 +1061,6 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">✉️</span>İletişim Sayfası — Hero</div></div>
         <div class="card-desc">İletişim sayfasının en üstündeki rozet ve alt başlık.</div>
-        <div class="fg"><label>Badge / Eyebrow Metni</label><input id="txt-iletisimBadge" type="text" placeholder="Akdeniz Üniversitesi · Antalya"></div>
         <div class="fg"><label>Hero Alt Başlık</label><textarea id="txt-iletisimSub" rows="2" placeholder="Sormak, önermek veya iş birliği yapmak için bize ulaş."></textarea></div>
         <button class="btn btn-p" onclick="saveTexts('iletisimHero')">Kaydet</button>
       </div>
@@ -1551,18 +1545,18 @@ async function loadTexts() {
     if (!snap.exists()) return;
     const m = snap.data();
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    set('txt-heroBadge', m.heroBadge); set('txt-heroSub', m.heroSub);
+    set('txt-heroSub', m.heroSub);
     set('txt-heroBtn1', m.heroBtn1); set('txt-heroBtn2', m.heroBtn2);
     set('txt-evTitle', m.evTitle); set('txt-footerSub', m.footerSub);
     set('txt-who1', m.who1); set('txt-who2', m.who2);
     set('txt-about1', m.about1); set('txt-about2', m.about2); set('txt-about3', m.about3);
     set('txt-vision1', m.vision1); set('txt-vision2', m.vision2);
     set('txt-mission1', m.mission1); set('txt-mission2', m.mission2);
-    set('txt-aboutBadge', m.aboutBadge); set('txt-aboutSub', m.aboutSub);
+    set('txt-aboutSub', m.aboutSub);
     set('txt-aboutEvTitle', m.aboutEvTitle); set('txt-aboutEvSub', m.aboutEvSub);
-    set('txt-eventsBadge', m.eventsBadge); set('txt-eventsSub', m.eventsSub);
-    set('txt-ekipBadge', m.ekipBadge); set('txt-ekipSub', m.ekipSub);
-    set('txt-iletisimBadge', m.iletisimBadge); set('txt-iletisimSub', m.iletisimSub);
+    set('txt-eventsSub', m.eventsSub);
+    set('txt-ekipSub', m.ekipSub);
+    set('txt-iletisimSub', m.iletisimSub);
   } catch(e) { console.warn('loadTexts:', e); }
 }
 
@@ -1573,7 +1567,7 @@ async function loadSpBasic() {
     if (!snap.exists()) return;
     const s = snap.data();
     const set = (id, val) => { const el = document.getElementById(id); if (el) el.value = val || ''; };
-    set('sp-heroBadge', s.heroBadge); set('sp-heroSub', s.heroSub); set('sp-heroTitle', s.heroTitle);
+    set('sp-heroSub', s.heroSub); set('sp-heroTitle', s.heroTitle);
     set('sp-ctaTitle', s.ctaTitle); set('sp-ctaText', s.ctaText);
     set('sp-whyTitle', s.whyTitle); set('sp-whyDesc', s.whyDesc);
     set('sp-colTitle', s.colTitle); set('sp-colDesc', s.colDesc);
@@ -2158,16 +2152,16 @@ window.saveTexts = async function(group) {
     const snap = await getDoc(doc(db, "ayarlar", "kk_metin_v1"));
     const mevcut = snap.exists() ? snap.data() : {};
     const get = id => document.getElementById(id)?.value.trim() || '';
-    if      (group === 'hero')  { mevcut.heroBadge=get('txt-heroBadge'); mevcut.heroSub=get('txt-heroSub'); mevcut.heroBtn1=get('txt-heroBtn1'); mevcut.heroBtn2=get('txt-heroBtn2'); }
+    if      (group === 'hero')  { mevcut.heroSub=get('txt-heroSub'); mevcut.heroBtn1=get('txt-heroBtn1'); mevcut.heroBtn2=get('txt-heroBtn2'); }
     else if (group === 'extra') { mevcut.evTitle=get('txt-evTitle'); mevcut.footerSub=get('txt-footerSub'); }
     else if (group === 'who')   { mevcut.who1=get('txt-who1'); mevcut.who2=get('txt-who2'); }
     else if (group === 'about') { mevcut.about1=get('txt-about1'); mevcut.about2=get('txt-about2'); mevcut.about3=get('txt-about3'); }
     else if (group === 'vm')    { mevcut.vision1=get('txt-vision1'); mevcut.vision2=get('txt-vision2'); mevcut.mission1=get('txt-mission1'); mevcut.mission2=get('txt-mission2'); }
-    else if (group === 'aboutHero')   { mevcut.aboutBadge=get('txt-aboutBadge'); mevcut.aboutSub=get('txt-aboutSub'); }
+    else if (group === 'aboutHero')   { mevcut.aboutSub=get('txt-aboutSub'); }
     else if (group === 'aboutEv')     { mevcut.aboutEvTitle=get('txt-aboutEvTitle'); mevcut.aboutEvSub=get('txt-aboutEvSub'); }
-    else if (group === 'eventsHero')  { mevcut.eventsBadge=get('txt-eventsBadge'); mevcut.eventsSub=get('txt-eventsSub'); }
-    else if (group === 'ekipHero')    { mevcut.ekipBadge=get('txt-ekipBadge'); mevcut.ekipSub=get('txt-ekipSub'); }
-    else if (group === 'iletisimHero'){ mevcut.iletisimBadge=get('txt-iletisimBadge'); mevcut.iletisimSub=get('txt-iletisimSub'); }
+    else if (group === 'eventsHero')  { mevcut.eventsSub=get('txt-eventsSub'); }
+    else if (group === 'ekipHero')    { mevcut.ekipSub=get('txt-ekipSub'); }
+    else if (group === 'iletisimHero'){ mevcut.iletisimSub=get('txt-iletisimSub'); }
     await setDoc(doc(db, "ayarlar", "kk_metin_v1"), mevcut);
     addLog('Sayfa metinleri güncellendi (' + group + ')', 'ok');
     toast('Metinler kaydedildi!', 'ok');
@@ -2180,7 +2174,6 @@ window.saveSpBasic = async function() {
     const mevcut = snap.exists() ? snap.data() : {};
     const get = id => document.getElementById(id)?.value.trim() || '';
     Object.assign(mevcut, {
-      heroBadge:  get('sp-heroBadge'),
       heroSub:    get('sp-heroSub'),
       heroTitle:  get('sp-heroTitle'),
       ctaTitle:   get('sp-ctaTitle'),
