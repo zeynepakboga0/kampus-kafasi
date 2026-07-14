@@ -1230,6 +1230,7 @@ img { max-width: 100%; display: block; }
     <button class="modal-close" onclick="closeFaqModal()">✕</button>
     <input type="hidden" id="faq-edit-id">
     <div class="fg"><label>Soru <span class="req">*</span></label><input id="faq-q" type="text" placeholder="Üyelik nasıl olunur?"></div>
+    <div class="fg"><label>Sıra No</label><input id="faq-order" type="number" placeholder="1" value="1"></div>
     <div class="fg"><label>Cevap <span class="req">*</span></label><textarea id="faq-a" rows="4" placeholder="Cevabı açıklayıcı bir şekilde yaz…"></textarea></div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeFaqModal()">İptal</button>
@@ -1870,13 +1871,18 @@ async function loadFaqs() {
     if (countEl) countEl.textContent = snap.empty ? '0 soru' : `${snap.size} soru`;
     if (snap.empty) { listEl.innerHTML = `<div class="empty"><div class="empty-ico">❓</div><div class="empty-title">Henüz soru eklenmedi.</div></div>`; return; }
     listEl.innerHTML = '';
-    snap.forEach(d => {
-      const q = d.data(); const id = d.id;
+
+    const faqArr = [];
+    snap.forEach(d => faqArr.push({ id: d.id, ...d.data() }));
+    faqArr.sort((a, b) => (a.order || 99) - (b.order || 99));
+
+    faqArr.forEach(q => {
+      const id = q.id;
       const div = document.createElement('div');
       div.className = 'li';
       div.innerHTML = `
         <div class="li-body">
-          <div class="li-title">${esc(q.question)}</div>
+          <div class="li-title">${q.order ? q.order + '. ' : ''}${esc(q.question)}</div>
           <div class="li-sub">${esc(q.answer||'')}</div>
         </div>
         <div class="li-acts">
@@ -1902,6 +1908,7 @@ window.editFaq = async function(id) {
     const q = snap.data();
     document.getElementById('faq-edit-id').value = id;
     document.getElementById('faq-q').value = q.question || '';
+    document.getElementById('faq-order').value = q.order || 1;
     document.getElementById('faq-a').value = q.answer || '';
     document.getElementById('faq-modal').classList.add('on');
   } catch(e) { toast('Yüklenemedi.', 'err'); }
@@ -1910,11 +1917,12 @@ window.editFaq = async function(id) {
 window.saveFaq = async function() {
   const question = document.getElementById('faq-q').value.trim();
   const answer   = document.getElementById('faq-a').value.trim();
+  const order    = parseInt(document.getElementById('faq-order').value) || 1;
   const editId   = document.getElementById('faq-edit-id').value;
   if (!question || !answer) { toast('Soru ve cevap zorunludur!', 'err'); return; }
   try {
-    if (editId) { await updateDoc(doc(db, 'kk_faqs', editId), { question, answer }); toast('Soru güncellendi!', 'ok'); }
-    else { await addDoc(collection(db, 'kk_faqs'), { question, answer, createdAt: serverTimestamp() }); addLog('Yeni SSS eklendi', 'info'); toast('Soru eklendi!', 'ok'); }
+    if (editId) { await updateDoc(doc(db, 'kk_faqs', editId), { question, answer, order }); toast('Soru güncellendi!', 'ok'); }
+    else { await addDoc(collection(db, 'kk_faqs'), { question, answer, order, createdAt: serverTimestamp() }); addLog('Yeni SSS eklendi', 'info'); toast('Soru eklendi!', 'ok'); }
     closeFaqModal(); await loadFaqs();
   } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
 };
