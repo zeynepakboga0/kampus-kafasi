@@ -579,10 +579,11 @@ function resetForm() {
       renderContactCards();
     }
 
-    const fSnap = await getDocs(collection(db, "kk_faqs"));
+   const fSnap = await getDocs(collection(db, "kk_faqs"));
     if (!fSnap.empty) {
       faqData = [];
       fSnap.forEach(d => faqData.push(d.data()));
+      faqData.sort((a, b) => (a.order || 99) - (b.order || 99));
       renderFaq();
     }
   } catch(e) { console.warn('Firebase okunamadı:', e); }
