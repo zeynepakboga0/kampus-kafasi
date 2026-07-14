@@ -394,7 +394,7 @@ footer {
   border-color: rgba(45,216,240,.35);
 }
 .ev-thumb {
-  height: 190px; display: flex; align-items: center; justify-content: center;
+  aspect-ratio: 1/1; display: flex; align-items: center; justify-content: center;
   font-size: 3.5rem;
   background: linear-gradient(135deg,#0c1b24,#08121a);
   flex-shrink: 0; position: relative; overflow: hidden;
@@ -406,7 +406,7 @@ footer {
 }
 .ev-thumb-emoji { display:flex; align-items:center; justify-content:center; width:100%; height:100%; transition:transform .35s; }
 .event-card:hover .ev-thumb .ev-thumb-emoji { transform: scale(1.12); }
-.ev-thumb img { width:100%; height:100%; object-fit:cover; transition:transform .5s ease; }
+.ev-thumb img { width:100%; height:100%; object-fit:cover; object-position:center; transition:transform .5s ease; }
 .event-card:hover .ev-thumb img { transform: scale(1.06); }
 
 .ev-upcoming-bar {
@@ -455,11 +455,11 @@ footer {
 @keyframes modalIn { from{opacity:0;transform:scale(.88) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
 .modal-hero {
-  position: relative; height: 260px;
+  position: relative; aspect-ratio: 4/5; max-height: 70vh;
   background: linear-gradient(135deg,#0c1b24,#08121a);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
 }
-.modal-hero-img { width:100%; height:100%; object-fit:cover; display:none; }
+.modal-hero-img { width:100%; height:100%; object-fit:contain; display:none; }
 .modal-hero-emoji { font-size: 5rem; z-index: 1; filter: drop-shadow(0 0 30px rgba(45,216,240,.3)); }
 .modal-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--dark) 100%); z-index: 2; }
 .modal-hero-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(45,216,240,.12) 0%, transparent 65%); z-index: 0; }
@@ -676,7 +676,6 @@ margin-bottom: 6px; white-space: normal;}
 @media (max-width: 520px) {
   .modal-box { border-radius: 20px; }
   .modal-content { padding: 0 18px 24px; }
-  .modal-hero { height: 200px; }
   .modal-info-grid { grid-template-columns: 1fr; }
   .sponsor-btns { flex-direction: column; align-items: center; }
   .counters-grid { grid-template-columns: 1fr; max-width: 320px; }

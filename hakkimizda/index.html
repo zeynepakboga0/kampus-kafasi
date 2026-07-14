@@ -35,7 +35,7 @@
 .activity-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;transition:transform .35s cubic-bezier(.34,1.2,.64,1),box-shadow .35s,border-color .35s,opacity .42s;cursor:pointer;position:relative;display:flex;flex-direction:column}
 .activity-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(45,216,240,.15);border-color:rgba(45,216,240,.3)}
 .ac-enter{transform:translateY(14px)}
-.ac-cover{height:160px;background:linear-gradient(135deg,rgba(45,216,240,.07),rgba(13,110,106,.09));display:flex;align-items:center;justify-content:center;font-size:2.8rem;flex-shrink:0;overflow:hidden;position:relative}
+.ac-cover{aspect-ratio:1/1;background:linear-gradient(135deg,rgba(45,216,240,.07),rgba(13,110,106,.09));display:flex;align-items:center;justify-content:center;font-size:2.8rem;flex-shrink:0;overflow:hidden;position:relative}
 .ac-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,9,11,.6) 100%);pointer-events:none}
 .ac-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
 .activity-card:hover .ac-cover img{transform:scale(1.06)}
@@ -56,8 +56,8 @@
 .ev-modal-bg.open{opacity:1;pointer-events:all}
 .ev-modal{background:var(--dark);border:1px solid rgba(45,216,240,.2);border-radius:28px;max-width:680px;width:100%;box-shadow:0 60px 120px rgba(0,0,0,.7),0 0 0 1px rgba(45,216,240,.08);overflow:hidden;position:relative;transform:scale(.94) translateY(16px);transition:transform .32s cubic-bezier(.34,1.46,.64,1);max-height:92vh;overflow-y:auto}
 .ev-modal-bg.open .ev-modal{transform:scale(1) translateY(0)}
-.ev-modal-hero{position:relative;height:240px;background:linear-gradient(135deg,#0c1b24,#08121a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-.ev-modal-hero-img{width:100%;height:100%;object-fit:cover;display:none}
+.ev-modal-hero{position:relative;aspect-ratio:4/5;max-height:70vh;background:linear-gradient(135deg,#0c1b24,#08121a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.ev-modal-hero-img{width:100%;height:100%;object-fit:contain;display:none}
 .ev-modal-hero-emoji{font-size:5rem;z-index:1;filter:drop-shadow(0 0 30px rgba(45,216,240,.3))}
 .ev-modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--dark) 100%);z-index:2}
 .ev-modal-hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(45,216,240,.12) 0%,transparent 65%);z-index:0}
