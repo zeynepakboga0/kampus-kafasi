@@ -455,7 +455,7 @@ footer {
 @keyframes modalIn { from{opacity:0;transform:scale(.88) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
 .modal-hero {
-  position: relative; aspect-ratio: 4/5; max-height: 70vh;
+  position: relative; width: 100%; aspect-ratio: 4/5; max-height: 70vh;
   background: linear-gradient(135deg,#0c1b24,#08121a);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
 }

@@ -474,7 +474,11 @@ img { max-width: 100%; display: block; }
 .modal-close:hover { background: rgba(255,255,255,.1); color: var(--text); }
 .modal-foot { display: flex; gap: 8px; justify-content: flex-end; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--edge); flex-wrap: wrap; }
 .img-preview { width: 100%; max-height: 140px; object-fit: cover; border-radius: var(--r-sm); margin-top: 7px; border: 1px solid var(--edge); display: none; }
-
+.crop-wrap { position:relative; width:100%; max-width:360px; overflow:hidden; border-radius:var(--r-sm); border:1px solid var(--edge); background:var(--glass2); margin-top:6px; touch-action:none; display:none; }
+.crop-wrap.has-img { display:block; }
+.crop-wrap img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+.crop-frame { position:absolute; border:2px solid var(--teal); box-shadow:0 0 0 9999px rgba(0,0,0,.6); cursor:grab; }
+.crop-frame:active { cursor:grabbing; }
 /* ══════════════════════════════════════
    TABS
 ══════════════════════════════════════ */
@@ -908,6 +912,7 @@ img { max-width: 100%; display: block; }
         <div class="sec-hdr" style="margin-bottom:10px">
           <div style="font-size:.82rem;color:var(--sub)">Neden Biz maddeleri</div>
           <button class="btn btn-p btn-sm" onclick="openWhyModal()">+ Madde Ekle</button>
+          <button class="btn btn-ghost btn-sm" onclick="importWhyDefaults()">⇩ Sitedeki Hazır Maddeleri Aktar</button>
           <button class="btn-reset" onclick="askReset('neden-biz')">🗑 Sıfırla</button>
         </div>
         <div id="sp-why-list"></div>
@@ -923,6 +928,7 @@ img { max-width: 100%; display: block; }
         <div class="sec-hdr" style="margin-bottom:10px">
           <div style="font-size:.82rem;color:var(--sub)">İş birliği kartları</div>
           <button class="btn btn-p btn-sm" onclick="openOptionModal()">+ Kart Ekle</button>
+          <button class="btn btn-ghost btn-sm" onclick="importOptionDefaults()">⇩ Sitedeki Hazır Kartları Aktar</button>
           <button class="btn-reset" onclick="askReset('options')">🗑 Sıfırla</button> 
         </div>
         <div id="sp-options-list"></div>
@@ -947,6 +953,7 @@ img { max-width: 100%; display: block; }
         </div>
         <div class="pg-head-right">
           <button class="btn btn-p" onclick="openStepModal()">+ Adım Ekle</button>
+          <button class="btn btn-ghost" onclick="importStepDefaults()">⇩ Sitedeki Hazır Adımları Aktar</button>
           <button class="btn-reset" onclick="askReset('steps')">🗑 Adımları Sıfırla</button>
         </div>
       </div>
@@ -1160,12 +1167,37 @@ img { max-width: 100%; display: block; }
       <div class="fg" style="grid-column:1/-1">
         <label>Fotoğraf</label>
         <div class="img-row">
-          <input id="ev-img" type="url" placeholder="https://… (veya bilgisayarından dosya seç)" oninput="previewImg('ev-img','ev-img-preview')">
+          <input id="ev-img" type="url" placeholder="https://… (veya bilgisayarından dosya seç)" oninput="previewImg('ev-img','ev-img-preview'); evCardCrop.setCropImage(this.value.trim(), '50% 50%'); evModalCrop.setCropImage(this.value.trim(), '50% 50%')">
           <button type="button" class="btn btn-sm" onclick="document.getElementById('ev-img-file').click()">📁 Dosya Seç</button>
-          <input id="ev-img-file" type="file" accept="image/*" style="display:none" onchange="handleFilePick('ev-img-file','ev-img','ev-img-preview')">
+          <input id="ev-img-file" type="file" accept="image/*" style="display:none" onchange="handleFilePick('ev-img-file','ev-img','ev-img-preview', 1280, 0.82); setTimeout(()=>{ const u = document.getElementById('ev-img').value; evCardCrop.setCropImage(u, '50% 50%'); evModalCrop.setCropImage(u, '50% 50%'); }, 900)">
         </div>
         <img id="ev-img-preview" class="img-preview" alt="">
         <div class="fg-hint">İnternetten bir fotoğraf linki yapıştır, ya da "Dosya Seç" ile bilgisayarından doğrudan yükle.</div>
+      </div>
+      <div class="fg" style="grid-column:1/-1">
+        <label>Fotoğraf Konumu (Kart — küçük görünüm)</label>
+        <div class="crop-wrap" id="ev-crop-wrap">
+          <img id="ev-crop-img" alt="">
+          <div class="crop-frame" id="ev-crop-frame"></div>
+        </div>
+        <input type="hidden" id="ev-imgpos" value="50% 50%">
+        <div class="fg-hint">Işıklı çerçeveyi sürükleyin — etkinlik listesindeki küçük kartta o alan görünecek.</div>
+      </div>
+      <div class="fg" style="grid-column:1/-1">
+        <label>Fotoğraf Konumu (Detay — büyüdüğünde)
+          <select id="ev-cropmodal-ratio" style="margin-left:8px" onchange="evModalCrop.setRatio(Number(this.value))">
+            <option value="1.7778">16:9 (geniş)</option>
+            <option value="1.6" selected>8:5 (orta)</option>
+            <option value="1.3333">4:3</option>
+            <option value="1">1:1 (kare)</option>
+          </select>
+        </label>
+        <div class="crop-wrap" id="ev-crop-wrap-modal">
+          <img id="ev-crop-img-modal" alt="">
+          <div class="crop-frame" id="ev-crop-frame-modal"></div>
+        </div>
+        <input type="hidden" id="ev-imgpos-modal" value="50% 50%">
+        <div class="fg-hint">Bu çerçeve, karta tıklanınca açılan büyük görünümdeki kırpma alanını belirler. Oranı, sitedeki büyük görselin gerçek en-boy oranına yakın seçin.</div>
       </div>
     </div>
     <div class="toggle-row">
@@ -1193,6 +1225,11 @@ img { max-width: 100%; display: block; }
     <div class="fg-row">
       <div class="fg"><label>Ad Soyad <span class="req">*</span></label><input id="m-name" type="text" placeholder="Ahmet Yılmaz"></div>
       <div class="fg"><label>Unvan / Görev <span class="req">*</span></label><input id="m-role" type="text" placeholder="Başkan…"></div>
+    </div>
+    <div class="fg">
+      <label>Bölüm / Departman</label>
+      <input id="m-dept" type="text" placeholder="Etkinlik Ekibi, Sosyal Medya, Tasarım…">
+      <div class="fg-hint">Kartta unvanın altında küçük bir etiket olarak görünür. Boş bırakılabilir.</div>
     </div>
     <div class="fg" id="m-order-wrap">
       <label>Sıra Numarası</label>
@@ -1243,7 +1280,7 @@ img { max-width: 100%; display: block; }
 <div class="modal-bg" id="why-modal">
   <div class="modal">
     <div class="modal-accent"></div>
-    <div class="modal-title">✅ Neden Biz Maddesi</div>
+    <div class="modal-title" id="why-modal-title">✅ Neden Biz Maddesi</div>
     <button class="modal-close" onclick="closeWhyModal()">✕</button>
     <input type="hidden" id="why-edit-id">
     <div class="fg"><label>Emoji / İkon</label><input id="why-ico" type="text" placeholder="👥" maxlength="4"></div>
@@ -1260,12 +1297,26 @@ img { max-width: 100%; display: block; }
 <div class="modal-bg" id="option-modal">
   <div class="modal">
     <div class="modal-accent"></div>
-    <div class="modal-title">🤝 İş Birliği Kartı</div>
+    <div class="modal-title" id="option-modal-title">🤝 İş Birliği Kartı</div>
     <button class="modal-close" onclick="closeOptionModal()">✕</button>
     <input type="hidden" id="opt-edit-id">
-    <div class="fg"><label>Emoji / İkon</label><input id="opt-ico" type="text" placeholder="🎯" maxlength="4"></div>
+    <div class="fg"><label>İkon</label>
+      <select id="opt-ico">
+        <option value="activity">📈 Aktivite / Nabız</option>
+        <option value="instagram">📷 Instagram / Kamera</option>
+        <option value="users">👥 Kullanıcılar</option>
+        <option value="megaphone">📣 Megafon</option>
+        <option value="star">⭐ Yıldız</option>
+        <option value="heart">❤️ Kalp</option>
+        <option value="target">🎯 Hedef</option>
+        <option value="briefcase">💼 Çanta</option>
+        <option value="gift">🎁 Hediye</option>
+        <option value="mail">✉️ Zarf</option>
+      </select>
+    </div>
     <div class="fg"><label>Başlık <span class="req">*</span></label><input id="opt-title" type="text" placeholder="Etkinlik Sponsorluğu"></div>
     <div class="fg"><label>Açıklama</label><textarea id="opt-desc" rows="3" placeholder="Bu iş birliği seçeneği hakkında kısa bilgi…"></textarea></div>
+    <div class="fg"><label>Teklif E-postası</label><input id="opt-email" type="email" placeholder="iletisim@kampuskafasi.com"></div>
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeOptionModal()">İptal</button>
       <button class="btn btn-p" onclick="saveOption()">Kaydet</button>
@@ -1685,6 +1736,8 @@ window.openEvModal = function() {
   document.getElementById('ev-cat').value = 'Sosyal';
   document.getElementById('ev-featured').checked = false;
   document.getElementById('ev-img-preview').style.display = 'none';
+  evCardCrop.setCropImage('', '50% 50%');
+  evModalCrop.setCropImage('', '50% 50%');
   document.getElementById('ev-modal-title').textContent = '◷ Etkinlik Ekle';
   document.getElementById('ev-modal').classList.add('on');
 };
@@ -1705,6 +1758,8 @@ window.editEvent = async function(id) {
     document.getElementById('ev-featured').checked = e.featured || false;
     const prev = document.getElementById('ev-img-preview');
     if (e.img) { prev.src = e.img; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
+    evCardCrop.setCropImage(e.img || '', e.imgPos || '50% 50%');
+    evModalCrop.setCropImage(e.img || '', e.imgPosModal || e.imgPos || '50% 50%');
     document.getElementById('ev-modal-title').textContent = '◷ Etkinliği Düzenle';
     document.getElementById('ev-modal').classList.add('on');
   } catch(e) { toast('Yüklenemedi: ' + e.message, 'err'); }
@@ -1720,8 +1775,10 @@ window.saveEvent = async function() {
     cat:      document.getElementById('ev-cat').value,
     loc:      document.getElementById('ev-loc').value.trim(),
     desc:     document.getElementById('ev-desc').value.trim(),
-    img:      document.getElementById('ev-img').value.trim(),
-    featured: document.getElementById('ev-featured').checked,
+    img:         document.getElementById('ev-img').value.trim(),
+    imgPos:      document.getElementById('ev-imgpos').value.trim() || '50% 50%',
+    imgPosModal: document.getElementById('ev-imgpos-modal').value.trim() || '50% 50%',
+    featured:    document.getElementById('ev-featured').checked,
   };
   try {
     if (editId) { await updateDoc(doc(db, 'kk_events', editId), data); addLog('Etkinlik güncellendi: ' + title, 'ok'); toast('Etkinlik güncellendi!', 'ok'); }
@@ -1769,7 +1826,7 @@ function renderTeamList(type, members, listEl) {
     div.innerHTML = `
       <div class="li-body">
         <div class="li-title">${esc(m.name)}${m.order?`<span class="badge" style="margin-left:6px;font-size:.58rem">#${m.order}</span>`:''}</div>
-        <div class="li-sub">${esc(m.role)}${m.ig?' · @'+esc(m.ig):''}${m.linkedin?' · LinkedIn':''}</div>
+        <div class="li-sub">${esc(m.role)}${m.dept?' · '+esc(m.dept):''}${m.ig?' · @'+esc(m.ig):''}${m.linkedin?' · LinkedIn':''}</div>
       </div>
       <div class="li-acts">
         <button class="btn btn-ghost btn-xs" onclick="editMember('${type}','${m.id}')">Düzenle</button>
@@ -1797,7 +1854,7 @@ window.switchEkipTab = function(tab) {
 };
 
 window.openMemberModal = function(type) {
-  ['m-name','m-role','m-img','m-ig','m-linkedin','m-order','m-edit-id','m-initials'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+['m-name','m-role','m-img','m-ig','m-linkedin','m-order','m-edit-id','m-initials','m-dept'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
   document.getElementById('m-type').value = type;
   document.getElementById('member-modal-title').textContent = type === 'board' ? '⊙ Yönetim Kurulu Üyesi Ekle' : '⊙ Admin Ekle';
   document.getElementById('m-order-wrap').style.display = 'flex';
@@ -1817,6 +1874,7 @@ window.editMember = async function(type, id) {
     document.getElementById('m-type').value     = type;
     document.getElementById('m-initials').value = m.initials || '';
     document.getElementById('m-role').value     = m.role     || '';
+    document.getElementById('m-dept').value     = m.dept     || '';
     document.getElementById('m-img').value      = m.img      || '';
     document.getElementById('m-ig').value       = m.ig       || '';
     document.getElementById('m-linkedin').value = m.linkedin || '';
@@ -1841,6 +1899,7 @@ window.saveMember = async function() {
   const data = {
     name, role,
     initials: document.getElementById('m-initials').value.trim(),
+    dept:     document.getElementById('m-dept').value.trim(),
     img:      document.getElementById('m-img').value.trim(),
     ig:       document.getElementById('m-ig').value.trim().replace('@',''),
     linkedin: document.getElementById('m-linkedin').value.trim(),
@@ -1952,7 +2011,10 @@ async function loadWhyItems() {
           <div class="li-title">${esc(o.ico||'')} ${esc(o.title)}</div>
           <div class="li-sub">${esc(o.desc||'')}</div>
         </div>
-        <div class="li-acts"><button class="btn btn-d btn-xs" onclick="deleteWhy('${id}')">Sil</button></div>
+        <div class="li-acts">
+          <button class="btn btn-ghost btn-xs" onclick="editWhy('${id}')">Düzenle</button>
+          <button class="btn btn-d btn-xs" onclick="deleteWhy('${id}')">Sil</button>
+        </div>
       `;
       listEl.appendChild(div);
     });
@@ -1960,29 +2022,66 @@ async function loadWhyItems() {
 }
 window.openWhyModal = function() {
   ['why-title','why-desc','why-ico','why-edit-id'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('why-modal-title').textContent = '✅ Neden Biz Maddesi Ekle';
   document.getElementById('why-modal').classList.add('on');
 };
 window.closeWhyModal = function() { document.getElementById('why-modal').classList.remove('on'); };
-window.saveWhy = async function() {
-  const title = document.getElementById('why-title').value.trim();
-  if (!title) { toast('Başlık zorunludur!', 'err'); return; }
+
+window.editWhy = async function(id) {
   try {
-    await addDoc(collection(db, 'kk_sp_why'), {
-      title, desc: document.getElementById('why-desc').value.trim(),
-      ico: document.getElementById('why-ico').value.trim(), createdAt: serverTimestamp(),
-    });
-    closeWhyModal(); await loadWhyItems(); toast('Madde eklendi!', 'ok');
-  } catch(e) { toast('Eklenemedi: ' + e.message, 'err'); }
+    const snap = await getDoc(doc(db, 'kk_sp_why', id));
+    if (!snap.exists()) { toast('Madde bulunamadı.', 'err'); return; }
+    const w = snap.data();
+    document.getElementById('why-edit-id').value = id;
+    document.getElementById('why-title').value   = w.title || '';
+    document.getElementById('why-desc').value    = w.desc  || '';
+    document.getElementById('why-ico').value     = w.ico   || '';
+    document.getElementById('why-modal-title').textContent = '✅ Maddeyi Düzenle';
+    document.getElementById('why-modal').classList.add('on');
+  } catch(e) { toast('Yüklenemedi.', 'err'); }
 };
+
+window.saveWhy = async function() {
+  const title  = document.getElementById('why-title').value.trim();
+  const editId = document.getElementById('why-edit-id').value;
+  if (!title) { toast('Başlık zorunludur!', 'err'); return; }
+  const data = {
+    title, desc: document.getElementById('why-desc').value.trim(),
+    ico: document.getElementById('why-ico').value.trim(),
+  };
+  try {
+    if (editId) { await updateDoc(doc(db, 'kk_sp_why', editId), data); addLog('"Neden Biz" maddesi güncellendi: ' + title, 'ok'); toast('Madde güncellendi!', 'ok'); }
+    else { data.createdAt = serverTimestamp(); await addDoc(collection(db, 'kk_sp_why'), data); addLog('Yeni "Neden Biz" maddesi eklendi: ' + title, 'info'); toast('Madde eklendi!', 'ok'); }
+    closeWhyModal(); await loadWhyItems();
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
 window.deleteWhy = async function(id) {
   if (!confirm('Silinsin mi?')) return;
   try { await deleteDoc(doc(db, 'kk_sp_why', id)); await loadWhyItems(); toast('Silindi.', 'ok'); }
   catch(e) { toast('Silinemedi.', 'err'); }
 };
 
+window.importWhyDefaults = async function() {
+  const defaults = [
+    { ico:'', title:'Geniş & Sadık Kitle',   desc:"17.000'i aşkın aktif öğrenci, anlık görünürlük." },
+    { ico:'', title:'Güvenilir Platform',    desc:'GSB ortaklığıyla resmi tanınan öğrenci topluluğu.' },
+    { ico:'', title:'Hedefli Erişim',        desc:'Üniversite öğrencisi demografisine tam isabet.' },
+    { ico:'', title:'Doğrudan Etkileşim',    desc:'Sahada, dijitalde ve görsel içerikte aktif temas.' },
+  ];
+  const snap = await getDocs(collection(db, 'kk_sp_why'));
+  if (!snap.empty && !confirm('Listede zaten madde var. Sitedeki hazır 4 maddeyi yine de eklemek ister misin?')) return;
+  try {
+    for (const item of defaults) { await addDoc(collection(db, 'kk_sp_why'), { ...item, createdAt: serverTimestamp() }); }
+    addLog('Sitedeki hazır "Neden Biz" maddeleri aktarıldı', 'info');
+    await loadWhyItems(); toast('Hazır maddeler eklendi!', 'ok');
+  } catch(e) { toast('İçe aktarılamadı: ' + e.message, 'err'); }
+};
+
 /* ══════════════════════════════════════
    İŞ BİRLİĞİ KARTLARI
 ══════════════════════════════════════ */
+const OPT_ICON_LABELS = { activity:'📈', instagram:'📷', users:'👥', megaphone:'📣', star:'⭐', heart:'❤️', target:'🎯', briefcase:'💼', gift:'🎁', mail:'✉️' };
 async function loadOptionItems() {
   const listEl = document.getElementById('sp-options-list');
   if (!listEl) return;
@@ -1996,35 +2095,78 @@ async function loadOptionItems() {
       div.className = 'li';
       div.innerHTML = `
         <div class="li-body">
-          <div class="li-title">${esc(o.ico||'')} ${esc(o.title)}</div>
+          <div class="li-title">${OPT_ICON_LABELS[o.ico]||'🤝'} ${esc(o.title)}</div>
           <div class="li-sub">${esc(o.desc||'')}</div>
         </div>
-        <div class="li-acts"><button class="btn btn-d btn-xs" onclick="deleteOption('${id}')">Sil</button></div>
+        <div class="li-acts">
+          <button class="btn btn-ghost btn-xs" onclick="editOption('${id}')">Düzenle</button>
+          <button class="btn btn-d btn-xs" onclick="deleteOption('${id}')">Sil</button>
+        </div>
       `;
       listEl.appendChild(div);
     });
   } catch(e) { toast('Kartlar yüklenemedi.', 'err'); }
 }
 window.openOptionModal = function() {
-  ['opt-title','opt-desc','opt-ico','opt-edit-id'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  ['opt-title','opt-desc','opt-ico','opt-email','opt-edit-id'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('option-modal-title').textContent = '🤝 İş Birliği Kartı Ekle';
   document.getElementById('option-modal').classList.add('on');
 };
 window.closeOptionModal = function() { document.getElementById('option-modal').classList.remove('on'); };
-window.saveOption = async function() {
-  const title = document.getElementById('opt-title').value.trim();
-  if (!title) { toast('Başlık zorunludur!', 'err'); return; }
+
+window.editOption = async function(id) {
   try {
-    await addDoc(collection(db, 'kk_sp_options'), {
-      title, desc: document.getElementById('opt-desc').value.trim(),
-      ico: document.getElementById('opt-ico').value.trim(), createdAt: serverTimestamp(),
-    });
-    closeOptionModal(); await loadOptionItems(); toast('Kart eklendi!', 'ok');
-  } catch(e) { toast('Eklenemedi: ' + e.message, 'err'); }
+    const snap = await getDoc(doc(db, 'kk_sp_options', id));
+    if (!snap.exists()) { toast('Kart bulunamadı.', 'err'); return; }
+    const o = snap.data();
+    document.getElementById('opt-edit-id').value = id;
+    document.getElementById('opt-title').value   = o.title || '';
+    document.getElementById('opt-desc').value    = o.desc  || '';
+    document.getElementById('opt-ico').value     = o.ico   || '';
+    document.getElementById('opt-email').value   = o.email || '';
+    document.getElementById('option-modal-title').textContent = '🤝 Kartı Düzenle';
+    document.getElementById('option-modal').classList.add('on');
+  } catch(e) { toast('Yüklenemedi.', 'err'); }
 };
+
+window.saveOption = async function() {
+  const title  = document.getElementById('opt-title').value.trim();
+  const editId = document.getElementById('opt-edit-id').value;
+  if (!title) { toast('Başlık zorunludur!', 'err'); return; }
+  const data = {
+    title, desc: document.getElementById('opt-desc').value.trim(),
+    ico: document.getElementById('opt-ico').value.trim(),
+    email: document.getElementById('opt-email').value.trim(),
+  };
+  try {
+    if (editId) { await updateDoc(doc(db, 'kk_sp_options', editId), data); addLog('İş birliği kartı güncellendi: ' + title, 'ok'); toast('Kart güncellendi!', 'ok'); }
+    else { data.createdAt = serverTimestamp(); await addDoc(collection(db, 'kk_sp_options'), data); addLog('Yeni iş birliği kartı eklendi: ' + title, 'info'); toast('Kart eklendi!', 'ok'); }
+    closeOptionModal(); await loadOptionItems();
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
 window.deleteOption = async function(id) {
   if (!confirm('Silinsin mi?')) return;
   try { await deleteDoc(doc(db, 'kk_sp_options', id)); await loadOptionItems(); toast('Silindi.', 'ok'); }
   catch(e) { toast('Silinemedi.', 'err'); }
+};
+
+window.importOptionDefaults = async function() {
+  const defaults = [
+    { ico:'activity', title:'Etkinlik Sponsorluğu', email:'iletisim@kampuskafasi.com',
+      desc:'Düzenlediğimiz kampüs etkinliklerinde markanızı ön plana çıkarın. Logo yerleşimi, afiş ve stant alanı, sahne tanıtımı ve öğrencilerle birebir etkileşim fırsatı sunar. Etkinlik öncesi ve sonrası sosyal medya paylaşımlarıyla görünürlüğünüz katlanır.' },
+    { ico:'instagram', title:'Sosyal Medya İş Birliği', email:'iletisim@kampuskafasi.com',
+      desc:'Instagram sayfamız ve 17.000+ üyeli WhatsApp ağımızda markanızı tanıtın. Organik içerik üretimi, story ve reels paylaşımları ile geniş öğrenci kitlesine özgün ve etkili bir şekilde ulaşın.' },
+    { ico:'users', title:'Kampüs Tanıtımı', email:'iletisim@kampuskafasi.com',
+      desc:'Ürün veya hizmetinizi doğrudan hedef kitlenize duyurun. WhatsApp gruplarımız üzerinden anlık erişim, üniversite ortamında marka bilinirliği ve öğrenci geri bildirimiyle organik büyüme sağlayın.' },
+  ];
+  const snap = await getDocs(collection(db, 'kk_sp_options'));
+  if (!snap.empty && !confirm('Listede zaten kart var. Sitedeki hazır 3 kartı yine de eklemek ister misin?')) return;
+  try {
+    for (const item of defaults) { await addDoc(collection(db, 'kk_sp_options'), { ...item, createdAt: serverTimestamp() }); }
+    addLog('Sitedeki hazır iş birliği kartları aktarıldı', 'info');
+    await loadOptionItems(); toast('Hazır kartlar eklendi!', 'ok');
+  } catch(e) { toast('İçe aktarılamadı: ' + e.message, 'err'); }
 };
 
 /* ══════════════════════════════════════
@@ -2102,6 +2244,26 @@ window.deleteStep = async function(id) {
   if (!confirm('Bu adımı silmek istediğinizden emin misiniz?')) return;
   try { await deleteDoc(doc(db, 'kk_sp_steps', id)); await loadSteps(); toast('Adım silindi.', 'ok'); }
   catch(e) { toast('Silinemedi.', 'err'); }
+};
+
+window.importStepDefaults = async function() {
+  const defaults = [
+    { order:1, ico:'', title:'İletişime Geç',
+      desc:'E-posta veya Instagram üzerinden bize ulaş, hedeflerini ve beklentilerini paylaş. Sana en kısa sürede geri döneceğiz.' },
+    { order:2, ico:'', title:'Teklif & Planlama',
+      desc:'İhtiyaçlarına özel bir iş birliği modeli ve detaylı bir plan birlikte oluşturuyoruz. Bütçe ve hedeflerine göre şekillenen esnek seçenekler sunuyoruz.' },
+    { order:3, ico:'', title:'Uygulama',
+      desc:'Anlaşılan plan doğrultusunda etkinliği veya dijital içerikleri hayata geçiriyoruz. Süreç boyunca seni bilgilendiriyoruz.' },
+    { order:4, ico:'', title:'Birlikte Değerlendirme',
+      desc:'Süreci seninle birlikte değerlendiriyor, sonuçları ve öğrenilenleri paylaşıyoruz. Uzun vadeli iş birliği için temel atıyoruz.' },
+  ];
+  const snap = await getDocs(collection(db, 'kk_sp_steps'));
+  if (!snap.empty && !confirm('Listede zaten adım var. Sitedeki hazır 4 adımı yine de eklemek ister misin?')) return;
+  try {
+    for (const item of defaults) { await addDoc(collection(db, 'kk_sp_steps'), { ...item, createdAt: serverTimestamp() }); }
+    addLog('Sitedeki hazır süreç adımları aktarıldı', 'info');
+    await loadSteps(); toast('Hazır adımlar eklendi!', 'ok');
+  } catch(e) { toast('İçe aktarılamadı: ' + e.message, 'err'); }
 };
 
 /* ══════════════════════════════════════
@@ -2277,6 +2439,87 @@ window.toast = function(msg, type = 'ok') {
     setTimeout(() => el.remove(), 300);
   }, 3200);
 };
+
+function makeCropTool(wrapId, frameId, imgId, posInputId, initialRatio){
+  const wrap = document.getElementById(wrapId);
+  const frame = document.getElementById(frameId);
+  const img = document.getElementById(imgId);
+  const posInput = document.getElementById(posInputId);
+  let RATIO = initialRatio;
+  let dragging = false, startX, startY, frameStartLeft, frameStartTop;
+
+  function sizeFrame(){
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    if (!w || !h) return;
+    const imgRatio = w / h;
+    let fw, fh;
+    if (imgRatio > RATIO) { fh = h; fw = h * RATIO; }
+    else { fw = w; fh = w / RATIO; }
+    frame.style.width = fw + 'px';
+    frame.style.height = fh + 'px';
+  }
+  function clampFrame(){
+    const maxLeft = Math.max(wrap.clientWidth - frame.offsetWidth, 0);
+    const maxTop  = Math.max(wrap.clientHeight - frame.offsetHeight, 0);
+    let left = Math.min(Math.max(frame.offsetLeft, 0), maxLeft);
+    let top  = Math.min(Math.max(frame.offsetTop, 0), maxTop);
+    frame.style.left = left + 'px';
+    frame.style.top  = top + 'px';
+  }
+  function updatePosFromFrame(){
+    const maxLeft = wrap.clientWidth - frame.offsetWidth;
+    const maxTop  = wrap.clientHeight - frame.offsetHeight;
+    const x = maxLeft > 0 ? (frame.offsetLeft / maxLeft) * 100 : 50;
+    const y = maxTop  > 0 ? (frame.offsetTop  / maxTop)  * 100 : 50;
+    posInput.value = Math.round(x) + '% ' + Math.round(y) + '%';
+  }
+  function startDrag(x, y){
+    dragging = true; startX = x; startY = y;
+    frameStartLeft = frame.offsetLeft; frameStartTop = frame.offsetTop;
+  }
+  function moveDrag(x, y){
+    if (!dragging) return;
+    frame.style.left = (frameStartLeft + (x - startX)) + 'px';
+    frame.style.top  = (frameStartTop  + (y - startY)) + 'px';
+    clampFrame(); updatePosFromFrame();
+  }
+  function endDrag(){ dragging = false; }
+
+  frame.addEventListener('mousedown', e => { e.preventDefault(); startDrag(e.clientX, e.clientY); });
+  window.addEventListener('mousemove', e => moveDrag(e.clientX, e.clientY));
+  window.addEventListener('mouseup', endDrag);
+  frame.addEventListener('touchstart', e => { const t = e.touches[0]; startDrag(t.clientX, t.clientY); }, {passive:true});
+  window.addEventListener('touchmove', e => { const t = e.touches[0]; moveDrag(t.clientX, t.clientY); }, {passive:true});
+  window.addEventListener('touchend', endDrag);
+  window.addEventListener('resize', () => { if (wrap.classList.contains('has-img')) { sizeFrame(); clampFrame(); updatePosFromFrame(); } });
+
+  function setCropImage(url, initialPos){
+    if (!url){ wrap.classList.remove('has-img'); img.src=''; posInput.value='50% 50%'; return; }
+    img.src = url;
+    img.onload = function(){
+      wrap.classList.add('has-img');
+      requestAnimationFrame(() => {
+        sizeFrame();
+        const parts = (initialPos || '50% 50%').replace(/%/g,'').trim().split(/\s+/).map(Number);
+        const px = isNaN(parts[0]) ? 50 : parts[0];
+        const py = isNaN(parts[1]) ? 50 : parts[1];
+        const maxLeft = wrap.clientWidth - frame.offsetWidth;
+        const maxTop  = wrap.clientHeight - frame.offsetHeight;
+        frame.style.left = (maxLeft * (px/100)) + 'px';
+        frame.style.top  = (maxTop  * (py/100)) + 'px';
+        clampFrame(); updatePosFromFrame();
+      });
+    };
+  }
+  function setRatio(r){
+    RATIO = r;
+    if (wrap.classList.contains('has-img')) { sizeFrame(); clampFrame(); updatePosFromFrame(); }
+  }
+  return { setCropImage, setRatio };
+}
+
+window.evCardCrop  = makeCropTool('ev-crop-wrap',       'ev-crop-frame',       'ev-crop-img',       'ev-imgpos',       16/9);
+window.evModalCrop = makeCropTool('ev-crop-wrap-modal', 'ev-crop-frame-modal', 'ev-crop-img-modal', 'ev-imgpos-modal', 1.6);
 
 window.previewImg = function(inputId, previewId) {
   const url = document.getElementById(inputId)?.value.trim();

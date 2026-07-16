@@ -175,31 +175,33 @@
 <div id="event-modal" onclick="closeModalOutside(event)">
   <div class="modal-box">
     <button class="modal-x" onclick="closeModal()">✕</button>
-    <div class="modal-hero">
-      <div class="modal-hero-glow"></div>
-      <img id="m-img" class="modal-hero-img" alt="">
-      <div class="modal-hero-emoji" id="m-emoji">🎉</div>
-      <div class="modal-hero-overlay"></div>
-    </div>
-    <div class="modal-content">
-      <div class="modal-tag-row">
-        <span class="modal-cat-badge" id="m-cat">Kategori</span>
-        <span class="modal-status-badge" id="m-status">Yaklaşan</span>
+    <div class="modal-scroll">
+      <div class="modal-hero">
+        <div class="modal-hero-glow"></div>
+        <img id="m-img" class="modal-hero-img" alt="">
+        <div class="modal-hero-emoji" id="m-emoji">🎉</div>
+        <div class="modal-hero-overlay"></div>
       </div>
-      <div class="modal-title" id="m-title">Etkinlik</div>
-      <div class="modal-info-grid">
-        <div class="modal-info-item">
-          <span class="modal-info-label">📅 Tarih</span>
-          <span class="modal-info-value" id="m-date">—</span>
+      <div class="modal-content">
+        <div class="modal-tag-row">
+          <span class="modal-cat-badge" id="m-cat">Kategori</span>
+          <span class="modal-status-badge" id="m-status">Yaklaşan</span>
         </div>
-        <div class="modal-info-item" id="m-loc-wrap">
-          <span class="modal-info-label">📍 Konum</span>
-          <span class="modal-info-value" id="m-loc">—</span>
+        <div class="modal-title" id="m-title">Etkinlik</div>
+        <div class="modal-info-grid">
+          <div class="modal-info-item">
+            <span class="modal-info-label">📅 Tarih</span>
+            <span class="modal-info-value" id="m-date">—</span>
+          </div>
+          <div class="modal-info-item" id="m-loc-wrap">
+            <span class="modal-info-label">📍 Konum</span>
+            <span class="modal-info-value" id="m-loc">—</span>
+          </div>
         </div>
+        <div class="modal-divider"></div>
+        <div class="modal-desc-label">Açıklama</div>
+        <div class="modal-desc" id="m-desc"></div>
       </div>
-      <div class="modal-divider"></div>
-      <div class="modal-desc-label">Açıklama</div>
-      <div class="modal-desc" id="m-desc"></div>
     </div>
   </div>
 </div>
@@ -455,7 +457,7 @@ function openModal(id) {
 
   document.getElementById('m-desc').textContent = ev.desc || '';
   document.getElementById('event-modal').classList.add('open');
-  document.querySelector('#event-modal .modal-box').scrollTop = 0;
+  document.querySelector('#event-modal .modal-scroll').scrollTop = 0;
   document.body.style.overflow = 'hidden';
 }
 function closeModal() { document.getElementById('event-modal').classList.remove('open'); document.body.style.overflow=''; }

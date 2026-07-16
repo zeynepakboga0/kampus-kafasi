@@ -39,34 +39,48 @@
 .team-group-lbl{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.18em;color:var(--cl);text-align:center;margin-bottom:40px;display:flex;align-items:center;justify-content:center;gap:16px}
 .team-group-lbl::before,.team-group-lbl::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(45,216,240,.25),transparent);max-width:200px}
 
-/* YÖNETİM KURULU KARTLAR */
-.board-layout{display:flex;flex-direction:column;align-items:center;gap:16px}
-.board-row{display:flex;justify-content:center;gap:16px;width:100%}
+/* YÖNETİM KURULU KARTLAR — Modern, sade stil */
+.board-layout{display:flex;flex-direction:column;align-items:center;gap:18px}
+.board-row{display:flex;justify-content:center;gap:18px;width:100%}
 
-.board-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:30px 22px 24px;display:flex;flex-direction:column;align-items:center;gap:0;transition:transform .3s cubic-bezier(.34,1.2,.64,1),box-shadow .3s,border-color .3s;position:relative;overflow:hidden;width:220px;flex-shrink:0}
-.board-card::before{content:'';position:absolute;inset:0;border-radius:18px;background:radial-gradient(circle at top center,rgba(45,216,240,.07),transparent 60%);pointer-events:none}
-.board-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
-.board-card:hover{transform:translateY(-7px) scale(1.02);box-shadow:0 24px 56px rgba(0,0,0,.5),0 0 0 1px rgba(45,216,240,.18);border-color:rgba(45,216,240,.3)}
-.board-card:hover::after{opacity:.8}
+.board-card,.admin-card{position:relative;background:var(--card);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden;transition:transform .32s cubic-bezier(.34,1.15,.64,1),box-shadow .32s ease,border-color .32s ease}
+.board-card::before,.admin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .35s ease}
+.board-card:hover::before,.admin-card:hover::before{opacity:1}
+.board-card:hover,.admin-card:hover{transform:translateY(-6px);border-color:rgba(45,216,240,.3);box-shadow:0 20px 40px rgba(0,0,0,.35),0 0 0 1px rgba(45,216,240,.1)}
 
-.board-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--cl),var(--cd));display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;color:var(--black);margin-bottom:16px;flex-shrink:0;box-shadow:0 6px 24px rgba(45,216,240,.32);transition:transform .3s,box-shadow .3s}
-.board-card:hover .board-avatar{transform:scale(1.1);box-shadow:0 8px 32px rgba(45,216,240,.45)}
-.board-name{font-size:.95rem;font-weight:800;color:var(--white);text-align:center;margin-bottom:6px;line-height:1.25}
-.board-role{font-size:.74rem;font-weight:600;color:var(--cl);text-align:center;letter-spacing:.04em}
+.board-card{width:222px;flex-shrink:0;border-radius:22px;padding:34px 22px 26px}
+.admin-card{border-radius:18px;padding:26px 16px 20px}
 
-/* Admin Kartlar */
-.admin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:8px}
+/* Avatar — yuvarlak, dairesel halka vurgusu */
+.board-avatar,.admin-avatar{border-radius:50%;background:linear-gradient(135deg,var(--cl),var(--cd));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--black);flex-shrink:0;position:relative;transition:transform .3s ease,box-shadow .3s ease}
+.board-avatar{width:82px;height:82px;font-size:1.15rem;margin-bottom:18px;box-shadow:0 0 0 4px rgba(45,216,240,.07),0 10px 26px rgba(45,216,240,.28)}
+.admin-avatar{width:58px;height:58px;font-size:.85rem;margin-bottom:14px;box-shadow:0 0 0 3px rgba(45,216,240,.06),0 6px 18px rgba(45,216,240,.24)}
+.board-avatar img,.admin-avatar img{width:100%;height:100%;border-radius:50%}
+.board-card:hover .board-avatar,.admin-card:hover .admin-avatar{transform:scale(1.06);box-shadow:0 0 0 4px rgba(45,216,240,.12),0 12px 30px rgba(45,216,240,.4)}
 
-.admin-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 16px 20px;display:flex;flex-direction:column;align-items:center;gap:0;transition:transform .28s cubic-bezier(.34,1.2,.64,1),box-shadow .28s,border-color .28s;position:relative;overflow:hidden}
-.admin-card::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top center,rgba(45,216,240,.04),transparent 60%);pointer-events:none}
-.admin-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
-.admin-card:hover{transform:translateY(-6px) scale(1.02);box-shadow:0 18px 44px rgba(0,0,0,.45),0 0 0 1px rgba(45,216,240,.12);border-color:rgba(45,216,240,.25)}
-.admin-card:hover::after{opacity:.7}
+/* İsim */
+.board-name{font-size:1rem;font-weight:800;color:var(--white);line-height:1.28;margin-bottom:10px}
+.admin-name{font-size:.86rem;font-weight:700;color:var(--white);line-height:1.28;margin-bottom:8px}
 
-.admin-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--cl),var(--cd));display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:700;color:var(--black);margin-bottom:13px;flex-shrink:0;box-shadow:0 4px 16px rgba(45,216,240,.28);transition:transform .28s,box-shadow .28s}
-.admin-card:hover .admin-avatar{transform:scale(1.08);box-shadow:0 6px 22px rgba(45,216,240,.4)}
-.admin-name{font-size:.85rem;font-weight:700;color:var(--white);text-align:center;margin-bottom:4px;line-height:1.25}
-.admin-role{font-size:.7rem;font-weight:600;color:var(--cl);text-align:center;letter-spacing:.04em}
+/* Unvan/Görev — pill badge */
+.board-role,.admin-role{display:inline-flex;align-items:center;border-radius:100px;background:rgba(45,216,240,.09);border:1px solid rgba(45,216,240,.2);color:var(--cl);font-weight:700;letter-spacing:.01em;white-space:nowrap}
+.board-role{padding:5px 16px;font-size:.72rem;margin-bottom:12px}
+.admin-role{padding:4px 12px;font-size:.63rem;margin-bottom:10px}
+
+/* Bölüm — sade ikincil satır */
+.board-dept,.admin-dept{display:flex;align-items:center;gap:5px;color:rgba(255,255,255,.4);font-weight:500}
+.board-dept{font-size:.74rem;margin-bottom:6px}
+.admin-dept{font-size:.65rem;margin-bottom:5px}
+.board-dept svg,.admin-dept svg{flex-shrink:0;opacity:.7}
+
+/* Instagram bağlantısı */
+.board-ig,.admin-ig{display:inline-flex;align-items:center;gap:5px;color:rgba(255,255,255,.32);transition:color .2s ease;margin-top:4px}
+.board-ig{font-size:.74rem}
+.admin-ig{font-size:.65rem}
+.board-ig:hover,.admin-ig:hover{color:var(--cl)}
+.board-ig svg,.admin-ig svg{flex-shrink:0}
+
+.admin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:8px}
 
 /* SPONSOR MODAL */
 #sponsor-modal{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}
@@ -362,17 +376,20 @@ function escHtml(str) {
 }
 
 function makeCard(m, type) {
-  const size = type === 'board' ? 72 : 56;
+  const p = type === 'board' ? 'board' : 'admin';
   const card = document.createElement('div');
-  card.className = type === 'board' ? 'board-card' : 'admin-card';
+  card.className = p + '-card';
   const avatarContent = m.img
-  ? `<img src="${escHtml(m.img)}" alt="${escHtml(m.name || '')}" style="width:100%;height:100%;object-fit:cover;border-radius:50%">`
+  ? `<img src="${escHtml(m.img)}" alt="${escHtml(m.name || '')}" style="width:100%;height:100%;object-fit:cover">`
   : `<span>${escHtml(m.initials || initials(m.name))}</span>`;
+  const deptIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg>`;
+  const igIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
   card.innerHTML = `
-    <div class="${type === 'board' ? 'board' : 'admin'}-avatar">${avatarContent}</div>
-    <div class="${type === 'board' ? 'board' : 'admin'}-name">${escHtml(m.name || '')}</div>
-    <div class="${type === 'board' ? 'board' : 'admin'}-role">${escHtml(m.role || '')}</div>
-    ${m.ig ? `<a href="https://instagram.com/${encodeURIComponent(m.ig)}" target="_blank" rel="noopener noreferrer" style="margin-top:${type==='board'?10:8}px;font-size:${type==='board'?'.72':'.68'}rem;color:var(--cl);opacity:.7">@${escHtml(m.ig)}</a>` : ''}
+    <div class="${p}-avatar">${avatarContent}</div>
+    <div class="${p}-name">${escHtml(m.name || '')}</div>
+    ${m.role ? `<div class="${p}-role">${escHtml(m.role)}</div>` : ''}
+    ${m.dept ? `<div class="${p}-dept">${deptIcon}${escHtml(m.dept)}</div>` : ''}
+    ${m.ig ? `<a href="https://instagram.com/${encodeURIComponent(m.ig)}" target="_blank" rel="noopener noreferrer" class="${p}-ig">${igIcon}@${escHtml(m.ig)}</a>` : ''}
   `;
   addHover(card);
   return card;
