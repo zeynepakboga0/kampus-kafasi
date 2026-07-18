@@ -9,7 +9,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
-<script src="../event-card.js" defer></script>
 <style>
 /* BİZ KİMİZ */
 #intro{padding:80px 32px;background:rgba(10,15,21,.82)}
@@ -33,10 +32,24 @@
 #activities{padding:80px 32px;background:rgba(10,15,21,.82)}
 .activities-intro{max-width:560px;margin:8px 0 32px;font-size:.9rem;color:rgba(255,255,255,.4);line-height:1.75}
 .activities-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-/* Kart tasarımının kendisi artık style.css'teki ortak .event-card bileşeninden geliyor
-   (bkz. "ETKİNLİK KARTI — TEK ORTAK TASARIM" bloğu + event-card.js).
-   Burası bir "öne çıkanlar" vitrini olduğu için geçmiş etkinlik soluklaşması kapatıldı: */
-#activities-grid .ev-past{opacity:1;filter:none}
+.activity-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;transition:transform .35s cubic-bezier(.34,1.2,.64,1),box-shadow .35s,border-color .35s,opacity .42s;cursor:pointer;position:relative;display:flex;flex-direction:column}
+.activity-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(45,216,240,.15);border-color:rgba(45,216,240,.3)}
+.ac-enter{transform:translateY(14px)}
+.ac-cover{aspect-ratio:3/2;background:linear-gradient(135deg,rgba(45,216,240,.07),rgba(13,110,106,.09));display:flex;align-items:center;justify-content:center;font-size:2.8rem;flex-shrink:0;overflow:hidden;position:relative}
+.ac-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,9,11,.6) 100%);pointer-events:none}
+.ac-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
+.activity-card:hover .ac-cover img{transform:scale(1.06)}
+.ac-cover-emoji{display:flex;align-items:center;justify-content:center;width:100%;height:100%;transition:transform .35s}
+.activity-card:hover .ac-cover-emoji{transform:scale(1.1)}
+.ac-body{padding:16px 18px;display:flex;flex-direction:column;flex:1}
+.ac-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+.ac-cat{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:var(--cl);background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.18);padding:3px 9px;border-radius:100px}
+.ac-date-lbl{font-size:.67rem;color:rgba(255,255,255,.27)}
+.ac-title{font-size:.92rem;font-weight:800;color:var(--white);margin-bottom:6px;line-height:1.3;letter-spacing:-.01em}
+.ac-desc{font-size:.78rem;color:rgba(255,255,255,.36);line-height:1.6;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.ac-loc{font-size:.72rem;color:rgba(255,255,255,.28);margin-top:6px;display:flex;align-items:center;gap:5px}
+.ac-read-more{margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:var(--cl);opacity:.9;transition:opacity .2s}
+.activity-card:hover .ac-read-more{opacity:1}
 
 /* ETKİNLİK MODAL */
 .ev-modal-bg{position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .28s}
@@ -379,17 +392,48 @@ function loadActivities(eventsFromFirebase) {
   }
 
   toShow.forEach((ev, i) => {
-    const now2 = new Date();
-    const isPast = new Date(ev.date) < now2;
-    const card = kkBuildEventCard(ev, {
-      isPast,
-      onClick: () => openEvModal(ev, events),
-      dateOpts: { day:'numeric', month:'short', year:'numeric' }
-    });
+    const card = document.createElement('div');
+    card.className = 'activity-card';
     card.style.opacity = '0';
     card.style.transition = `opacity .42s ${i*0.06}s ease`;
     card.classList.add('ac-enter');
+    card.addEventListener('click', () => openEvModal(ev, events));
+
+    const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});
+    const cover = document.createElement('div'); cover.className = 'ac-cover';
+    if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
+      const img = document.createElement('img'); img.src = ev.img; img.alt = ev.title;
+      img.style.objectPosition = ev.imgPos || '50% 50%';
+      cover.appendChild(img);
+    } else {
+      const em = document.createElement('div'); em.className = 'ac-cover-emoji';
+      em.textContent = EMOJI_MAP[ev.cat] || '📌';
+      cover.appendChild(em);
+    }
+    card.appendChild(cover);
+
+    const body = document.createElement('div'); body.className = 'ac-body';
+    body.innerHTML = `
+      <div class="ac-meta">
+        <span class="ac-cat">${EMOJI_MAP[ev.cat]||''} ${escHtml(ev.cat)}</span>
+        <span class="ac-date-lbl">${ds}</span>
+      </div>
+      <div class="ac-title">${escHtml(ev.title)}</div>
+      ${ev.desc ? `<div class="ac-desc">${escHtml(ev.desc)}</div>` : ''}
+      ${ev.loc ? `<div class="ac-loc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
+      <div class="ac-read-more">Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    `;
+    card.appendChild(body);
     grid.appendChild(card);
+
+    card.addEventListener('mouseenter', () => {
+      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
+      card.style.transform = 'translateY(-6px)';
+    });
+    card.addEventListener('mouseleave', () => {
+      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
+      card.style.transform = '';
+    });
   });
 
   const obs = new IntersectionObserver(entries => {
