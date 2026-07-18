@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+<script src="../event-card.js" defer></script>
 <style>
 /* EVENTS SECTION */
 #events-page{padding:72px 32px 80px;background:rgba(7,9,11,.92)}
@@ -23,26 +24,11 @@
 /* EVENTS GRID */
 .events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 
-/* EVENT CARD */
-.ev-card{background:var(--card);border:1px solid var(--bd);border-radius:22px;overflow:hidden;transition:transform .35s cubic-bezier(.34,1.2,.64,1),box-shadow .35s,border-color .35s,opacity .4s;cursor:pointer;position:relative;display:flex;flex-direction:column}
-.ev-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(45,216,240,.15);border-color:rgba(45,216,240,.3)}
+/* EVENT CARD — tasarım artık style.css'teki ortak .event-card bileşeninden geliyor
+   (bkz. "ETKİNLİK KARTI — TEK ORTAK TASARIM" bloğu + event-card.js).
+   Burada sadece bu sayfaya özgü küçük ayrıntılar kalıyor: */
 .card-enter{transform:translateY(16px)}
-.ev-card.past-card{opacity:.72;filter:saturate(.65)}
-.ev-card.past-card:hover{opacity:1;filter:saturate(1)}
-.ev-thumb{aspect-ratio:3/2;background:linear-gradient(135deg,#0c1b24,#08121a);display:flex;align-items:center;justify-content:center;font-size:3.5rem;flex-shrink:0;overflow:hidden;position:relative}
-.ev-thumb::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,9,11,.6) 100%);pointer-events:none}
-.ev-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.ev-card:hover .ev-thumb img{transform:scale(1.06)}
-.ev-thumb-emoji{display:flex;align-items:center;justify-content:center;width:100%;height:100%;transition:transform .35s}
-.ev-card:hover .ev-thumb-emoji{transform:scale(1.1)}
-.ev-upcoming-badge{position:absolute;top:10px;left:10px;font-size:.6rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;padding:4px 10px;border-radius:100px;background:rgba(45,221,212,.2);color:var(--cl);border:1px solid rgba(45,221,212,.4);z-index:2;backdrop-filter:blur(8px)}
-.ev-body{padding:16px 18px 14px;display:flex;flex-direction:column;gap:0;flex:1}
-.ev-meta-row-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-.ev-cat-badge{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:var(--cl);background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.18);padding:3px 9px;border-radius:100px}
-.ev-date-lbl{font-size:.67rem;color:rgba(255,255,255,.27)}
-.ev-title{font-size:1.08rem;font-weight:800;color:var(--white);margin-bottom:6px;line-height:1.3;letter-spacing:-.01em}
-.ev-desc{font-size:.82rem;color:rgba(255,255,255,.36);line-height:1.55;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-overflow:ellipsis}
-.ev-loc{font-size:.72rem;color:rgba(255,255,255,.28);margin-top:6px;display:flex;align-items:center;gap:5px}
+/* Geçmiş kart soluklaşması artık style.css'teki paylaşılan .ev-past sınıfından geliyor */
 
 /* LOAD MORE */
 .load-more-wrap{text-align:center;margin-top:36px}
@@ -384,61 +370,19 @@ function formatDate(d){
   return new Date(d).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
 }
 
-const CAT_EMOJI = {'Sosyal':'🎉','Gezi':'🗺️','Spor':'⚽','Panel':'🎤','Bilgilendirme':'📋'};
+const CAT_EMOJI = window.KK_CAT_EMOJI;
 
 function escHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+// Kart artık event-card.js içindeki kkBuildEventCard() ile üretiliyor
+// (index, hakkımızda ve etkinlikler sayfaları aynı tasarımı paylaşıyor).
 function buildCard(ev, isPast){
-  const card = document.createElement('div');
-  card.className = 'ev-card' + (isPast ? ' past-card' : '');
-  card.onclick = () => openModal(ev.id);
-
-  // Thumb
-  const cover = document.createElement('div'); cover.className = 'ev-thumb';
-  if(ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)){
-    const img = document.createElement('img'); img.src = ev.img; img.alt = ev.title;
-    img.style.objectPosition = ev.imgPos || '50% 50%';
-    cover.appendChild(img);
-  } else {
-    const em = document.createElement('div'); em.className = 'ev-thumb-emoji';
-    em.textContent = ev.emoji || CAT_EMOJI[ev.cat] || '📌';
-    cover.appendChild(em);
-  }
-  if(!isPast){
-    const badge = document.createElement('div'); badge.className = 'ev-upcoming-badge';
-    badge.textContent = 'Yaklaşan';
-    cover.appendChild(badge);
-  }
-  card.appendChild(cover);
-
-  // Body
-  const body = document.createElement('div'); body.className = 'ev-body';
-  const ds = formatDate(ev.date);
-  body.innerHTML = `
-    <div class="ev-cat-row" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
-      <span class="ev-cat-badge">${CAT_EMOJI[ev.cat]||''} ${escHtml(ev.cat)}</span>
-    </div>
-    <div class="ev-title">${escHtml(ev.title)}</div>
-    <div class="ev-meta" style="display:flex;flex-direction:column;gap:4px;margin-bottom:8px">
-      <div class="ev-meta-row" style="display:flex;align-items:center;gap:7px;font-size:.75rem;color:rgba(255,255,255,.38)">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-        ${ds}
-      </div>
-      ${ev.loc ? `<div class="ev-meta-row" style="display:flex;align-items:center;gap:7px;font-size:.75rem;color:rgba(255,255,255,.38)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
-    </div>
-    ${ev.desc ? `<div class="ev-desc">${escHtml(ev.desc)}</div>` : ''}
-    <div class="ev-read-more">Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-  `;
-  card.appendChild(body);
-
-  // entrance animation — sadece opacity inline, transform CSS hover'ını bloke etmesin
-  card.style.opacity='0';
-  card.style.transition='opacity .4s ease';
-  // CSS hover'ın çalışması için transform inline yazılmıyor,
-  // bunun yerine sınıf ekliyoruz
+  const card = kkBuildEventCard(ev, { isPast, onClick: () => openModal(ev.id) });
+  card.style.opacity = '0';
+  card.style.transition = 'opacity .4s ease';
   card.classList.add('card-enter');
   return card;
 }
@@ -447,15 +391,6 @@ function appendCards(cards, gridId){
   const grid = document.getElementById(gridId);
   cards.forEach((card,i) => {
     grid.appendChild(card);
-    // Sadece yukarı hareket
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = 'translateY(-6px)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = '';
-    });
     setTimeout(()=>{card.style.opacity='1'; card.classList.remove('card-enter');}, i*40+20);
   });
 }

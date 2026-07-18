@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="event-card.js" defer></script>
 
 
 
@@ -330,65 +331,9 @@ events = [];
 
 
 // ── ETKİNLİK KARTI ──
-const EMOJI = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
-
-function buildEventCard(ev, isPast, delay) {
-  const card = document.createElement('div');
-  card.className = 'event-card reveal' + (isPast ? ' ev-past' : '');
-  card.style.transitionDelay = delay + 's';
-  card.addEventListener('click', () => openModal(ev.id));
-
-  if (!isPast) {
-    const badge = document.createElement('div');
-    badge.className = 'ev-upcoming-bar';
-    badge.textContent = 'Yaklaşan';
-    card.appendChild(badge);
-  }
-
-  const thumb = document.createElement('div');
-  thumb.className = 'ev-thumb';
-  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-    const img = document.createElement('img');
-    img.src = ev.img; img.alt = ev.title;
-    thumb.appendChild(img);
-  } else {
-    const emoji = document.createElement('div');
-    emoji.className = 'ev-thumb-emoji';
-    emoji.textContent = EMOJI[ev.cat] || '📌';
-    thumb.appendChild(emoji);
-  }
-  card.appendChild(thumb);
-
-  const body = document.createElement('div');
-  body.className = 'ev-body';
-
-  const catRow = document.createElement('div'); catRow.className = 'ev-cat-row';
-  const evBadge = document.createElement('span'); evBadge.className = 'ev-badge';
-  evBadge.textContent = (EMOJI[ev.cat]||'') + ' ' + ev.cat;
-  catRow.appendChild(evBadge);
-  body.appendChild(catRow);
-
-  const title = document.createElement('div'); title.className = 'ev-title'; title.textContent = ev.title;
-  body.appendChild(title);
-
-  const meta = document.createElement('div'); meta.className = 'ev-meta';
-  const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-  meta.innerHTML = `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${ds}</div>`
-    + (ev.loc ? `<div class="ev-meta-row"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : '');
-  body.appendChild(meta);
-
-  if (ev.desc) {
-    const desc = document.createElement('div'); desc.className = 'ev-desc'; desc.textContent = ev.desc;
-    body.appendChild(desc);
-  }
-
-  const more = document.createElement('div'); more.className = 'ev-read-more';
-  more.innerHTML = 'Detayları Gör <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-  body.appendChild(more);
-
-  card.appendChild(body);
-  return card;
-}
+// Kartın kendisi artık event-card.js içindeki kkBuildEventCard() ile üretiliyor
+// (index, hakkımızda, etkinlikler sayfaları aynı tasarımı kullanıyor).
+const EMOJI = window.KK_CAT_EMOJI;
 
 function renderEvents() {
   const g = document.getElementById('events-grid');
@@ -407,19 +352,10 @@ function renderEvents() {
     : [...events].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
   preview.forEach((ev, i) => {
     const isPast = new Date(ev.date) < now;
-    const card = buildEventCard(ev, isPast, i*0.07);
-    // Yıldız rozeti gizle
-    const featuredBadge = card.querySelector('.ev-featured-badge');
-    if (featuredBadge) featuredBadge.remove();
+    const card = kkBuildEventCard(ev, { isPast, onClick: () => openModal(ev.id) });
+    card.classList.add('reveal');
+    card.style.transitionDelay = (i*0.07) + 's';
     g.appendChild(card);
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = 'translateY(-6px)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = '';
-    });
     if (typeof revealObs !== 'undefined') revealObs.observe(card);
   });
 }
