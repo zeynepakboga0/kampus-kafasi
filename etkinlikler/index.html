@@ -333,6 +333,7 @@
   <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
 </footer>
 
+<script src="../event-card.js"></script>
 <script>
 // ── RESET ──
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
@@ -386,56 +387,22 @@ function formatDate(d){
   return new Date(d).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
 }
 
-const CAT_EMOJI = {'Sosyal':'🎉','Gezi':'🗺️','Spor':'⚽','Panel':'🎤','Bilgilendirme':'📋'};
+const CAT_EMOJI = window.KK_CAT_EMOJI;
 
 function escHtml(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  return window.kkEscHtml(str);
 }
 
 function buildCard(ev, isPast){
-  const card = document.createElement('div');
-  card.className = 'ev-card' + (isPast ? ' past-card' : '');
-  card.onclick = () => openModal(ev.id);
-
-  // Thumb
-  const cover = document.createElement('div'); cover.className = 'ev-thumb';
-  if(ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)){
-    const img = document.createElement('img'); img.src = ev.img; img.alt = ev.title;
-    img.style.objectPosition = ev.imgPos || '50% 50%';
-    cover.appendChild(img);
-  } else {
-    const em = document.createElement('div'); em.className = 'ev-thumb-emoji';
-    em.textContent = ev.emoji || CAT_EMOJI[ev.cat] || '📌';
-    cover.appendChild(em);
-  }
-  if(!isPast){
-    const badge = document.createElement('div'); badge.className = 'ev-upcoming-badge';
-    badge.textContent = 'Yaklaşan';
-    cover.appendChild(badge);
-  }
-  card.appendChild(cover);
-
-  // Body
-  const body = document.createElement('div'); body.className = 'ev-body';
-  const ds = formatDate(ev.date);
-  body.innerHTML = `
-    <div class="ev-cat-row">
-      <span class="ev-cat-badge">${CAT_EMOJI[ev.cat]||''} ${escHtml(ev.cat)}</span>
-      <span class="ev-date-lbl">${ds}</span>
-    </div>
-    <div class="ev-title">${escHtml(ev.title)}</div>
-    ${ev.desc ? `<div class="ev-desc">${escHtml(ev.desc)}</div>` : ''}
-    ${ev.loc ? `<div class="ev-loc"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
-    <div class="ev-read-more">Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-  `;
-  card.appendChild(body);
+  // Kart gövdesi + görünümü artık event-card.js > kkBuildEventCard() tarafından üretiliyor
+  const card = window.kkBuildEventCard(ev, {
+    isPast,
+    onClick: (e) => openModal(e.id)
+  });
 
   // entrance animation — sadece opacity inline, transform CSS hover'ını bloke etmesin
   card.style.opacity='0';
   card.style.transition='opacity .4s ease';
-  // CSS hover'ın çalışması için transform inline yazılmıyor,
-  // bunun yerine sınıf ekliyoruz
   card.classList.add('card-enter');
   return card;
 }

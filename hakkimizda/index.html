@@ -347,6 +347,7 @@
   <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
 </footer>
 
+<script src="../event-card.js"></script>
 <script>
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 window.scrollTo(0, 0);
@@ -368,7 +369,7 @@ function closeDrawer() {
 
 
 // ── ETKİNLİK VERİSİ ──
-const EMOJI_MAP = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
+const EMOJI_MAP = window.KK_CAT_EMOJI;
 
 function escHtml(str) {
   if (!str) return '';
@@ -392,48 +393,16 @@ function loadActivities(eventsFromFirebase) {
   }
 
   toShow.forEach((ev, i) => {
-    const card = document.createElement('div');
-    card.className = 'activity-card';
+    // Kart artık event-card.js > kkBuildEventCard() ile üretiliyor (diğer sayfalarla birebir aynı görünüm)
+    const card = window.kkBuildEventCard(ev, {
+      isPast: true,
+      dateOpts: {day:'numeric',month:'short',year:'numeric'},
+      onClick: () => openEvModal(ev, events)
+    });
     card.style.opacity = '0';
     card.style.transition = `opacity .42s ${i*0.06}s ease`;
     card.classList.add('ac-enter');
-    card.addEventListener('click', () => openEvModal(ev, events));
-
-    const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'short',year:'numeric'});
-    const cover = document.createElement('div'); cover.className = 'ac-cover';
-    if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-      const img = document.createElement('img'); img.src = ev.img; img.alt = ev.title;
-      img.style.objectPosition = ev.imgPos || '50% 50%';
-      cover.appendChild(img);
-    } else {
-      const em = document.createElement('div'); em.className = 'ac-cover-emoji';
-      em.textContent = EMOJI_MAP[ev.cat] || '📌';
-      cover.appendChild(em);
-    }
-    card.appendChild(cover);
-
-    const body = document.createElement('div'); body.className = 'ac-body';
-    body.innerHTML = `
-      <div class="ac-meta">
-        <span class="ac-cat">${EMOJI_MAP[ev.cat]||''} ${escHtml(ev.cat)}</span>
-        <span class="ac-date-lbl">${ds}</span>
-      </div>
-      <div class="ac-title">${escHtml(ev.title)}</div>
-      ${ev.desc ? `<div class="ac-desc">${escHtml(ev.desc)}</div>` : ''}
-      ${ev.loc ? `<div class="ac-loc"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
-      <div class="ac-read-more">Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
-    `;
-    card.appendChild(body);
     grid.appendChild(card);
-
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = 'translateY(-6px)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = '';
-    });
   });
 
   const obs = new IntersectionObserver(entries => {

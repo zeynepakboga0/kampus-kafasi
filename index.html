@@ -313,7 +313,7 @@
   <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
 </footer>
 
-
+<script src="event-card.js"></script>
 <script>
 
   function escHtml(str) {
@@ -329,69 +329,16 @@ events = [];
 
 
 
-// ── ETKİNLİK KARTI ──
-const EMOJI = {Konferans:'🎤',Gezi:'🗺️',Spor:'⚽',Sosyal:'🎉',Kültür:'🎭',Eğitim:'📚',Diğer:'📌'};
+// ── ETKİNLİK KARTI (event-card.js içindeki ortak kkBuildEventCard kullanılıyor) ──
+const EMOJI = window.KK_CAT_EMOJI;
 
 function buildEventCard(ev, isPast, delay) {
-  const card = document.createElement('div');
-  card.className = 'event-card reveal' + (isPast ? ' ev-past' : '');
+  const card = window.kkBuildEventCard(ev, {
+    isPast,
+    onClick: (e) => openModal(e.id)
+  });
+  card.classList.add('reveal');
   card.style.transitionDelay = delay + 's';
-  card.addEventListener('click', () => openModal(ev.id));
-
-  if (!isPast) {
-    const badge = document.createElement('div');
-    badge.className = 'ev-upcoming-bar';
-    badge.textContent = 'Yaklaşan';
-    card.appendChild(badge);
-  }
-
-  const thumb = document.createElement('div');
-  thumb.className = 'ev-thumb';
-  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-    const img = document.createElement('img');
-    img.src = ev.img; img.alt = ev.title;
-    thumb.appendChild(img);
-  } else {
-    const emoji = document.createElement('div');
-    emoji.className = 'ev-thumb-emoji';
-    emoji.textContent = EMOJI[ev.cat] || '📌';
-    thumb.appendChild(emoji);
-  }
-  card.appendChild(thumb);
-
-  const body = document.createElement('div');
-  body.className = 'ev-body';
-
-  const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-
-  const catRow = document.createElement('div'); catRow.className = 'ev-cat-row';
-  const evBadge = document.createElement('span'); evBadge.className = 'ev-badge';
-  evBadge.textContent = (EMOJI[ev.cat]||'') + ' ' + ev.cat;
-  const dateLbl = document.createElement('span'); dateLbl.className = 'ev-date-lbl';
-  dateLbl.textContent = ds;
-  catRow.appendChild(evBadge);
-  catRow.appendChild(dateLbl);
-  body.appendChild(catRow);
-
-  const title = document.createElement('div'); title.className = 'ev-title'; title.textContent = ev.title;
-  body.appendChild(title);
-
-  if (ev.desc) {
-    const desc = document.createElement('div'); desc.className = 'ev-desc'; desc.textContent = ev.desc;
-    body.appendChild(desc);
-  }
-
-  if (ev.loc) {
-    const loc = document.createElement('div'); loc.className = 'ev-loc';
-    loc.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>' + escHtml(ev.loc);
-    body.appendChild(loc);
-  }
-
-  const more = document.createElement('div'); more.className = 'ev-read-more';
-  more.innerHTML = 'Detayları Gör <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>';
-  body.appendChild(more);
-
-  card.appendChild(body);
   return card;
 }
 
