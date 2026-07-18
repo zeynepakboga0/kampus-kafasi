@@ -430,7 +430,7 @@ function buildCard(ev, isPast){
       ${ev.loc ? `<div class="ev-meta-row" style="display:flex;align-items:center;gap:7px;font-size:.75rem;color:rgba(255,255,255,.38)"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>${escHtml(ev.loc)}</div>` : ''}
     </div>
     ${ev.desc ? `<div class="ev-desc">${escHtml(ev.desc)}</div>` : ''}
-    <div class="ev-read-more" style="margin-top:auto;padding-top:14px;display:flex;align-items:center;gap:6px;font-size:.78rem;font-weight:700;color:#2dd8f0;opacity:.9">Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
+    <div class="ev-read-more">Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>Detayları Gör <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg></div>
   `;
   card.appendChild(body);
 
