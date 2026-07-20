@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* PAGE HERO */
-.page-hero{padding:130px 32px 70px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
+.page-hero{padding:90px 32px 40px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
 .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
 .page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
 .page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
@@ -30,7 +30,7 @@
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* TEAM SECTION */
-#team{padding:80px 32px;background:rgba(10,15,21,.82);position:relative}
+#team{padding:56px 32px;background:rgba(10,15,21,.82);position:relative}
 #team::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(45,216,240,.04) 0%,transparent 65%);pointer-events:none}
 
 .team-group{margin-bottom:80px}
@@ -122,8 +122,8 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 }
 @media(max-width:960px){
   #nav{padding:0 18px}.nav-links{display:none}
-  #team{padding:60px 18px}
-  .page-hero{padding:110px 18px 56px}
+  #team{padding:40px 18px}
+  .page-hero{padding:85px 18px 56px}
   footer{padding:48px 18px 32px}
   .footer-inner{grid-template-columns:1fr;gap:28px}
   .sponsor-grid{grid-template-columns:1fr;gap:16px}
@@ -186,15 +186,6 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
   </div>
 </nav>
-
-<div id="mobile-nav-strip">
-  <a href="../" class="mn-link">Ana Sayfa</a>
-  <a href="../hakkimizda/" class="mn-link">Hakkımızda</a>
-  <a href="../etkinlikler/" class="mn-link">Etkinlikler</a>
-  <a href="../ekip/" class="mn-link active">Ekip</a>
-  <a href="../iletisim/" class="mn-link">İletişim</a>
-  <a href="../sponsorluk/" class="mn-link">Sponsorluk</a>
-</div>
 
 
 <!-- DRAWER -->

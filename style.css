@@ -332,7 +332,7 @@ footer {
    PAGE HERO (iç sayfalar — hakkımızda, ekip, etkinlikler vb.)
    ════════════════════════════════════════════════════════════ */
 .page-hero {
-  padding: 130px 32px 70px; position: relative;
+  padding: 90px 32px 40px; position: relative;
   overflow: hidden; background: rgba(7,9,11,.95);
 }
 .page-hero::before {
@@ -467,7 +467,13 @@ footer {
   border-radius: 28px; max-width: 680px; width: 100%;
   box-shadow: 0 60px 120px rgba(0,0,0,.7), 0 0 0 1px rgba(45,216,240,.08);
   animation: modalIn .36s cubic-bezier(.34,1.46,.64,1) both;
-  overflow: hidden; position: relative; max-height: 92vh; overflow-y: auto;
+  overflow: hidden; position: relative; max-height: 92vh;
+  display: flex; flex-direction: column;
+}
+
+.modal-scroll {
+  overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch;
+  flex: 1 1 auto; min-height: 0;
 }
 @keyframes modalIn { from{opacity:0;transform:scale(.88) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
@@ -709,7 +715,7 @@ margin-bottom: 6px; white-space: normal;}
    ════════════════════════════════════════════════════════════ */
 #hero {
   min-height: 100svh; position: relative; overflow: hidden;
-  display: flex; align-items: center; padding: 90px 32px 72px;
+  display: flex; align-items: center; padding: 90px 32px 48px;
 }
 #particle-canvas { position: absolute; inset: 0; z-index: 0; pointer-events: none; width: 100%; height: 100%; }
 #hero::after {
@@ -751,7 +757,7 @@ margin-bottom: 6px; white-space: normal;}
 /* ════════════════════════════════════════════════════════════
    INDEX — WHO (Biz Kimiz)
    ════════════════════════════════════════════════════════════ */
-#who { background:rgba(7,9,11,.82);padding:90px 32px; }
+#who { background:rgba(7,9,11,.82);padding:56px 32px; }
 .who-inner { display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;margin-top:48px; }
 .who-card { background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:24px 22px;transition:border-color .25s,transform .25s;position:relative;overflow:hidden; }
 .who-card:hover { border-color:rgba(45,216,240,.3);transform:translateY(-3px); }
@@ -762,7 +768,7 @@ margin-bottom: 6px; white-space: normal;}
 /* ════════════════════════════════════════════════════════════
    INDEX — EVENTS SECTION
    ════════════════════════════════════════════════════════════ */
-#events { background:rgba(7,9,11,.82);padding:90px 32px; }
+#events { background:rgba(7,9,11,.82);padding:56px 32px; }
 .events-header { display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:14px; }
 .events-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px; }
 .events-cta { margin-top:44px;text-align:center; }
@@ -774,7 +780,7 @@ margin-bottom: 6px; white-space: normal;}
 /* ════════════════════════════════════════════════════════════
    INDEX — CONTACT
    ════════════════════════════════════════════════════════════ */
-#contact { background:rgba(13,17,23,.82);color:var(--white);padding:90px 32px; }
+#contact { background:rgba(13,17,23,.82);color:var(--white);padding:56px 32px; }
 .contact-intro { font-size:.97rem;color:rgba(255,255,255,.45);line-height:1.75;margin:12px auto 0;max-width:560px;text-align:center; }
 .contact-cards { display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:44px; }
 .contact-card { background:var(--card);border:1px solid var(--bd);border-radius:18px;padding:32px 20px;text-align:center;transition:transform .3s cubic-bezier(.34,1.56,.64,1),border-color .3s,box-shadow .3s;cursor:pointer;text-decoration:none;color:var(--white);display:flex;flex-direction:column;align-items:center;gap:12px; }
@@ -794,7 +800,7 @@ margin-bottom: 6px; white-space: normal;}
   .hero-visual { display: none; }
 
   /* Hero içerik: ortala, kompakt */
-  #hero { padding: 120px 20px 56px; min-height: unset; }
+  #hero { padding: 90px 20px 56px; min-height: unset; }
   .hero-eyebrow { font-size: .68rem; margin-bottom: 16px; }
   .hero-title {
     font-size: clamp(3.6rem, 14vw, 5.5rem);
@@ -836,13 +842,13 @@ margin-bottom: 6px; white-space: normal;}
 
   /* Who: tek sütun */
   .who-inner { grid-template-columns: 1fr; gap: 28px; }
-  #who { padding: 64px 20px; }
+  #who { padding: 44px 20px; }
   .who-card { padding: 20px 18px; }
   .who-card h3 { font-size: .92rem; }
   .who-card p { font-size: .82rem; }
 
   /* Events */
-  #events { padding: 64px 20px; }
+  #events { padding: 44px 20px; }
   .events-header { margin-bottom: 28px; }
 
   /* Contact: 2 sütun */
@@ -851,12 +857,12 @@ margin-bottom: 6px; white-space: normal;}
   .cc-icon-wrap { width: 44px; height: 44px; border-radius: 12px; }
   .cc-label { font-size: .65rem; }
   .cc-value { font-size: .82rem; }
-  #contact { padding: 64px 20px; }
+  #contact { padding: 44px 20px; }
 }
 
 @media (max-width: 520px) {
   /* Hero: küçük telefon */
-  #hero { padding: 112px 16px 48px; }
+  #hero { padding: 85px 16px 48px; }
   .hero-eyebrow { font-size: .62rem; padding: 4px 12px; }
   .hero-title { font-size: clamp(3.2rem, 16vw, 4.2rem); line-height: 1.0; margin-bottom: 14px; }
   .hero-sub { font-size: .87rem; margin-bottom: 24px; }
@@ -867,7 +873,7 @@ margin-bottom: 6px; white-space: normal;}
   .stat-lbl { font-size: .55rem; letter-spacing: .02em; }
 
   /* Who */
-  #who, #events, #contact { padding: 52px 16px; }
+  #who, #events, #contact { padding: 36px 16px; }
   .who-card { padding: 16px 14px; }
 
   /* Contact: 2 sütun (küçük) */
@@ -919,9 +925,6 @@ margin-bottom: 6px; white-space: normal;}
     background: rgba(45,216,240,.07);
   }
   
-  /* İçerik nav şeridinin altına kaymasın diye */
-  #hero { padding-top: 140px !important; }
-  .page-hero { padding-top: 150px !important; }
 }
 @media (max-width: 480px) {
   .nav-game-btn {

@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* PAGE HERO */
-.page-hero{padding:130px 32px 70px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
+.page-hero{padding:90px 32px 40px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
 .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
 .page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
 .page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
@@ -31,7 +31,7 @@
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* STATS BAR - index-style animated counters */
-#sp-stats{padding:0 32px 52px;background:transparent}
+#sp-stats{padding:0 32px 32px;background:transparent}
 .sp-stats-grid{display:flex;gap:0;border:1px solid var(--bd);border-radius:18px;overflow:hidden;max-width:540px;background:rgba(255,255,255,.02)}
 .sp-stat-item{flex:1;padding:28px 16px;text-align:center;border-right:1px solid var(--bd);transition:background .3s}
 .sp-stat-item:last-child{border-right:none}
@@ -41,7 +41,7 @@
 .sp-stat-lbl{font-size:.7rem;color:var(--muted);font-weight:500;margin-top:3px;letter-spacing:.04em}
 
 /* NEDEN BİZ */
-#sp-why{padding:72px 32px;background:rgba(7,9,11,.82)}
+#sp-why{padding:56px 32px;background:rgba(7,9,11,.82)}
 .sp-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;max-width:780px;grid-auto-rows:1fr}
 .sp-why-item{display:flex;align-items:flex-start;gap:12px;padding:16px 18px;border-left:2px solid rgba(45,216,240,.3);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;transition:border-color .2s,background .2s;box-sizing:border-box;height:100%;word-wrap:break-word;overflow-wrap:break-word}
 .sp-why-item:hover{border-left-color:var(--cl);background:rgba(45,216,240,.04)}
@@ -50,7 +50,7 @@
 .sp-why-text strong{color:rgba(255,255,255,.85);font-weight:600;display:block;margin-bottom:2px;font-size:.86rem}
 
 /* İŞ BİRLİĞİ SEÇENEKLERİ */
-#sp-options{padding:80px 32px;background:rgba(10,15,21,.82)}
+#sp-options{padding:56px 32px;background:rgba(10,15,21,.82)}
 .sp-options-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:32px}
 .sp-option-card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:30px 24px 24px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default;display:flex;flex-direction:column}
 .sp-option-card::before{content:'';position:absolute;inset:0;border-radius:20px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
@@ -64,7 +64,7 @@
 .btn-card-offer:hover{background:rgba(45,216,240,.15);border-color:var(--cl);transform:translateY(-1px)}
 
 /* SÜREÇ - yeni tasarım */
-#sp-process{padding:80px 32px;background:rgba(7,9,11,.82)}
+#sp-process{padding:56px 32px;background:rgba(7,9,11,.82)}
 .sp-steps{display:grid;grid-template-columns:1fr;gap:0;margin-top:52px;max-width:700px;position:relative}
 .sp-step{display:flex;align-items:flex-start;gap:28px;padding:0 0 40px 0;position:relative;opacity:0;transform:translateX(-18px);transition:opacity .55s ease,transform .55s ease}
 .sp-step.visible{opacity:1;transform:translateX(0)}
@@ -88,7 +88,7 @@
 .sp-step-icon{display:none}
 
 /* İLETİŞİM */
-#sp-contact{padding:80px 32px;background:rgba(7,9,11,.82)}
+#sp-contact{padding:56px 32px;background:rgba(7,9,11,.82)}
 .sp-contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px}
 .sp-cc{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 20px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default}
 .sp-cc::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
@@ -120,10 +120,10 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   .sp-contact-grid{grid-template-columns:1fr}
   .footer-inner{grid-template-columns:1fr;gap:28px}
   #nav{padding:0 18px}.nav-links{display:none}
-  #sp-why,#sp-options,#sp-process,#sp-cta,#sp-contact{padding:60px 18px}
+  #sp-why,#sp-options,#sp-process,#sp-cta,#sp-contact{padding:40px 18px}
   #sp-stats{padding:0 18px 40px}
   .sp-why-grid{grid-template-columns:1fr}
-  .page-hero{padding:110px 18px 56px}
+  .page-hero{padding:85px 18px 56px}
   footer{padding:48px 18px 32px}
   .sp-cta-box{padding:36px 24px}
 }
@@ -171,14 +171,6 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
   </div>
 </nav>
-<div id="mobile-nav-strip">
-  <a href="../" class="mn-link">Ana Sayfa</a>
-  <a href="../hakkimizda/" class="mn-link">Hakkımızda</a>
-  <a href="../etkinlikler/" class="mn-link">Etkinlikler</a>
-  <a href="../ekip/" class="mn-link">Ekip</a>
-  <a href="../iletisim/" class="mn-link">İletişim</a>
-  <a href="../sponsorluk/" class="mn-link active">Sponsorluk</a>
-</div>
 
 
 <!-- DRAWER -->
