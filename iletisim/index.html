@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 /* PAGE HERO */
-.page-hero{padding:90px 32px 40px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
+.page-hero{padding:90px 32px 40px;position:relative;overflow:hidden}
 .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
 .page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
 .page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
@@ -31,7 +31,8 @@
 .reveal.visible{opacity:1;transform:translateY(0)}
 
 /* İLETİŞİM BİLGİLERİ — yeni yatay kart tasarımı */
-#contact-info{padding:56px 32px;background:rgba(10,15,21,.82)}
+#contact-info{padding:56px 32px;background:linear-gradient(to bottom,rgba(7,9,11,.95),rgba(10,15,21,.82) 160px);position:relative;overflow:hidden}
+#contact-info::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:700px;height:400px;background:radial-gradient(ellipse,rgba(45,216,240,.04) 0%,transparent 65%);pointer-events:none}
 .contact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:32px}
 
 /* Sol taraftaki yatay iletişim kartları */
