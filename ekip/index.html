@@ -71,9 +71,12 @@
 .admin-name{font-size:.9rem;font-weight:700;color:var(--white);line-height:1.28;margin-bottom:9px}
 
 /* Unvan/Görev — pill badge */
-.board-role,.admin-role{display:inline-flex;align-items:center;border-radius:100px;background:rgba(45,216,240,.09);border:1px solid rgba(45,216,240,.2);color:var(--cl);font-weight:700;letter-spacing:.01em;white-space:nowrap}
+.board-role,.admin-role{display:inline-flex;align-items:center;gap:7px;border-radius:100px;background:rgba(45,216,240,.09);border:1px solid rgba(45,216,240,.2);color:var(--cl);font-weight:700;letter-spacing:.01em;white-space:nowrap}
 .board-role{padding:5px 16px;font-size:.72rem;margin-bottom:12px}
 .admin-role{padding:4px 12px;font-size:.63rem;margin-bottom:10px}
+.board-role::before,.admin-role::before{content:'';border-radius:50%;background:var(--cl);flex-shrink:0}
+.board-role::before{width:6px;height:6px}
+.admin-role::before{width:5px;height:5px}
 
 /* Bölüm — sade ikincil satır */
 .board-dept,.admin-dept{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.5);font-weight:500;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:100px}

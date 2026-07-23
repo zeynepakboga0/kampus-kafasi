@@ -98,7 +98,17 @@
   <div class="hero-inner">
     <div>
       <div class="hero-eyebrow"><span class="hero-dot"></span><span id="hero-badge-text">Akdeniz Üniversitesi · Antalya</span></div>
-      <h1 class="hero-title" id="hero-title-el">Kampüs<br>Kafası</h1>
+      <h1 class="hero-title-dynamic" id="hero-title-el">
+        <span class="htd-static">Kampüs Hayatının</span>
+        <span class="htd-chip">
+          <span class="htd-chip-glow"></span>
+          <span class="htd-dot"></span>
+          <span class="htd-rotator" id="htd-rotator">
+            <span class="htd-word" id="htd-word">Kalbi</span>
+          </span>
+        </span>
+        <span class="htd-measure" id="htd-measure" aria-hidden="true"></span>
+      </h1>
       <p class="hero-sub" id="hero-sub-el">Üniversite hayatının tam merkezinde. WhatsApp gruplarımızda 17.000'den fazla öğrenciyle buluşuyor, yeni gelenlere kampüs ve şehir hayatında yol gösteriyoruz.</p>
       <div class="hero-btns">
         <a href="etkinlikler/" class="btn-primary">Etkinlikleri Gör</a>
@@ -203,7 +213,7 @@
   <div class="section-wrap">
     <div class="reveal" style="text-align:center">
       <span class="section-lbl" style="justify-content:center;display:flex">Bize Ulaşın</span>
-      <h2 class="section-h" style="font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,5vw,4rem);color:var(--white)">İletişim</h2>
+      <h2 class="section-h iletisim-gradient" style="font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,5vw,4rem)">İletişim</h2>
       <p class="contact-intro">Sorularınız, önerileriniz veya iş birliği teklifleriniz için bizimle iletişime geçin.</p>
     </div>
     <div class="contact-cards reveal">
@@ -416,6 +426,85 @@ function applySettings() {
     const el=document.getElementById('email-link'),es=document.getElementById('email-sub-text'),sp=document.getElementById('sponsor-email');
     if(el)el.href='mailto:'+sett.email; if(es)es.textContent=sett.email; if(sp)sp.href='mailto:'+sett.email;
   }
+}
+
+// ── HERO BAŞLIK: DEĞİŞEN METİN (ışıltılı çip + 3D flip) ──
+function initHeroRotator() {
+  const words = ['Kalbi', 'Nabzı', 'Sesi', 'Rengi', 'Enerjisi', 'Adresi'];
+  const rotator = document.getElementById('htd-rotator');
+  const wordEl = document.getElementById('htd-word');
+  const measureEl = document.getElementById('htd-measure');
+  if (!rotator || !wordEl || !measureEl) return;
+
+  const WIDTH_BUFFER = 2; // sadece px yuvarlama farkları için minik güvenlik payı
+  let i = 0;
+
+  function syncMeasureFont() {
+    const wordStyles = getComputedStyle(wordEl);
+    ['fontFamily', 'fontWeight', 'fontSize', 'letterSpacing'].forEach(prop => {
+      measureEl.style[prop] = wordStyles[prop];
+    });
+  }
+
+  function measure(text) {
+    syncMeasureFont();
+    measureEl.textContent = text;
+    return Math.ceil(measureEl.getBoundingClientRect().width) + WIDTH_BUFFER;
+  }
+
+  function applyWidth(text) {
+    rotator.style.width = measure(text) + 'px';
+  }
+
+  function start() {
+    syncMeasureFont();
+    applyWidth(words[i]);
+
+    const ROTATE_MS = 2600;
+    const TRANSITION_MS = 480;
+
+    setInterval(() => {
+      const nextIndex = (i + 1) % words.length;
+
+      // çıkış animasyonu ve genişlik geçişini aynı anda başlat
+      wordEl.classList.add('htd-out');
+      applyWidth(words[nextIndex]);
+
+      setTimeout(() => {
+        i = nextIndex;
+        wordEl.textContent = words[i];
+        wordEl.classList.remove('htd-out');
+        wordEl.classList.add('htd-in');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            wordEl.classList.remove('htd-in');
+          });
+        });
+      }, TRANSITION_MS);
+    }, ROTATE_MS);
+  }
+
+  // yazı tipleri tam yüklenmeden ölçüm yapılırsa genişlik yanlış hesaplanıp
+  // kelime kırpılabiliyor — bu yüzden fontlar hazır olana kadar bekleniyor
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(start).catch(start);
+  } else {
+    start();
+  }
+
+  // ekstra güvenlik: sayfa tamamen yüklendiğinde ve pencere yeniden
+  // boyutlandığında mevcut kelimenin genişliğini yeniden hesapla
+  window.addEventListener('load', () => applyWidth(words[i]));
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => applyWidth(words[i]), 150);
+  });
+}
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeroRotator);
+} else {
+  initHeroRotator();
 }
 
 // kk-data.js'den gelen metin verilerini uygula

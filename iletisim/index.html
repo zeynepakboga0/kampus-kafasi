@@ -64,7 +64,8 @@
 .cc-btn svg{flex-shrink:0}
 
 /* FORM BÖLÜMÜ */
-#contact-form-section{padding:56px 32px;background:rgba(10,15,21,.82)}
+#contact-form-section{padding:56px 32px;background:linear-gradient(to bottom,rgba(7,9,11,.95),rgba(10,15,21,.82) 160px);position:relative;overflow:hidden}
+#contact-form-section::before{content:'';position:absolute;top:0;left:50%;transform:translateX(-50%);width:600px;height:260px;background:radial-gradient(ellipse,rgba(45,216,240,.025) 0%,transparent 65%);pointer-events:none}
 .form-layout{display:grid;grid-template-columns:1fr 1fr;gap:40px;margin-top:32px;align-items:stretch}
 .form-left{display:flex;flex-direction:column;gap:14px}
 .form-left .contact-card{flex:1}
