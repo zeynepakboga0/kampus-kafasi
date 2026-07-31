@@ -381,55 +381,78 @@ footer {
 
 
 /* ════════════════════════════════════════════════════════════
-   ETKİNLİK KARTI (index + etkinlikler sayfalarında ortak)
+   ETKİNLİK KARTI — "BİLET" TASARIMI
+   (index + etkinlikler + hakkımızda sayfalarında ortak)
+   Görsel ile bilgi bloğu arasında kopma çizgisi (perforasyon) ve
+   iki yanında bilet deliği izlenimi veren tek imza öge burada.
+   Mobilde kart yatay bilete (sol: görsel, sağ: bilgi) döner —
+   bkz. RESPONSIVE bölümündeki max-width:700px kuralı.
    ════════════════════════════════════════════════════════════ */
 .event-card {
   background: var(--card); border: 1px solid var(--bd);
-  border-radius: 18px; overflow: hidden; cursor: pointer;
+  border-radius: var(--r); overflow: hidden; cursor: pointer;
   transition: transform .35s cubic-bezier(.34,1.2,.64,1), box-shadow .35s, border-color .35s, opacity .42s;
   position: relative; display: flex; flex-direction: column;
 }
 .event-card:hover {
-  box-shadow: 0 28px 70px rgba(0,0,0,.5), 0 0 0 1px rgba(45,216,240,.15);
-  border-color: rgba(45,216,240,.3);
+  box-shadow: 0 28px 70px rgba(0,0,0,.5), 0 0 0 1px rgba(45,216,240,.18);
+  border-color: rgba(45,216,240,.32);
 }
 .ev-thumb {
-  aspect-ratio: 3/2; display: flex; align-items: center; justify-content: center;
-  font-size: 2.8rem;
-  background: linear-gradient(135deg,rgba(45,216,240,.07),rgba(13,110,106,.09));
+  aspect-ratio: 16/10; display: flex; align-items: center; justify-content: center;
+  font-size: 2.6rem;
+  background: linear-gradient(135deg,rgba(45,216,240,.08),rgba(13,110,106,.1));
   flex-shrink: 0; position: relative; overflow: hidden;
 }
 .ev-thumb::after {
   content: ''; position: absolute; inset: 0;
-  background: linear-gradient(to bottom, transparent 50%, rgba(7,9,11,.6) 100%);
+  background: linear-gradient(to bottom, transparent 45%, rgba(7,9,11,.65) 100%);
   pointer-events: none;
 }
 .ev-thumb-emoji { display:flex; align-items:center; justify-content:center; width:100%; height:100%; transition:transform .35s; }
-.event-card:hover .ev-thumb .ev-thumb-emoji { transform: scale(1.1); }
+.event-card:hover .ev-thumb .ev-thumb-emoji { transform: scale(1.1) rotate(-4deg); }
 .ev-thumb img { width:100%; height:100%; object-fit:cover; object-position:center; transition:transform .5s ease; }
-.event-card:hover .ev-thumb img { transform: scale(1.06); }
+.event-card:hover .ev-thumb img { transform: scale(1.07); }
 
-.ev-upcoming-bar {
+.ev-upcoming-bar, .ev-upcoming-badge {
   position: absolute; top: 12px; left: 12px; z-index: 2;
   font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
-  padding: 4px 10px; border-radius: 100px;
-  background: rgba(45,221,212,.2); color: var(--cl); border: 1px solid rgba(45,221,212,.4);
+  padding: 5px 11px 5px 9px; border-radius: 100px;
+  background: rgba(7,9,11,.55); color: var(--cl); border: 1px solid rgba(45,221,212,.4);
   backdrop-filter: blur(8px);
+  display: flex; align-items: center; gap: 5px;
 }
-.ev-body { padding: 16px 18px; display: flex; flex-direction: column; flex: 1; }
+.ev-upcoming-bar::before, .ev-upcoming-badge::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  background: var(--cl); box-shadow: 0 0 8px 1px var(--cl);
+}
 
-.ev-cat-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+/* Bilet gövdesi: görselin altında, kopma çizgisiyle ayrılmış */
+.ev-body {
+  padding: 18px 18px 16px; display: flex; flex-direction: column; flex: 1;
+  position: relative;
+  border-top: 1.5px dashed rgba(255,255,255,.16);
+}
+/* "bilet deliği" — kartın kenarından ısırılmış gibi görünen iki daire */
+.ev-body::before, .ev-body::after {
+  content: ''; position: absolute; top: -9px; width: 18px; height: 18px;
+  border-radius: 50%; background: var(--black); z-index: 1;
+}
+.ev-body::before { left: -9px; }
+.ev-body::after { right: -9px; }
+
+.ev-cat-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .ev-badge, .ev-cat-badge {
   font-size: .62rem; font-weight: 700; text-transform: uppercase; letter-spacing: .11em;
   color: var(--cl); background: rgba(45,216,240,.08); border: 1px solid rgba(45,216,240,.18);
   padding: 3px 9px; border-radius: 100px;
 }
 .ev-date-lbl { font-size: .67rem; color: rgba(255,255,255,.27); }
-.ev-title { font-weight: 800; font-size: .92rem; color: var(--white); margin-bottom: 6px; line-height: 1.3; letter-spacing: -.01em; }
+.ev-title { font-weight: 800; font-size: .96rem; color: var(--white); margin-bottom: 8px; line-height: 1.32; letter-spacing: -.01em; }
 .ev-desc { font-size: .78rem; color: rgba(255,255,255,.36); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 
-/* Kart gövdesinde tarih + konum satırı (ekran görüntüsündeki gibi ikonlu) */
-.ev-meta { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 10px; }
+/* Kart gövdesinde tarih + konum satırı (ikonlu) */
+.ev-meta { display: flex; flex-direction: row; align-items: center; flex-wrap: wrap; gap: 14px; margin-bottom: 12px; }
 .ev-date, .ev-loc {
   font-size: .72rem; color: rgba(255,255,255,.4);
   display: flex; align-items: center; gap: 6px;
@@ -437,18 +460,13 @@ footer {
 .ev-date svg, .ev-loc svg { flex-shrink: 0; color: var(--cl); opacity: .8; }
 .ev-loc { font-size: .72rem; margin-top: 0; }
 
-/* Küçük görselin üstündeki "Yaklaşan" rozeti */
-.ev-upcoming-badge {
-  position: absolute; top: 12px; left: 12px; z-index: 2;
-  font-size: .6rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em;
-  padding: 4px 10px; border-radius: 100px;
-  background: rgba(45,221,212,.2); color: var(--cl); border: 1px solid rgba(45,221,212,.4);
-  backdrop-filter: blur(8px);
+.ev-read-more {
+  margin-top: auto; padding-top: 14px; display: flex; align-items: center; gap: 6px;
+  font-size: .78rem; font-weight: 700; color: var(--cl); opacity: .85; transition: opacity .2s, gap .2s;
 }
-.ev-read-more { margin-top: auto; padding-top: 14px; display: flex; align-items: center; gap: 6px; font-size: .78rem; font-weight: 700; color: var(--cl); opacity: .9; transition: opacity .2s; }
-.event-card:hover .ev-read-more { opacity: 1; }
+.event-card:hover .ev-read-more { opacity: 1; gap: 9px; }
 .no-events-msg { grid-column:1/-1; text-align:center; padding:72px 20px; color:rgba(255,255,255,.15); font-size:.95rem; }
-.ev-past { opacity: .75; filter: saturate(.65); }
+.ev-past { opacity: .7; filter: saturate(.55); }
 .ev-past:hover { opacity: 1; filter: saturate(1); }
 
 
@@ -696,6 +714,27 @@ margin-bottom: 6px; white-space: normal;}
   .nav-logo img { width:24px; height:24px; }
 }
 
+/* ── ETKİNLİK KARTI — mobilde yatay bilet düzeni ──
+   Görsel sola sabit genişlikte küçülür, bilgi bloğu sağa geçer;
+   kopma çizgisi dikeye döner, delikler üst/altta belirir. */
+@media (max-width: 700px) {
+  .event-card { flex-direction: row; align-items: stretch; }
+  .ev-thumb { aspect-ratio: unset; width: 108px; font-size: 2rem; }
+  .ev-upcoming-bar, .ev-upcoming-badge { top: 8px; left: 8px; font-size: .55rem; padding: 4px 9px 4px 7px; }
+  .ev-body {
+    padding: 13px 16px 12px; justify-content: center;
+    border-top: none; border-left: 1.5px dashed rgba(255,255,255,.16);
+  }
+  .ev-body::before, .ev-body::after { left: -9px; right: auto; }
+  .ev-body::before { top: -9px; }
+  .ev-body::after { top: auto; bottom: -9px; }
+  .ev-cat-row { margin-bottom: 6px; }
+  .ev-title { font-size: .87rem; margin-bottom: 6px; -webkit-line-clamp: 2; }
+  .ev-desc { display: none; }
+  .ev-meta { margin-bottom: 0; gap: 10px; }
+  .ev-read-more { padding-top: 8px; font-size: .72rem; }
+}
+
 @media (max-width: 520px) {
   .modal-box { border-radius: 20px; }
   .modal-content { padding: 0 18px 24px; }
@@ -730,7 +769,7 @@ margin-bottom: 6px; white-space: normal;}
 .blob3 { width:240px;height:240px;background:rgba(45,216,240,.06);top:40%;left:30%;animation-delay:-5s; }
 @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(20px,-30px) scale(1.05)} 66%{transform:translate(-15px,20px) scale(.96)} }
 .hero-grid-bg { position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px; }
-.hero-inner { position:relative;z-index:1;max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 300px;gap:48px;align-items:center; }
+.hero-inner { position:relative;z-index:1;max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 430px;gap:48px;align-items:center; }
 .hero-eyebrow { display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:22px;opacity:0;animation:fadeUp .7s .2s ease forwards; }
 .hero-dot { width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0; }
 .hero-title { font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(3.2rem,8vw,6.5rem);line-height:1.05;margin-bottom:22px;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .35s ease forwards;padding-bottom:.1em; }
@@ -749,10 +788,10 @@ margin-bottom: 6px; white-space: normal;}
   line-height:1.1;
   letter-spacing:-.008em;
   margin-bottom:.26em;
-  background:linear-gradient(100deg,rgba(255,255,255,.85) 0%,rgba(255,255,255,.85) 35%,var(--cl) 50%,rgba(255,255,255,.85) 65%,rgba(255,255,255,.85) 100%);
-  background-size:280% 100%;
+  background:linear-gradient(100deg,rgba(255,255,255,.85) 0%,var(--cl) 50%,rgba(255,255,255,.85) 100%);
+  background-size:200% 100%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-  animation:htdStaticGradient 7s ease-in-out infinite;
+  animation:shimmerAnim 3.5s linear infinite;
 }
 .iletisim-gradient{
   background:linear-gradient(135deg,var(--cl) 0%,#fff 50%,var(--cl) 100%);
@@ -843,14 +882,14 @@ margin-bottom: 6px; white-space: normal;}
 .stat-item:last-child { border-right:none; }
 .stat-num { font-size:clamp(1.1rem,3.5vw,2rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap; }
 .stat-lbl { font-size:.65rem;color:rgba(255,255,255,.3);font-weight:500;margin-top:3px;letter-spacing:.04em; }
-.hero-visual { opacity:0;animation:fadeUp .7s .55s ease forwards;display:flex;align-items:center;justify-content:center;position:relative;width:340px;height:340px; }
+.hero-visual { opacity:0;animation:fadeUp .7s .55s ease forwards;display:flex;align-items:center;justify-content:center;position:relative;width:430px;height:430px; }
 .logo-glow-bg { position:absolute;inset:-60px;border-radius:50%;background:radial-gradient(circle,rgba(45,221,212,.18),transparent 65%);animation:glowPulse 3.5s ease-in-out infinite;z-index:0; }
 .orbit { position:absolute;border-radius:50%;border:1px solid transparent;pointer-events:none;top:50%;left:50%; }
-.orbit-1 { width:310px;height:310px;margin:-155px 0 0 -155px;border-top-color:rgba(45,221,212,.6);border-right-color:rgba(45,221,212,.6);animation:orbitSpin 6s linear infinite; }
+.orbit-1 { width:350px;height:350px;margin:-175px 0 0 -175px;border-top-color:rgba(45,221,212,.6);border-right-color:rgba(45,221,212,.6);animation:orbitSpin 6s linear infinite; }
 .orbit-1::after { content:'';position:absolute;width:9px;height:9px;border-radius:50%;background:var(--cl);box-shadow:0 0 16px var(--cl),0 0 30px rgba(45,221,212,.5);top:-4.5px;left:50%;transform:translateX(-50%); }
-.orbit-2 { width:348px;height:348px;margin:-174px 0 0 -174px;border-bottom-color:rgba(45,221,212,.25);border-left-color:rgba(45,221,212,.25);animation:orbitSpinRev 12s linear infinite; }
+.orbit-2 { width:390px;height:390px;margin:-195px 0 0 -195px;border-bottom-color:rgba(45,221,212,.25);border-left-color:rgba(45,221,212,.25);animation:orbitSpinRev 12s linear infinite; }
 .orbit-2::after { content:'';position:absolute;width:5px;height:5px;border-radius:50%;background:var(--cm);box-shadow:0 0 10px var(--cm);bottom:-2.5px;right:28%;transform:translateX(-50%); }
-.orbit-3 { width:390px;height:390px;margin:-195px 0 0 -195px;border-top-color:rgba(45,221,212,.09);border-left-color:rgba(45,221,212,.09);animation:orbitSpin 22s linear infinite; }
+.orbit-3 { width:430px;height:430px;margin:-215px 0 0 -215px;border-top-color:rgba(45,221,212,.09);border-left-color:rgba(45,221,212,.09);animation:orbitSpin 22s linear infinite; }
 @keyframes orbitSpin { to{transform:rotate(360deg)} }
 @keyframes orbitSpinRev { to{transform:rotate(-360deg)} }
 .hero-logo-img { width:310px;height:310px;border-radius:50%;object-fit:cover;position:relative;z-index:1;box-shadow:0 0 60px rgba(45,216,240,.2),0 0 120px rgba(45,216,240,.08);animation:logoEntrance 1.2s .6s cubic-bezier(.34,1.56,.64,1) both; }

@@ -43,28 +43,57 @@
 .board-layout{display:flex;flex-direction:column;align-items:center;gap:22px}
 .board-row{display:flex;justify-content:center;gap:22px;width:100%}
 
-.board-card,.admin-card{position:relative;background:var(--card);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;text-align:center;overflow:hidden;transition:transform .32s cubic-bezier(.34,1.15,.64,1),box-shadow .32s ease,border-color .32s ease}
+.board-card,.admin-card{position:relative;background:var(--card);border:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;text-align:center;overflow:visible;transition:transform .32s cubic-bezier(.34,1.15,.64,1),box-shadow .32s ease,border-color .32s ease}
 .board-card::before,.admin-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .35s ease}
 .board-card:hover::before,.admin-card:hover::before{opacity:1}
-.board-card:hover,.admin-card:hover{transform:translateY(-6px);border-color:rgba(45,216,240,.3);box-shadow:0 20px 40px rgba(0,0,0,.35),0 0 0 1px rgba(45,216,240,.1)}
+.board-card:hover,.admin-card:hover{transform:translateY(-6px);border-color:rgba(45,216,240,.3);box-shadow:0 20px 40px rgba(0,0,0,.35),0 0 0 1px rgba(45,216,240,.1);z-index:5}
 
 .board-card{width:250px;flex-shrink:0;border-radius:24px;padding:38px 24px 28px}
 .admin-card{border-radius:20px;padding:28px 18px 22px}
 
-/* Avatar — yuvarlak, dairesel halka vurgusu (foto çerçeveyi asla taşmaz) */
-.board-avatar,.admin-avatar{border-radius:50%;background:linear-gradient(135deg,var(--cl),var(--cd));display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--black);flex-shrink:0;position:relative;overflow:hidden;transition:box-shadow .35s ease}
-.board-avatar{width:140px;height:140px;font-size:1.3rem;margin-bottom:20px;box-shadow:0 0 0 4px rgba(45,216,240,.09),0 10px 28px rgba(45,216,240,.3)}
-.admin-avatar{width:92px;height:92px;font-size:.95rem;margin-bottom:16px;box-shadow:0 0 0 3px rgba(45,216,240,.07),0 6px 20px rgba(45,216,240,.26)}
-.board-avatar img,.admin-avatar img{width:100%;height:100%;border-radius:50%;object-fit:cover;display:block;animation:avatarBreathe 3.5s ease-in-out infinite;transform-origin:center}
-/* Her fotoya hafif farklı ritim — organik, senkronize olmayan bir "nefes alma" hissi */
-.board-card:nth-child(2n) .board-avatar img,.admin-card:nth-child(3n) .admin-avatar img{animation-duration:4s;animation-delay:-1.2s}
-.board-card:nth-child(3n) .board-avatar img,.admin-card:nth-child(4n) .admin-avatar img{animation-duration:3.1s;animation-delay:-2.6s}
-.admin-card:nth-child(2n) .admin-avatar img{animation-duration:3.8s;animation-delay:-.8s}
-@keyframes avatarBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.1)}}
-/* Hover: taşma yok, sadece halka parlaklığı ve foto netliği artar */
-.board-card:hover .board-avatar,.admin-card:hover .admin-avatar{box-shadow:0 0 0 4px rgba(45,216,240,.16),0 14px 34px rgba(45,216,240,.42)}
-.board-card:hover .board-avatar img,.admin-card:hover .admin-avatar img{filter:brightness(1.05) saturate(1.08)}
-@media (prefers-reduced-motion:reduce){.board-avatar img,.admin-avatar img{animation:none}}
+/* Avatar — şekilsiz, arka plan boş/şeffaf; foto kendi silüetiyle görünür, sadece "nefes alır" */
+/* Avatar dış kabuk — sadece "nefes alma" pulsu burada */
+.board-avatar,.admin-avatar{background:transparent;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--cl);flex-shrink:0;position:relative;overflow:visible}
+.board-avatar{width:140px;height:140px;font-size:1.3rem;margin-bottom:20px}
+.admin-avatar{width:92px;height:92px;font-size:.95rem;margin-bottom:16px}
+
+/* Çerçeve — sabit boyutlu, ASLA hareket etmez/büyümez, ölçeklenmez.
+   Sadece ALT yarısı gerçek bir daire kavisiyle keser (taşma asla olmaz);
+   ÜST tarafı ise açık bırakılır ki karakter nefes alıp büyüdüğünde üstten
+   çerçeveyi aşıp "dışarı çıkıyormuş" gibi görünsün. Çerçeve görsel olarak
+   karakterin arkasında/altında kalan bir ışık halkasıdır (drop-shadow).
+   140px kutu için: yarıçap 70 → alt yarım daire M0,70 A70,70 ... */
+.board-frame,.admin-frame{width:100%;height:100%;border-radius:50%;overflow:visible;filter:drop-shadow(0 0 16px rgba(45,216,240,.26)) drop-shadow(0 8px 18px rgba(0,0,0,.38));transition:filter .35s ease}
+.board-frame{clip-path:path('M0,70 A70,70 0 0 0 140,70 L140,-1000 L0,-1000 Z')}
+.admin-frame{clip-path:path('M0,46 A46,46 0 0 0 92,46 L92,-1000 L0,-1000 Z')}
+.board-card:hover .board-frame,.admin-card:hover .admin-frame{filter:drop-shadow(0 0 26px rgba(45,216,240,.5)) drop-shadow(0 10px 24px rgba(0,0,0,.45))}
+
+/* Nefes alma animasyonu karakterin (foto/baş harf) kendisinde çalışır;
+   transform-origin alt kısımda olduğu için büyüme yukarı doğru olur.
+   Alt kısım çerçevenin clip-path'indeki daire kavisiyle her zaman birebir
+   örtüştüğü için taşma olmaz; üst kısım ise açık bırakıldığı için karakter
+   büyüdükçe çerçeveden dışarı taşıp "çıkar" gibi görünür. */
+.board-avatar img,.admin-avatar img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;transition:filter .35s ease;transform-origin:center bottom;animation:avatarBreathe var(--breathe-duration,3.5s) ease-in-out infinite;animation-delay:var(--breathe-delay,0s)}
+.board-avatar span,.admin-avatar span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;letter-spacing:.05em;transform-origin:center bottom;animation:avatarBreathe var(--breathe-duration,3.5s) ease-in-out infinite;animation-delay:var(--breathe-delay,0s)}
+
+@keyframes avatarBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+/* Hover: nefes alma DURMAZ, devam eder — sadece daha büyük bir aralıkta "nefes alır" (çerçeveden daha fazla taşar) */
+@keyframes avatarBreatheHover{0%,100%{transform:scale(1.06)}50%{transform:scale(1.18)}}
+.board-card:hover .board-avatar img,.admin-card:hover .admin-avatar img{animation-name:avatarBreatheHover;filter:brightness(1.08) saturate(1.12)}
+.board-card:hover .board-avatar span,.admin-card:hover .admin-avatar span{animation-name:avatarBreatheHover;color:#fff}
+@media (prefers-reduced-motion:reduce){.board-avatar img,.admin-avatar img,.board-avatar span,.admin-avatar span{animation:none}}
+@media(max-width:620px){
+  .board-avatar{width:104px;height:104px;font-size:1.05rem}
+  .admin-avatar{width:76px;height:76px;font-size:.82rem}
+  .board-frame{clip-path:path('M0,52 A52,52 0 0 0 104,52 L104,-1000 L0,-1000 Z')}
+  .admin-frame{clip-path:path('M0,38 A38,38 0 0 0 76,38 L76,-1000 L0,-1000 Z')}
+}
+@media(max-width:420px){
+  .board-avatar{width:92px;height:92px}
+  .admin-avatar{width:68px;height:68px}
+  .board-frame{clip-path:path('M0,46 A46,46 0 0 0 92,46 L92,-1000 L0,-1000 Z')}
+  .admin-frame{clip-path:path('M0,34 A34,34 0 0 0 68,34 L68,-1000 L0,-1000 Z')}
+}
 
 /* İsim */
 .board-name{font-size:1.05rem;font-weight:800;color:var(--white);line-height:1.28;margin-bottom:12px}
@@ -377,22 +406,45 @@ function escHtml(str) {
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
+/* ── Her karaktere bağımsız, rastgele "nefes alma" ritmi ver ── */
+function randomBreathe(el) {
+  const duration = (3 + Math.random() * 1.4).toFixed(2);   // ~3s–4.4s, mevcut ritim aralığı
+  const delay = (-Math.random() * duration).toFixed(2);    // her biri farklı anda başlar
+  // Animasyon artık karakterin kendisinde (img/span) çalışıyor; süre/gecikmeyi
+  // CSS custom property olarak dış kapsayıcıya (avatarEl) veriyoruz, alt eleman miras alıyor.
+  el.style.setProperty('--breathe-duration', duration + 's');
+  el.style.setProperty('--breathe-delay', delay + 's');
+}
+
 function makeCard(m, type) {
   const p = type === 'board' ? 'board' : 'admin';
   const card = document.createElement('div');
   card.className = p + '-card';
-  const avatarContent = m.img
-  ? `<img src="${escHtml(m.img)}" alt="${escHtml(m.name || '')}" style="width:100%;height:100%;object-fit:cover">`
-  : `<span>${escHtml(m.initials || initials(m.name))}</span>`;
   const deptIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c0 1.1 2.7 2 6 2s6-.9 6-2v-5"/></svg>`;
   const igIcon = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>`;
   card.innerHTML = `
-    <div class="${p}-avatar">${avatarContent}</div>
+    <div class="${p}-avatar"><div class="${p}-frame"></div></div>
     <div class="${p}-name">${escHtml(m.name || '')}</div>
     ${m.role ? `<div class="${p}-role">${escHtml(m.role)}</div>` : ''}
     ${m.dept ? `<div class="${p}-dept">${deptIcon}${escHtml(m.dept)}</div>` : ''}
     ${m.ig ? `<a href="https://instagram.com/${encodeURIComponent(m.ig)}" target="_blank" rel="noopener noreferrer" class="${p}-ig">${igIcon}@${escHtml(m.ig)}</a>` : ''}
   `;
+  const avatarEl = card.querySelector(`.${p}-avatar`);
+  const frameEl = card.querySelector(`.${p}-frame`);
+  randomBreathe(avatarEl);
+  const showInitials = () => {
+    const raw = (m.initials && m.initials.trim()) ? m.initials.trim() : initials(m.name);
+    frameEl.innerHTML = `<span>${escHtml(raw)}</span>`;
+  };
+  if (m.img) {
+    const img = new Image();
+    img.alt = m.name || '';
+    img.onerror = showInitials; // fotoğraf yüklenemezse boş kutu yerine baş harfe düş
+    img.src = m.img;
+    frameEl.appendChild(img);
+  } else {
+    showInitials();
+  }
   addHover(card);
   return card;
 }
