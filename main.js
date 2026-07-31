@@ -33,6 +33,7 @@ function veriBaslat() {
 
   function hideLoader() {
     loader.classList.add('hidden');
+    if (window._stopLoaderCanvas) window._stopLoaderCanvas();
     // Loader tam bu anda kapanıyor; sayaçlar da tam bu anda başlasın.
     // O ana kadar Firebase'den gerçek sayı gelmişse onu, gelmemişse
     // varsayılan (17000/50/4) sayıları kullan.
@@ -103,17 +104,27 @@ window.addEventListener('scroll',()=>{document.getElementById('nav').classList.t
   const c=document.getElementById('ld-canvas');if(!c)return;
   const ctx=c.getContext('2d');
   c.width=window.innerWidth;c.height=window.innerHeight;
-  const pts=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}));
-  function draw(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.strokeStyle=`rgba(45,221,212,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));pts.forEach(p=>{ctx.fillStyle='rgba(45,221,212,.45)';ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);}
-  draw();
+  const isSmall = window.innerWidth < 700;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const count = reduceMotion ? 0 : (isSmall ? 26 : 60);
+  const pts=Array.from({length:count},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}));
+  let rafId = null;
+  function draw(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.strokeStyle=`rgba(45,221,212,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));pts.forEach(p=>{ctx.fillStyle='rgba(45,221,212,.45)';ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();});rafId=requestAnimationFrame(draw);}
+  if (count > 0) draw();
+  // Loader kapandığında bu animasyon arka planda sonsuza kadar çalışmaya devam ediyordu
+  // (görünmez ama CPU/pil harcıyordu — özellikle mobilde hissedilir). Loader gizlenince durdur.
+  window._stopLoaderCanvas = function() { if (rafId) cancelAnimationFrame(rafId); rafId = null; };
 })();
 
 // ── HERO PARTICLE CANVAS ──
 (function(){
   const c=document.getElementById('particle-canvas');if(!c)return;
+  const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduceMotion) return;
   const ctx=c.getContext('2d');let W,H,pts,id;
+  function ptCount(){ return window.innerWidth < 700 ? 32 : 70; }
   function resize(){W=c.width=c.offsetWidth;H=c.height=c.offsetHeight;}
-  function init(){resize();pts=Array.from({length:70},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5}));}
+  function init(){resize();pts=Array.from({length:ptCount()},()=>({x:Math.random()*W,y:Math.random()*H,vx:(Math.random()-.5)*.3,vy:(Math.random()-.5)*.3,r:Math.random()*1.5+.5}));}
   function draw(){ctx.clearRect(0,0,W,H);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<-20)p.x=W+20;if(p.x>W+20)p.x=-20;if(p.y<-20)p.y=H+20;if(p.y>H+20)p.y=-20;});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<130){const ef=Math.min(a.x/70,1)*Math.min((W-a.x)/70,1)*Math.min(a.y/70,1)*Math.min((H-a.y)/70,1);ctx.strokeStyle=`rgba(45,221,212,${.1*(1-d/130)*ef})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));pts.forEach(p=>{const ef=Math.min(p.x/60,1)*Math.min((W-p.x)/60,1)*Math.min(p.y/60,1)*Math.min((H-p.y)/60,1);ctx.fillStyle=`rgba(45,221,212,${.55*ef})`;ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();});id=requestAnimationFrame(draw);}
   init();draw();window.addEventListener('resize',()=>{cancelAnimationFrame(id);init();draw();});
 })();

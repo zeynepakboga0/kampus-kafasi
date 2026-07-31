@@ -115,6 +115,12 @@ button { font-family: 'Outfit', sans-serif; }
 .loader-dot:nth-child(2) { animation-delay: .2s; }
 .loader-dot:nth-child(3) { animation-delay: .4s; }
 @keyframes dotP { 0%,100%{opacity:.2;transform:scale(.7)} 50%{opacity:1;transform:scale(1.4)} }
+@media (prefers-reduced-motion: reduce) {
+  .loader-glow { animation: none; opacity: .6; }
+  .loader-img-ring, .loader-img-ring2, .loader-img-ring3 { animation: none; }
+  .loader-title { animation: titleIn .01s forwards; background-position: 0% center; }
+  .loader-dot { animation: none; opacity: .8; }
+}
 
 
 /* ════════════════════════════════════════════════════════════
@@ -733,6 +739,18 @@ margin-bottom: 6px; white-space: normal;}
   .ev-desc { display: none; }
   .ev-meta { margin-bottom: 0; gap: 10px; }
   .ev-read-more { padding-top: 8px; font-size: .72rem; }
+
+  /* ── LOADER — mobil ── */
+  .loader-content { gap: 18px; padding: 0 24px; max-width: 100%; }
+  .loader-glow { width: 260px; height: 260px; }
+  .loader-logo-wrap { width: 66px; height: 66px; }
+  .loader-img { width: 66px; height: 66px; border-radius: 16px; }
+  .loader-img-ring  { inset: -8px;  border-radius: 22px; }
+  .loader-img-ring2 { inset: -15px; border-radius: 28px; }
+  .loader-img-ring3 { inset: -22px; border-radius: 34px; }
+  .loader-title { font-size: 2.4rem; line-height: 1.1; text-align: center; }
+  @keyframes divExpand { to { width: 130px; } }
+  .loader-sub { font-size: .62rem; letter-spacing: .14em; text-align: center; padding: 0 10px; }
 }
 
 @media (max-width: 520px) {
@@ -746,6 +764,11 @@ margin-bottom: 6px; white-space: normal;}
   .sponsor-modal-box { padding: 28px 18px; }
   .nav-logo { gap:6px; font-size:1.2rem; }
   .nav-logo img { width:22px; height:22px; }
+
+  /* ── LOADER — çok küçük ekranlar ── */
+  .loader-glow { width: 200px; height: 200px; }
+  .loader-title { font-size: 2rem; }
+  .loader-sub { font-size: .56rem; letter-spacing: .1em; }
 }
 
 
