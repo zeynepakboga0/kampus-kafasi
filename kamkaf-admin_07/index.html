@@ -484,6 +484,8 @@ img { max-width: 100%; display: block; }
   content:'✥'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%);
   color:var(--teal); font-size:1.05rem; text-shadow:0 1px 5px rgba(0,0,0,.9); pointer-events:none;
 }
+.crop-ratio-select { margin-left:8px; }
+.fg select.crop-ratio-select { width:auto; display:inline-block; padding:4px 8px; font-size:.68rem; text-transform:none; letter-spacing:normal; }
 /* ══════════════════════════════════════
    TABS
 ══════════════════════════════════════ */
@@ -874,12 +876,12 @@ img { max-width: 100%; display: block; }
       <div class="card">
         <div class="card-head"><div class="card-title"><span class="card-title-ico">📍</span>İletişim Bilgileri</div></div>
         <div class="g2">
-          <div class="fg"><label>Adres</label><input id="c-address" type="text" placeholder="Akdeniz Üniversitesi, Antalya"></div>
-          <div class="fg"><label>E-posta</label><input id="c-email" type="email" placeholder="info@kampuskafasi.com"></div>
-          <div class="fg"><label>Instagram (@kullanıcıadı)</label><input id="c-instagram" type="text" placeholder="kampuskafasii"></div>
-          <div class="fg"><label>WhatsApp Grup Linki</label><input id="c-whatsapp" type="url" placeholder="https://chat.whatsapp.com/..."></div>
-          <div class="fg"><label>LinkedIn URL</label><input id="c-linkedin" type="url" placeholder="https://linkedin.com/company/..."></div>
-          <div class="fg"><label>Google Maps URL</label><input id="c-maps" type="url" placeholder="https://maps.google.com/..."></div>
+          <div class="fg"><label>📍 Adres</label><input id="c-address" type="text" placeholder="Akdeniz Üniversitesi, Antalya"></div>
+          <div class="fg"><label>✉️ E-posta</label><input id="c-email" type="email" placeholder="info@kampuskafasi.com"></div>
+          <div class="fg"><label>📸 Instagram Kullanıcı Adı</label><input id="c-instagram" type="text" placeholder="kampuskafasii"></div>
+          <div class="fg"><label>💬 WhatsApp Grup Linki</label><input id="c-whatsapp" type="url" placeholder="https://chat.whatsapp.com/..."></div>
+          <div class="fg"><label>💼 LinkedIn URL</label><input id="c-linkedin" type="url" placeholder="https://linkedin.com/company/..."></div>
+          <div class="fg"><label>🗺️ Google Maps URL</label><input id="c-maps" type="url" placeholder="https://maps.google.com/..."></div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
           <button class="btn btn-p" onclick="saveContact()">Kaydet</button>
@@ -1856,7 +1858,7 @@ function renderTeamList(type, members, listEl) {
     div.innerHTML = `
       <div class="li-body">
         <div class="li-title">${esc(m.name)}${m.order?`<span class="badge" style="margin-left:6px;font-size:.58rem">#${m.order}</span>`:''}</div>
-        <div class="li-sub">${esc(m.role)}${m.dept?' · '+esc(m.dept):''}${m.ig?' · @'+esc(m.ig):''}${m.linkedin?' · LinkedIn':''}</div>
+        <div class="li-sub">${esc(m.role)}${m.dept?' · '+esc(m.dept):''}${m.ig?' · 📸 @'+esc(m.ig):''}${m.linkedin?' · 💼 LinkedIn':''}</div>
       </div>
       <div class="li-acts">
         <button class="btn btn-ghost btn-xs" onclick="editMember('${type}','${m.id}')">Düzenle</button>
@@ -1937,6 +1939,8 @@ window.saveMember = async function() {
     initials: document.getElementById('m-initials').value.trim(),
     dept:     document.getElementById('m-dept').value.trim(),
     img:      document.getElementById('m-img').value.trim(),
+    imgPos:   document.getElementById('m-imgpos').value.trim() || '50% 50%',
+    cropRatio: document.getElementById('m-cropmodal-ratio').value || '1',
     ig:       document.getElementById('m-ig').value.trim().replace('@',''),
     linkedin: document.getElementById('m-linkedin').value.trim(),
     order:    parseInt(document.getElementById('m-order').value) || 99,
