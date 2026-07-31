@@ -62,7 +62,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
     container.innerHTML = list.map(m => `
       <div class="board-card reveal">
         <div class="bc-img-wrap">
-          <img src="${m.img || assetPrefix + 'logo.jpg'}" alt="${esc(m.name)}">
+          <img src="${esc(m.img || assetPrefix + 'logo.jpg')}" alt="${esc(m.name)}">
         </div>
         <h3 class="bc-name">${esc(m.name)}</h3>
         <span class="bc-role">${esc(m.role)}</span>
