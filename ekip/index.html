@@ -48,51 +48,79 @@
 .board-card:hover::before,.admin-card:hover::before{opacity:1}
 .board-card:hover,.admin-card:hover{transform:translateY(-6px);border-color:rgba(45,216,240,.3);box-shadow:0 20px 40px rgba(0,0,0,.35),0 0 0 1px rgba(45,216,240,.1);z-index:5}
 
-.board-card{width:250px;flex-shrink:0;border-radius:24px;padding:38px 24px 28px}
-.admin-card{border-radius:20px;padding:28px 18px 22px}
+.board-card{width:250px;flex-shrink:0;border-radius:24px;padding:32px 24px 28px}
+.admin-card{border-radius:20px;padding:14px 16px 18px}
 
-/* Avatar — şekilsiz, arka plan boş/şeffaf; foto kendi silüetiyle görünür, sadece "nefes alır" */
-/* Avatar dış kabuk — sadece "nefes alma" pulsu burada */
-.board-avatar,.admin-avatar{background:transparent;display:flex;align-items:center;justify-content:center;font-weight:700;color:var(--cl);flex-shrink:0;position:relative;overflow:visible}
-.board-avatar{width:140px;height:140px;font-size:1.3rem;margin-bottom:20px}
-.admin-avatar{width:92px;height:92px;font-size:.95rem;margin-bottom:16px}
+/* Avatar — çerçevesiz. Fotoğrafın kendi içine gömülü "halka/aura" efekti
+   maskeyle GİZLENMİYOR, tamamen KIRPILIYOR: görsel yeterince yakınlaştırılıp
+   (--avatar-zoom) sabit, overflow:hidden bir pencereden gösteriliyor — halka
+   görünüm alanının dışında kaldığı için asla görünmez. Nefes alma / hover
+   büyümesi görselin kendisinde değil, bu sabit-kırpılmış pencerenin (frame)
+   TAMAMINDA çalışır; böylece büyürken de asla halka ortaya çıkmaz. */
+/* NOT: ../style.css içindeki eski .board-avatar/.admin-avatar tanımı
+   border-radius:50% + box-shadow:0 6px 24px rgba(45,216,240,.32) veriyor
+   (hover'da daha da güçlü). Arka planı şeffaf yapmak yetmiyor çünkü
+   box-shadow görünmez de olsa dairesel kutunun kenarında hâlâ çiziliyor —
+   halkanın gerçek kaynağı buydu. Aşağıda ikisini de sıfırlayıp iptal ediyoruz. */
+.board-avatar,.admin-avatar{background:transparent;border-radius:0;box-shadow:none;display:flex;align-items:flex-end;justify-content:center;font-weight:700;color:var(--cl);flex-shrink:0;position:relative;overflow:visible;z-index:1}
+.board-card:hover .board-avatar,.admin-card:hover .admin-avatar{box-shadow:none;transform:none}
+.board-avatar{width:150px;height:172px;font-size:1.3rem;margin-bottom:14px;--avatar-zoom:1.06}
+.admin-avatar{width:98px;height:112px;font-size:.95rem;margin-bottom:12px;--avatar-zoom:1.06}
 
-/* Çerçeve — sabit boyutlu, ASLA hareket etmez/büyümez, ölçeklenmez.
-   Sadece ALT yarısı gerçek bir daire kavisiyle keser (taşma asla olmaz);
-   ÜST tarafı ise açık bırakılır ki karakter nefes alıp büyüdüğünde üstten
-   çerçeveyi aşıp "dışarı çıkıyormuş" gibi görünsün. Çerçeve görsel olarak
-   karakterin arkasında/altında kalan bir ışık halkasıdır (drop-shadow).
-   140px kutu için: yarıçap 70 → alt yarım daire M0,70 A70,70 ... */
-.board-frame,.admin-frame{width:100%;height:100%;border-radius:50%;overflow:visible;filter:drop-shadow(0 0 16px rgba(45,216,240,.26)) drop-shadow(0 8px 18px rgba(0,0,0,.38));transition:filter .35s ease}
-.board-frame{clip-path:path('M0,70 A70,70 0 0 0 140,70 L140,-1000 L0,-1000 Z')}
-.admin-frame{clip-path:path('M0,46 A46,46 0 0 0 92,46 L92,-1000 L0,-1000 Z')}
-.board-card:hover .board-frame,.admin-card:hover .admin-frame{filter:drop-shadow(0 0 26px rgba(45,216,240,.5)) drop-shadow(0 10px 24px rgba(0,0,0,.45))}
+/* Sadece ayağın altında gerçekçi, dar, koyu bir zemin gölgesi */
+.board-avatar::after,.admin-avatar::after{content:'';position:absolute;left:50%;bottom:6px;transform:translateX(-50%);width:46%;height:11px;border-radius:50%;background:radial-gradient(ellipse,rgba(0,0,0,.6) 0%,rgba(0,0,0,.25) 55%,transparent 82%);filter:blur(4px);z-index:0;opacity:.8;transition:opacity .35s ease,width .35s ease}
+.admin-avatar::after{width:50%;height:8px;bottom:3px}
+.board-card:hover .board-avatar::after,.admin-card:hover .admin-avatar::after{opacity:1;width:52%}
 
-/* Nefes alma animasyonu karakterin (foto/baş harf) kendisinde çalışır;
-   transform-origin alt kısımda olduğu için büyüme yukarı doğru olur.
-   Alt kısım çerçevenin clip-path'indeki daire kavisiyle her zaman birebir
-   örtüştüğü için taşma olmaz; üst kısım ise açık bırakıldığı için karakter
-   büyüdükçe çerçeveden dışarı taşıp "çıkar" gibi görünür. */
-.board-avatar img,.admin-avatar img{width:100%;height:100%;object-fit:cover;display:block;image-rendering:pixelated;image-rendering:-moz-crisp-edges;image-rendering:crisp-edges;transition:filter .35s ease;transform-origin:center bottom;animation:avatarBreathe var(--breathe-duration,3.5s) ease-in-out infinite;animation-delay:var(--breathe-delay,0s)}
-.board-avatar span,.admin-avatar span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;letter-spacing:.05em;transform-origin:center bottom;animation:avatarBreathe var(--breathe-duration,3.5s) ease-in-out infinite;animation-delay:var(--breathe-delay,0s)}
+/* Sabit kırpma penceresi: overflow:hidden — halkayı fiziksel olarak keser.
+   Alt kenarı ayrıca yumuşak bir gradyanla karta karıştırır. */
+.board-frame,.admin-frame{width:100%;height:100%;position:relative;z-index:1;overflow:hidden;border-radius:18px;transform-origin:center bottom;animation:avatarBreathe var(--breathe-duration,3.5s) ease-in-out infinite;animation-delay:var(--breathe-delay,0s);-webkit-mask-image:linear-gradient(to bottom,#000 78%,transparent 100%);mask-image:linear-gradient(to bottom,#000 78%,transparent 100%)}
+.admin-frame{border-radius:14px}
+.board-card:hover .board-frame,.admin-card:hover .admin-frame{animation-name:avatarBreatheHover}
 
-@keyframes avatarBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
-/* Hover: nefes alma DURMAZ, devam eder — sadece daha büyük bir aralıkta "nefes alır" (çerçeveden daha fazla taşar) */
-@keyframes avatarBreatheHover{0%,100%{transform:scale(1.06)}50%{transform:scale(1.18)}}
-.board-card:hover .board-avatar img,.admin-card:hover .admin-avatar img{animation-name:avatarBreatheHover;filter:brightness(1.08) saturate(1.12)}
-.board-card:hover .board-avatar span,.admin-card:hover .admin-avatar span{animation-name:avatarBreatheHover;color:#fff}
-@media (prefers-reduced-motion:reduce){.board-avatar img,.admin-avatar img,.board-avatar span,.admin-avatar span{animation:none}}
+/* Görsel her zaman sabit oranda yakınlaştırılmış durur — halka bu yakınlaştırma
+   sayesinde çerçevenin dışında kalır ve overflow:hidden onu keser. */
+.board-avatar img,.admin-avatar img{width:100%;height:100%;object-fit:cover;object-position:center 15%;display:block;transform:scale(var(--avatar-zoom));transition:filter .35s ease}
+.board-card:hover .board-avatar img,.admin-card:hover .admin-avatar img{filter:brightness(1.08) saturate(1.12)}
+
+.board-avatar span,.admin-avatar span{width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;letter-spacing:.05em}
+.board-card:hover .board-avatar span,.admin-card:hover .admin-avatar span{color:#fff}
+
+@keyframes avatarBreathe{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+/* Hover: nefes alma DURMAZ, devam eder — kırpılmış pencere kartın dışına taşarak büyür */
+@keyframes avatarBreatheHover{0%,100%{transform:scale(1.3) translateY(-5px)}50%{transform:scale(1.36) translateY(-8px)}}
+@media (prefers-reduced-motion:reduce){.board-frame,.admin-frame{animation:none}}
 @media(max-width:620px){
-  .board-avatar{width:104px;height:104px;font-size:1.05rem}
-  .admin-avatar{width:76px;height:76px;font-size:.82rem}
-  .board-frame{clip-path:path('M0,52 A52,52 0 0 0 104,52 L104,-1000 L0,-1000 Z')}
-  .admin-frame{clip-path:path('M0,38 A38,38 0 0 0 76,38 L76,-1000 L0,-1000 Z')}
+  .board-avatar{width:114px;height:130px;font-size:1.05rem}
+  .admin-avatar{width:82px;height:94px;font-size:.82rem}
 }
 @media(max-width:420px){
-  .board-avatar{width:92px;height:92px}
-  .admin-avatar{width:68px;height:68px}
-  .board-frame{clip-path:path('M0,46 A46,46 0 0 0 92,46 L92,-1000 L0,-1000 Z')}
-  .admin-frame{clip-path:path('M0,34 A34,34 0 0 0 68,34 L68,-1000 L0,-1000 Z')}
+  .board-avatar{width:100px;height:114px}
+  .admin-avatar{width:74px;height:84px}
+}
+
+/* ADMIN KARTLARI — güncelleme: kısa kart, karakterin arkasında siyah silüet gölgesi
+   (büyüdükçe koyulaşıp genişliyor), hoverda "karttan çıkarcasına" YUMUŞAK büyüme.
+   Büyüme, nefes alma animasyonuyla çakışmasın diye ayrı bir katmanda (avatar)
+   transition ile yapılıyor; frame'in kendi nefes animasyonu hoverda da aynı
+   ritimde sürüyor, böylece sıçrama olmuyor. */
+.admin-avatar{margin-bottom:10px;transition:transform .75s cubic-bezier(.25,.75,.4,1)}
+
+/* Karakterin arkasındaki siyah silüet gölgesi — fotoğrafın tam arkasında, bulanık,
+   büyüdüğünde daha koyu ve daha geniş */
+.admin-avatar::before{content:'';position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:82%;height:88%;border-radius:48% 48% 44% 44%/56% 56% 40% 40%;background:radial-gradient(ellipse at center,rgba(0,0,0,.55) 0%,rgba(0,0,0,.32) 45%,transparent 78%);filter:blur(9px);z-index:0;opacity:.55;transition:opacity .75s cubic-bezier(.25,.75,.4,1),width .75s cubic-bezier(.25,.75,.4,1),height .75s cubic-bezier(.25,.75,.4,1),filter .75s cubic-bezier(.25,.75,.4,1)}
+.admin-card:hover .admin-avatar::before{opacity:.9;width:100%;height:106%;filter:blur(13px)}
+
+.admin-frame{box-shadow:0 14px 26px -8px rgba(0,0,0,.6),0 5px 14px -4px rgba(0,0,0,.4);transition:box-shadow .75s cubic-bezier(.25,.75,.4,1)}
+.admin-card:hover .admin-frame{animation-name:avatarBreathe;box-shadow:0 20px 36px -10px rgba(0,0,0,.7),0 8px 18px -6px rgba(0,0,0,.5)}
+.admin-card:hover .admin-avatar{transform:scale(1.13) translateY(-6px);transform-origin:center bottom;z-index:6}
+@media(max-width:620px){
+  .admin-card{padding:12px 12px 16px}
+  .admin-card:hover .admin-avatar{transform:scale(1.1) translateY(-5px)}
+}
+@media(max-width:420px){
+  .admin-card{padding:10px 10px 14px}
+  .admin-card:hover .admin-avatar{transform:scale(1.08) translateY(-4px)}
 }
 
 /* İsim */
@@ -175,18 +203,18 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   .board-row{flex-wrap:wrap;gap:12px}
   .board-card{flex:0 0 calc(50% - 6px);width:calc(50% - 6px);max-width:none}
   .board-row.solo .board-card{flex:0 0 auto;width:200px}
-  .admin-grid{grid-template-columns:repeat(2,1fr)}
+  .admin-grid{grid-template-columns:repeat(2,1fr);gap:14px}
   .sponsor-btns{flex-direction:column;align-items:center}
 }
 @media(max-width:420px){
   .board-row{gap:10px}
   .board-card{flex:0 0 calc(50% - 5px);width:calc(50% - 5px)}
   .board-row.solo .board-card{width:180px;flex:0 0 auto}
-  .admin-grid{grid-template-columns:repeat(2,1fr)}
+  .admin-grid{grid-template-columns:repeat(2,1fr);gap:12px}
 }
 @media(max-width:360px){
   .board-card{flex:0 0 calc(50% - 4px);width:calc(50% - 4px)}
-  .admin-grid{grid-template-columns:repeat(2,1fr)}
+  .admin-grid{grid-template-columns:repeat(2,1fr);gap:10px}
 }
 
 </style>
