@@ -2575,8 +2575,17 @@ window.handleFilePick = function(fileInputId, urlInputId, previewId, maxDim = 12
       }
       const canvas = document.createElement('canvas');
       canvas.width = width; canvas.height = height;
-      canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+      const ctx = canvas.getContext('2d');
+      // Şeffaflığı destekleyen formatlar (png, webp, gif) siyah zemine boyanmadan olduğu gibi korunur.
+      const keepTransparency = /^image\/(png|webp|gif)$/.test(file.type);
+      if (!keepTransparency) {
+        // Şeffaflığı olmayan formatlarda (jpeg vb.) JPEG çıktısı beyaz zemin üzerine çizilir.
+        ctx.fillStyle = '#fff';
+        ctx.fillRect(0, 0, width, height);
+      }
+      ctx.drawImage(img, 0, 0, width, height);
 
+      const outType = keepTransparency ? 'image/png' : 'image/jpeg';
       canvas.toBlob(async (blob) => {
         if (!blob) {
           toast('Görsel işlenemedi, başka bir dosya dene.', 'err');
@@ -2596,7 +2605,7 @@ window.handleFilePick = function(fileInputId, urlInputId, previewId, maxDim = 12
         } finally {
           fileInput.value = '';
         }
-      }, 'image/jpeg', quality);
+      }, outType, keepTransparency ? undefined : quality);
     };
     img.onerror = () => toast('Görsel okunamadı, başka bir dosya dene.', 'err');
     img.src = e.target.result;
