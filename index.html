@@ -178,12 +178,7 @@
   <div class="modal-box">
     <button class="modal-x" onclick="closeModal()">✕</button>
     <div class="modal-scroll">
-      <div class="modal-hero">
-        <div class="modal-hero-glow"></div>
-        <img id="m-img" class="modal-hero-img" alt="">
-        <div class="modal-hero-emoji" id="m-emoji">🎉</div>
-        <div class="modal-hero-overlay"></div>
-      </div>
+      <div class="ev-gallery" id="m-gallery"></div>
       <div class="modal-content">
         <div class="modal-tag-row">
           <span class="modal-cat-badge" id="m-cat">Kategori</span>
@@ -386,16 +381,7 @@ function openModal(id) {
   const isPast = new Date(ev.date) < now;
   const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
 
-  const imgEl = document.getElementById('m-img');
-  const emojiEl = document.getElementById('m-emoji');
-  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-    imgEl.src = ev.img; imgEl.style.display = 'block';
-    emojiEl.style.display = 'none';
-  } else {
-    imgEl.style.display = 'none';
-    emojiEl.style.display = 'flex';
-    emojiEl.textContent = EMOJI[ev.cat]||'📌';
-  }
+  window.kkRenderEventGallery(document.getElementById('m-gallery'), ev);
 
   document.getElementById('m-cat').textContent   = (EMOJI[ev.cat]||'') + ' ' + ev.cat;
   document.getElementById('m-title').textContent = ev.title;
