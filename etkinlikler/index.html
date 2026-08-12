@@ -2,113 +2,16 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://www.gstatic.com https://*.googleapis.com https://*.firebaseio.com ...https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Etkinlikler — Kampüs Kafası</title>
-<link rel="icon" type="image/jpeg" href="../logo.jpg">
+<title>Kampüs Kafası — Antalya</title>
+<link rel="icon" type="image/jpeg" href="logo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="../style.css">
-<style>
-/* EVENTS SECTION */
-#events-page{padding:36px 32px 56px;background:rgba(7,9,11,.92)}
+<link rel="stylesheet" href="style.css">
 
-/* DIVIDER */
-.ev-section-divider{display:flex;align-items:center;gap:16px;margin:20px 0 28px}
-.ev-section-divider-label{font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;white-space:nowrap;padding:5px 14px;border-radius:100px;border:1px solid var(--bd)}
-.ev-section-divider-label.upcoming{color:var(--cl);border-color:rgba(45,216,240,.3);background:rgba(45,216,240,.06)}
-.ev-section-divider-label.past{color:var(--muted);border-color:var(--bd);background:rgba(255,255,255,.03)}
-.ev-section-divider::before,.ev-section-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent)}
 
-/* EVENTS GRID */
-.events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
 
-/* Kartın kendi tasarımı artık sadece ../style.css içindeki
-   "ETKİNLİK KARTI — BİLET TASARIMI" bloğunda tutulur (event-card.js
-   .event-card sınıfını üretiyor). Buradaki eski .ev-card kuralları
-   kaldırıldı — aynı alt sınıf adlarını (.ev-thumb, .ev-body, .ev-title...)
-   tekrar tanımladıkları için ortak tasarımın üstüne yazıp onu görünmez
-   kılıyorlardı. card-enter animasyon sınıfı sayfaya özel olduğu için kaldı. */
-.card-enter{transform:translateY(16px)}
-
-/* LOAD MORE */
-.load-more-wrap{text-align:center;margin-top:36px}
-.btn-load-more{display:inline-flex;align-items:center;gap:8px;border:1.5px solid rgba(45,216,240,.28);color:var(--cl);padding:11px 28px;border-radius:100px;font-weight:600;font-size:.88rem;background:none;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
-.btn-load-more:hover{background:rgba(45,216,240,.07);border-color:var(--cl);transform:translateY(-2px)}
-.btn-load-more.hidden{display:none}
-.no-events{grid-column:1/-1;text-align:center;padding:56px 20px;color:rgba(255,255,255,.18);font-size:.92rem}
-
-/* FOLLOW CTA */
-#follow-cta{padding:56px 32px 56px;background:rgba(7,9,11,.95);border-top:1px solid var(--bd)}
-.follow-inner{max-width:860px;margin:0 auto}
-.follow-top{text-align:center;margin-bottom:44px}
-.follow-top h3{font-family:'Dancing Script',cursive;font-size:clamp(2rem,4vw,3rem);font-weight:700;background:linear-gradient(135deg,var(--cl) 0%,#fff 50%,var(--cl) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmerAnim 3s linear infinite;margin-bottom:10px}
-.follow-top p{font-size:.93rem;color:rgba(255,255,255,.38);line-height:1.75;max-width:520px;margin:0 auto}
-.follow-channels{display:grid;grid-template-columns:1fr 1fr;gap:18px}
-.follow-channel{display:flex;align-items:center;gap:20px;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:28px 26px;transition:transform .28s,border-color .28s,box-shadow .28s;text-decoration:none;color:var(--white)}
-.follow-channel:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
-.follow-channel.ig:hover{border-color:rgba(225,48,108,.4)}
-.follow-channel.wa:hover{border-color:rgba(37,211,102,.4)}
-.fc-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-.follow-channel.ig .fc-icon{background:linear-gradient(135deg,rgba(225,48,108,.15),rgba(131,58,180,.15));border:1px solid rgba(225,48,108,.25)}
-.follow-channel.wa .fc-icon{background:linear-gradient(135deg,rgba(37,211,102,.12),rgba(18,140,126,.15));border:1px solid rgba(37,211,102,.22)}
-.fc-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:3px;opacity:.5}
-.fc-name{font-size:1.05rem;font-weight:800;margin-bottom:3px}
-.fc-desc{font-size:.79rem;color:rgba(255,255,255,.35);line-height:1.5}
-.follow-channel.ig .fc-label,.follow-channel.ig .fc-name{color:#e1306c}
-.follow-channel.wa .fc-label,.follow-channel.wa .fc-name{color:#25d366}
-
-/* MODAL */
-#ev-modal{display:none;position:fixed;inset:0;z-index:600;background:rgba(0,0,0,.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .28s}
-#ev-modal.open{display:flex;opacity:1;pointer-events:all}
-.modal-box{background:var(--dark);border:1px solid rgba(45,216,240,.2);border-radius:28px;max-width:680px;width:100%;box-shadow:0 60px 120px rgba(0,0,0,.7),0 0 0 1px rgba(45,216,240,.08);overflow:hidden;position:relative;transform:scale(.94) translateY(16px);transition:transform .32s cubic-bezier(.34,1.46,.64,1);max-height:92vh;display:flex;flex-direction:column}
-.modal-scroll{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}
-#ev-modal.open .modal-box{transform:scale(1) translateY(0)}
-.modal-hero{position:relative;width:100%;aspect-ratio:4/5;max-height:70vh;background:linear-gradient(135deg,#0c1b24,#08121a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-.modal-hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:none}
-.modal-hero-emoji{font-size:5rem;z-index:1;filter:drop-shadow(0 0 30px rgba(45,216,240,.3));display:flex;align-items:center;justify-content:center}
-.modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--dark) 100%);z-index:2}
-.modal-hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(45,216,240,.12) 0%,transparent 65%);z-index:0}
-.modal-close-btn{position:absolute;top:16px;right:16px;z-index:10;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;backdrop-filter:blur(8px)}
-.modal-close-btn:hover{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.3);color:#fff}
-.modal-content{padding:0 30px 30px}
-.modal-tag-row{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding-top:8px;flex-wrap:wrap}
-.modal-cat-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 13px;border-radius:100px;font-size:.68rem;font-weight:700;background:rgba(45,216,240,.12);color:var(--cl);border:1px solid rgba(45,216,240,.25);text-transform:uppercase;letter-spacing:.06em}
-.modal-status-badge{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:100px;font-size:.65rem;font-weight:700;background:rgba(255,255,255,.05);color:rgba(255,255,255,.35);border:1px solid rgba(255,255,255,.08)}
-.modal-title{font-size:clamp(1.3rem,3vw,1.85rem);font-weight:900;color:var(--white);line-height:1.2;margin-bottom:18px;letter-spacing:-.02em}
-.modal-info-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px;background:rgba(255,255,255,.025);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:16px 18px}
-.modal-info-item{display:flex;flex-direction:column;gap:3px}
-.modal-info-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.25)}
-.modal-info-value{font-size:.88rem;font-weight:600;color:rgba(255,255,255,.75)}
-.modal-divider{height:1px;background:linear-gradient(90deg,transparent,rgba(45,216,240,.15),transparent);margin-bottom:18px}
-.modal-desc-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:rgba(255,255,255,.25);margin-bottom:8px}
-.modal-desc-text{font-size:.92rem;color:rgba(255,255,255,.55);line-height:1.85;white-space:pre-line;overflow-wrap:break-word;word-break:break-word}
-
-/* RESPONSIVE — sadece bu sayfaya özel */
-@media(max-width:960px){
-  .events-grid{grid-template-columns:repeat(2,1fr);gap:14px}
-  #events-page,#follow-cta{padding-left:18px;padding-right:18px}
-.page-hero{padding:85px 18px 56px}
-}
-@media(max-width:700px){
-  .events-grid{grid-template-columns:1fr}
-}
-@media(max-width:520px){
-  .follow-channels{grid-template-columns:1fr}
-}
-
-/* MODAL SCROLL FİX */
-#ev-modal{align-items:flex-start!important;padding-top:40px!important}
-#ev-modal .modal-box{max-height:88vh!important}
-#ev-modal .modal-scroll{overflow-y:scroll!important;overflow-x:hidden!important}
-#ev-modal .modal-content{overflow-wrap:break-word!important;word-break:break-word!important}
-#ev-modal .modal-desc-text{white-space:pre-line!important;overflow-wrap:break-word!important;word-break:break-word!important}
-
-@media(max-width:960px){
-  .page-hero{padding:85px 18px 56px}
-}
-
-</style>
 </head>
 <body>
 
@@ -119,30 +22,35 @@
   <div class="loader-glow"></div>
   <div class="loader-content">
     <div class="loader-logo-wrap">
-      <img src="../logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
-      <div class="loader-img-ring"></div><div class="loader-img-ring2"></div><div class="loader-img-ring3"></div>
+      <img src="logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
+      <div class="loader-img-ring"></div>
+      <div class="loader-img-ring2"></div>
+      <div class="loader-img-ring3"></div>
     </div>
     <div class="loader-text-wrap">
       <div class="loader-title">Kampüs Kafası</div>
       <div class="loader-divider"></div>
-      <div class="loader-sub">Etkinlikler</div>
-      <div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
+      <div class="loader-sub">Akdeniz Üniversitesi · Antalya</div>
+      <div class="loader-dots">
+        <div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- NAV -->
 <nav id="nav">
-  <a href="../" class="nav-logo"><img src="../logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
+  <a href="./" class="nav-logo" id="nav-logo-link"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
   <ul class="nav-links">
-    <li><a href="../">Ana Sayfa</a></li>
-    <li><a href="../hakkimizda/">Hakkımızda</a></li>
-    <li><a href="../etkinlikler/" class="active">Etkinlikler</a></li>
-    <li><a href="../ekip/">Ekip</a></li>
-    <li><a href="../iletisim/">İletişim</a></li>
-    <li><a href="../sponsorluk/">Sponsorluk</a></li>
+    <li><a href="./" class="active">Ana Sayfa</a></li>
+    <li><a href="hakkimizda/">Hakkımızda</a></li>
+    <li><a href="etkinlikler/">Etkinlikler</a></li>
+    <li><a href="ekip/">Ekip</a></li>
+    <li><a href="iletisim/">İletişim</a></li>
+    <li><a href="sponsorluk/">Sponsorluk</a></li>
   </ul>
   <div class="nav-right">
+<a href="oyun/" class="nav-game-btn"><span class="ngb-dot"></span>🏃 Kampüste Koş</a>
     <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
   </div>
 </nav>
@@ -152,16 +60,16 @@
 <div id="drawer-overlay" onclick="closeDrawer()"></div>
 <aside id="drawer">
   <div class="drawer-top">
-    <div class="drawer-logo"><img src="../logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
+    <div class="drawer-logo"><img src="logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
     <button class="drawer-close" onclick="closeDrawer()">✕</button>
   </div>
   <nav class="drawer-links">
-    <a href="../" class="drawer-link" onclick="closeDrawer()">Ana Sayfa</a>
-    <a href="../hakkimizda/" class="drawer-link" onclick="closeDrawer()">Hakkımızda</a>
-    <a href="../etkinlikler/" class="drawer-link active" onclick="closeDrawer()">Etkinlikler</a>
-    <a href="../ekip/" class="drawer-link" onclick="closeDrawer()">Ekip</a>
-    <a href="../iletisim/" class="drawer-link" onclick="closeDrawer()">İletişim</a>
-    <a href="../sponsorluk/" class="drawer-link">Sponsorluk</a>
+    <a href="./" class="drawer-link active" onclick="closeDrawer()">Ana Sayfa</a>
+    <a href="hakkimizda/" class="drawer-link" onclick="closeDrawer()">Hakkımızda</a>
+    <a href="etkinlikler/" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
+    <a href="ekip/" class="drawer-link" onclick="closeDrawer()">Ekip</a>
+    <a href="iletisim/" class="drawer-link" onclick="closeDrawer()">İletişim</a>
+    <a href="sponsorluk/" class="drawer-link">Sponsorluk</a>
   </nav>
   <div class="drawer-bottom">
     <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="drawer-ig">
@@ -172,114 +80,205 @@
       <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       WhatsApp Grubuna Katıl
     </a>
-    
-</div>
+    <script>
+    (function(){
+      try{
+        /* wa linki veriBaslat() içinde applySettings() ile güncelleniyor */
+      }catch(e){}
+    })();
+    </script>
+  </div>
 </aside>
 
-<!-- PAGE HERO -->
-<div class="page-hero">
-  <div class="page-hero-grid"></div>
-  <div class="page-hero-inner">
-    <div class="page-eyebrow"><span class="page-dot"></span><span id="events-badge-text">Takvimimiz  · Kampüs Kafası</span></div>
-    <h1 class="page-title">Etkin<span>likler</span></h1>
-    <p class="page-subtitle" id="events-hero-sub">Yaklaşan etkinliklerimizi kaçırma, geçmişe bak — topluluğumuz her zaman aktif.</p>
-  </div>
-</div>
-
-<!-- ETKİNLİKLER -->
-<section id="events-page">
-  <div class="section-wrap">
-
-    <!-- YAKLAŞAN -->
-    <div class="ev-section-divider">
-      <span class="ev-section-divider-label upcoming">🟢 Yaklaşan Etkinlikler</span>
+<!-- HERO -->
+<section id="hero">
+  <canvas id="particle-canvas"></canvas>
+  <div class="blob blob1"></div><div class="blob blob2"></div><div class="blob blob3"></div>
+  <div class="hero-grid-bg"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="hero-dot"></span><span id="hero-badge-text">Akdeniz Üniversitesi · Antalya</span></div>
+      <h1 class="hero-title-dynamic" id="hero-title-el">
+        <span class="htd-static">Kampüs Hayatının</span>
+        <span class="htd-chip">
+          <span class="htd-chip-glow"></span>
+          <span class="htd-dot"></span>
+          <span class="htd-rotator" id="htd-rotator">
+            <span class="htd-word" id="htd-word">Kalbi</span>
+          </span>
+        </span>
+        <span class="htd-measure" id="htd-measure" aria-hidden="true"></span>
+      </h1>
+      <p class="hero-sub" id="hero-sub-el">Üniversite hayatının tam merkezinde. WhatsApp gruplarımızda 17.000'den fazla öğrenciyle buluşuyor, yeni gelenlere kampüs ve şehir hayatında yol gösteriyoruz.</p>
+      <div class="hero-btns">
+        <a href="etkinlikler/" class="btn-primary">Etkinlikleri Gör</a>
+        <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>@kampuskafasii
+        </a>
+        <a href="#" id="wa-btn-hero" class="btn-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>WhatsApp
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item"><div class="stat-num" id="sc-members">0</div><div class="stat-lbl">Üye</div></div>
+        <div class="stat-item"><div class="stat-num" id="sc-events">0</div><div class="stat-lbl">Etkinlik</div></div>
+        <div class="stat-item"><div class="stat-num" id="sc-year">0</div><div class="stat-lbl">Yıl</div></div>
+      </div>
     </div>
-    <div class="events-grid" id="upcoming-grid"></div>
-    <div class="load-more-wrap" id="upcoming-more-wrap">
-      <button class="btn-load-more btn-load-more hidden" id="upcoming-more-btn" onclick="loadMoreUpcoming()">
-        Daha Fazla Göster
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
+    <div class="hero-visual">
+      <div class="logo-glow-bg"></div>
+      <div class="orbit orbit-1"></div>
+      <div class="orbit orbit-2"></div>
+      <div class="orbit orbit-3"></div>
+      <img src="logo.jpg" class="hero-logo-img" alt="Kampüs Kafası" onerror="this.style.display='none'">
     </div>
-
-    <!-- GEÇMİŞ -->
-    <div class="ev-section-divider">
-      <span class="ev-section-divider-label past">⏱ Geçmiş Etkinlikler</span>
-    </div>
-    <div class="events-grid" id="past-grid"></div>
-    <div class="load-more-wrap" id="past-more-wrap">
-      <button class="btn-load-more hidden" id="past-more-btn" onclick="loadMorePast()">
-        Daha Fazla Göster
-        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>
-      </button>
-    </div>
-
   </div>
 </section>
 
-<!-- TAKİP ET CTA -->
-<section id="follow-cta">
-  <div class="follow-inner">
-    <div class="follow-top">
-      <h3>Etkinliklerden Haberdar Ol</h3>
-      <p>Tüm duyurular, kayıt linkleri ve anlık güncellemeler için bizi sosyal medyada takip et — yeni etkinlikleri ilk sen öğren.</p>
+<!-- BİZ KİMİZ -->
+<section id="who">
+  <div class="section-wrap">
+    <div class="reveal">
+      <span class="section-lbl">Biz Kimiz?</span>
+      <h2 class="section-h" style="color:var(--white)">Kampüs Kafası ile Tanış</h2>
     </div>
-    <div class="follow-channels">
-      <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="follow-channel ig">
-        <div class="fc-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="#e1306c" stroke="none"/></svg>
+    <div class="who-inner" style="grid-template-columns:1fr;max-width:760px">
+      <div class="reveal">
+        <p style="font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.9;margin-bottom:20px">Kampüs Kafası, Gençlik ve Spor Bakanlığı (GSB) ile ortak projeler yürüten, resmi olarak tanınan bir Akdeniz Üniversitesi öğrenci topluluğudur. Öğrencilerin birbirine bağlandığı, yeni gelenlere yol gösterdiği ve kampüs hayatını kolaylaştırdığı bir platform olarak faaliyet gösteriyoruz.</p>
+        <p style="font-size:1.05rem;color:rgba(255,255,255,.55);line-height:1.9;margin-bottom:32px">WhatsApp ağımız üzerinden 17.000'den fazla öğrenciye ulaşıyor; yurt, şehir ve kampüs hayatında anlık bilgi sunuyoruz. Etkinlikler, geziler, anketler ve partilerle öğrenci yaşamını daha renkli kılıyoruz.</p>
+        <div style="margin-top:8px">
+          <a href="hakkimizda/" class="btn-outline">Daha Fazla Bilgi →</a>
         </div>
-        <div>
-          <div class="fc-label">Instagram</div>
-          <div class="fc-name">@kampuskafasii</div>
-          <div class="fc-desc">Etkinlik duyuruları ve anlık güncellemeler</div>
-        </div>
-      </a>
-      <a href="#" id="wa-cta-btn" class="follow-channel wa">
-        <div class="fc-icon">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="#25d366"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-        </div>
-        <div>
-          <div class="fc-label">WhatsApp</div>
-          <div class="fc-name">WhatsApp Grubuna Katıl</div>
-          <div class="fc-desc">17.000+ öğrenciyle aynı grupta buluş</div>
-        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ETKİNLİKLER (PREVIEW) -->
+<section id="events">
+  <div class="section-wrap">
+    <div class="events-header reveal">
+      <div>
+        <span class="section-lbl">Neler Oluyor?</span>
+        <h2 class="section-h" style="color:var(--white)">Etkinlikler</h2>
+      </div>
+    </div>
+    <div class="events-grid" id="events-grid"></div>
+    <div class="events-cta reveal">
+      <a href="etkinlikler/" class="btn-events-page">
+        Tüm Etkinlikleri Gör
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
 </section>
 
 <!-- EVENT MODAL -->
-<div id="ev-modal" onclick="if(event.target===this)closeModal()">
+<div id="event-modal" onclick="closeModalOutside(event)">
   <div class="modal-box">
-    <button class="modal-close-btn" onclick="closeModal()">✕</button>
+    <button class="modal-x" onclick="closeModal()">✕</button>
     <div class="modal-scroll">
-    <div class="modal-hero">
-      <div class="modal-hero-glow"></div>
-      <img id="modal-img" class="modal-hero-img" alt="">
-      <div class="modal-hero-emoji" id="modal-emoji"></div>
-      <div class="modal-hero-overlay"></div>
-    </div>
-    <div class="modal-content">
-      <div class="modal-tag-row">
-        <span class="modal-cat-badge" id="modal-cat"></span>
-        <span class="modal-status-badge" id="modal-status"></span>
-      </div>
-      <div class="modal-title" id="modal-title"></div>
-      <div class="modal-info-grid">
-        <div class="modal-info-item">
-          <span class="modal-info-label">📅 Tarih</span>
-          <span class="modal-info-value" id="modal-date"></span>
+      <div class="ev-gallery" id="m-gallery"></div>
+      <div class="modal-content">
+        <div class="modal-tag-row">
+          <span class="modal-cat-badge" id="m-cat">Kategori</span>
+          <span class="modal-status-badge" id="m-status">Yaklaşan</span>
         </div>
-        <div class="modal-info-item" id="modal-loc-wrap" style="display:none">
-          <span class="modal-info-label">📍 Konum</span>
-          <span class="modal-info-value" id="modal-loc"></span>
+        <div class="modal-title" id="m-title">Etkinlik</div>
+        <div class="modal-info-grid">
+          <div class="modal-info-item">
+            <span class="modal-info-label">📅 Tarih</span>
+            <span class="modal-info-value" id="m-date">—</span>
+          </div>
+          <div class="modal-info-item" id="m-loc-wrap">
+            <span class="modal-info-label">📍 Konum</span>
+            <span class="modal-info-value" id="m-loc">—</span>
+          </div>
         </div>
+        <div class="modal-divider"></div>
+        <div class="modal-desc-label">Açıklama</div>
+        <div class="modal-desc" id="m-desc"></div>
       </div>
-      <div class="modal-divider"></div>
-      <div class="modal-desc-label">Açıklama</div>
-      <div class="modal-desc-text" id="modal-desc"></div>
     </div>
+  </div>
+</div>
+
+<!-- İLETİŞİM -->
+<section id="contact">
+  <div class="section-wrap">
+    <div class="reveal" style="text-align:center">
+      <span class="section-lbl" style="justify-content:center;display:flex">Bize Ulaşın</span>
+      <h2 class="section-h iletisim-gradient" style="font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,5vw,4rem)">İletişim</h2>
+      <p class="contact-intro">Sorularınız, önerileriniz veya iş birliği teklifleriniz için bizimle iletişime geçin.</p>
+    </div>
+    <div class="contact-cards reveal">
+      <a href="mailto:iletisim@kampuskafasi.com" id="email-link" class="contact-card">
+        <div class="cc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+        </div>
+        <div class="cc-label">E-POSTA</div>
+        <div class="cc-value" id="email-sub-text">iletisim@kampuskafasi.com</div>
+      </a>
+      <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="cc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        </div>
+        <div class="cc-label">INSTAGRAM</div>
+        <div class="cc-value">@kampuskafasii</div>
+      </a>
+      <a href="#" id="wa-link" class="contact-card">
+        <div class="cc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        </div>
+        <div class="cc-label">WHATSAPP</div>
+        <div class="cc-value" id="wa-value-text">Grubumuza Katıl</div>
+      </a>
+      <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer" class="contact-card">
+        <div class="cc-icon-wrap">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6zM2 9h4v12H2z"/><circle cx="4" cy="4" r="2"/></svg>
+        </div>
+        <div class="cc-label">LİNKEDİN</div>
+        <div class="cc-value">Kampüs Kafası</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- SPONSOR MODAL -->
+<div id="sponsor-modal" onclick="closeSponsorOutside(event)">
+  <div class="sponsor-modal-box">
+    <button class="sponsor-modal-close" onclick="closeSponsor()">✕</button>
+    <div class="section-lbl" style="margin-bottom:10px">Fırsatlar</div>
+    <div class="sponsor-modal-title">Sponsorluk & İş Birliği</div>
+    <p class="sponsor-modal-sub">17.000'den fazla üniversite öğrencisine ulaşmak için doğru platform. Markanı genç nesille buluştur.</p>
+    <div class="sponsor-grid">
+      <div class="sponsor-card">
+        <div class="sponsor-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+        <h3>Etkinlik Sponsorluğu</h3>
+        <p>Düzenlediğimiz kampüs etkinliklerinde markanızı ön plana çıkarın. Logo yerleşimi, tanıtım ve doğrudan öğrenci etkileşimi.</p>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg></div>
+        <h3>Sosyal Medya İş Birliği</h3>
+        <p>Instagram sayfamız ve WhatsApp ağımızda markanızı tanıtın. Geniş öğrenci kitlesine doğrudan ulaşın.</p>
+      </div>
+      <div class="sponsor-card">
+        <div class="sponsor-icon"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg></div>
+        <h3>Kampüs Tanıtımı</h3>
+        <p>WhatsApp gruplarımız üzerinden ürün veya hizmetinizi doğrudan hedef kitlenize duyurun.</p>
+      </div>
+    </div>
+    <div class="sponsor-cta">
+      <h3>Bizimle İş Birliği Yapmak İster misiniz?</h3>
+      <p>Sponsorluk paketlerimiz ve iş birliği seçeneklerimiz hakkında bilgi almak için bizimle iletişime geçin.</p>
+      <div class="sponsor-btns">
+        <a href="mailto:iletisim@kampuskafasi.com" id="sponsor-email" class="btn-sponsor-primary">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>Teklif Al
+        </a>
+        <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="btn-sponsor-outline">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>Instagram'dan Yaz
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -288,109 +287,80 @@
 <footer>
   <div class="footer-inner">
     <div class="footer-brand">
-      <div class="fl">Kampüs Kafası · Antalya</div>
-      <p>Akdeniz Üniversitesi öğrenci topluluğu<br>17.000+ üye · Antalya</p>
+      <div class="fl" id="footer-logo-el">Kampüs Kafası · Antalya</div>
+      <p id="footer-sub-el">Akdeniz Üniversitesi öğrenci topluluğu<br>17.000+ üye · Antalya</p>
     </div>
     <div class="footer-col">
       <h5>Navigasyon</h5>
-      <a href="../">Ana Sayfa</a>
-      <a href="../hakkimizda/">Hakkımızda</a>
-      <a href="../etkinlikler/">Etkinlikler</a>
-      <a href="../ekip/">Ekip</a>
-      <a href="../sponsorluk/">Sponsorluk</a>
-      <a href="../iletisim/">İletişim</a>
+      <a href="./">Ana Sayfa</a>
+      <a href="hakkimizda/">Hakkımızda</a>
+      <a href="etkinlikler/">Etkinlikler</a>
+      <a href="ekip/">Ekip</a>
+      <a href="sponsorluk/">Sponsorluk</a>
+      <a href="iletisim/">İletişim</a>
     </div>
     <div class="footer-col">
       <h5>Sosyal Medya</h5>
       <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="#" id="footer-wa">WhatsApp</a>
       <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a href="https://www.tiktok.com/@kampuskafasi" target="_blank" rel="noopener noreferrer">TikTok</a>
-      <a href="#" id="footer-wa">WhatsApp</a>
-      
     </div>
   </div>
   <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
 </footer>
 
-<script src="../event-card.js"></script>
+<script src="event-card.js"></script>
 <script>
-// ── RESET ──
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
-window.scrollTo(0, 0);
-window.addEventListener('pageshow', function(e){ if(e.persisted) window.location.reload(); });
-window.addEventListener('load', () => { setTimeout(() => document.getElementById('loader').classList.add('hidden'), 1800); });
-window.addEventListener('scroll', () => { document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 40); }, {passive:true});
 
-function toggleDrawer() {
-  const d=document.getElementById('drawer'),o=document.getElementById('drawer-overlay'),h=document.getElementById('hamburger');
-  const open=d.classList.toggle('open'); o.classList.toggle('open',open); h.classList.toggle('open',open);
-  document.body.style.overflow=open?'hidden':'';
-}
-function closeDrawer() {
-  ['drawer','drawer-overlay'].forEach(id=>document.getElementById(id).classList.remove('open'));
-  document.getElementById('hamburger').classList.remove('open'); document.body.style.overflow='';
+  function escHtml(str) {
+  if (!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
 }
 
-// kk-data.js'in çağırdığı veriBaslat() bu sayfada renderEvents bekliyor,
-// ama biz zaten initEvents() ile Firebase'den okuyoruz — bu satır hatayı susturur.
-window.renderEvents = function() {};
+/* ── INDEX SAYFASINA ÖZGÜ VERİ & FONKSİYONLAR ── */
 
-// ── ETKİNLİK VERİLERİ ──
-// Firebase Firestore'dan (kk_events koleksiyonu) okunur, başarısız olursa boş yedek kullanılır
-const HARDCODED_EVENTS = [];
+// sett ve events main.js tarafından tanımlanıyor, burada sadece başlangıç değeri veriyoruz
+sett = { wa: '', email: '' };
+events = [];
 
-// API'den oku, yoksa hardcoded yedek kullan
-let EVENTS = HARDCODED_EVENTS;
 
-async function loadEvents() {
-  try {
-    const { initializeApp, getApps } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-    const { getFirestore, collection, getDocs } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
-    const { firebaseConfig } = await import("../firebase-config.js");
-    const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-    const snap = await getDocs(collection(db, "kk_events"));
-    const fromFirebase = [];
-    snap.forEach(d => fromFirebase.push({ id: d.id, ...d.data() }));
-    if (fromFirebase.length) EVENTS = fromFirebase;
-  } catch(e) {
-    console.warn('Firebase okunamadı, hardcoded yedek kullanılıyor:', e);
-  }
-  return EVENTS;
-}
 
-// ── SAYFALAMA ──
-const PAGE_SIZE = 9;
+// ── ETKİNLİK KARTI (event-card.js içindeki ortak kkBuildEventCard kullanılıyor) ──
+const EMOJI = window.KK_CAT_EMOJI;
 
-function formatDate(d){
-  return new Date(d).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
-}
-
-const CAT_EMOJI = window.KK_CAT_EMOJI;
-
-function escHtml(str) {
-  return window.kkEscHtml(str);
-}
-
-function buildCard(ev, isPast){
-  // Kart gövdesi + görünümü artık event-card.js > kkBuildEventCard() tarafından üretiliyor
+function buildEventCard(ev, isPast, delay) {
   const card = window.kkBuildEventCard(ev, {
     isPast,
     onClick: (e) => openModal(e.id)
   });
-
-  // entrance animation — sadece opacity inline, transform CSS hover'ını bloke etmesin
-  card.style.opacity='0';
-  card.style.transition='opacity .4s ease';
-  card.classList.add('card-enter');
+  card.classList.add('reveal');
+  card.style.transitionDelay = delay + 's';
   return card;
 }
 
-function appendCards(cards, gridId){
-  const grid = document.getElementById(gridId);
-  cards.forEach((card,i) => {
-    grid.appendChild(card);
-    // Sadece yukarı hareket
+function renderEvents() {
+  const g = document.getElementById('events-grid');
+  g.textContent = '';
+  if (!events.length) {
+    const msg = document.createElement('div');
+    msg.className = 'no-events-msg';
+    msg.textContent = 'Henüz etkinlik eklenmedi.';
+    g.appendChild(msg);
+    return;
+  }
+  const now = new Date();
+  const featured = events.filter(e => e.featured);
+  const preview = featured.length
+    ? featured.slice(0,6)
+    : [...events].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
+  preview.forEach((ev, i) => {
+    const isPast = new Date(ev.date) < now;
+    const card = buildEventCard(ev, isPast, i*0.07);
+    // Yıldız rozeti gizle
+    const featuredBadge = card.querySelector('.ev-featured-badge');
+    if (featuredBadge) featuredBadge.remove();
+    g.appendChild(card);
     card.addEventListener('mouseenter', () => {
       card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
       card.style.transform = 'translateY(-6px)';
@@ -399,100 +369,153 @@ function appendCards(cards, gridId){
       card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
       card.style.transform = '';
     });
-    setTimeout(()=>{card.style.opacity='1'; card.classList.remove('card-enter');}, i*40+20);
+    if (typeof revealObs !== 'undefined') revealObs.observe(card);
   });
 }
 
-
-
-
-// İlk yükleme
-async function initEvents(){
-  await loadEvents();
-  // Filtreleme initEvents içinde yapılmalı (EVENTS artık async yükleniyor)
-  const now = new Date();
-  const upcomingAll = EVENTS.filter(e => new Date(e.date) >= now).sort((a,b)=>new Date(a.date)-new Date(b.date));
-  const pastAll = EVENTS.filter(e => new Date(e.date) < now).sort((a,b)=>new Date(b.date)-new Date(a.date));
-  let upcomingShown = 0, pastShown = 0;
-
-  function loadMoreUpcoming(){
-    const slice = upcomingAll.slice(upcomingShown, upcomingShown + PAGE_SIZE);
-    appendCards(slice.map(ev => buildCard(ev, false)), 'upcoming-grid');
-    upcomingShown += slice.length;
-    document.getElementById('upcoming-more-btn').classList.toggle('hidden', upcomingShown >= upcomingAll.length);
-  }
-  function loadMorePast(){
-    const slice = pastAll.slice(pastShown, pastShown + PAGE_SIZE);
-    appendCards(slice.map(ev => buildCard(ev, true)), 'past-grid');
-    pastShown += slice.length;
-    document.getElementById('past-more-btn').classList.toggle('hidden', pastShown >= pastAll.length);
-  }
-  document.getElementById('upcoming-more-btn').onclick = loadMoreUpcoming;
-  document.getElementById('past-more-btn').onclick = loadMorePast;
-  if(upcomingAll.length === 0){
-    const grid = document.getElementById('upcoming-grid');
-    const msg = document.createElement('div'); msg.className='no-events'; msg.textContent='Şu an için yaklaşan etkinlik yok — yakında!';
-    grid.appendChild(msg);
-  } else {
-    loadMoreUpcoming();
-  }
-  // Past — ilk PAGE_SIZE
-  if(pastAll.length === 0){
-    const grid = document.getElementById('past-grid');
-    const msg = document.createElement('div'); msg.className='no-events'; msg.textContent='Henüz geçmiş etkinlik yok.';
-    grid.appendChild(msg);
-  } else {
-    loadMorePast();
-  }
-}
-initEvents();
-
 // ── MODAL ──
-function openModal(id){
-  const ev = EVENTS.find(e=>e.id===id); if(!ev)return;
+function openModal(id) {
+    const ev = events.find(e => e.id === id);
+  if (!ev) return;
   const now = new Date();
   const isPast = new Date(ev.date) < now;
-  const ds = formatDate(ev.date);
+  const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
 
-  const imgEl = document.getElementById('modal-img');
-  const emojiEl = document.getElementById('modal-emoji');
-  if(ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)){
-    imgEl.src=ev.img; imgEl.style.objectPosition = ev.imgPos || '50% 50%'; imgEl.style.display='block'; emojiEl.style.display='none';
-  } else {
-    imgEl.style.display='none'; emojiEl.style.display='flex';
-    emojiEl.textContent = ev.emoji || CAT_EMOJI[ev.cat] || '📌';
+  window.kkRenderEventGallery(document.getElementById('m-gallery'), ev);
+
+  document.getElementById('m-cat').textContent   = (EMOJI[ev.cat]||'') + ' ' + ev.cat;
+  document.getElementById('m-title').textContent = ev.title;
+  document.getElementById('m-date').textContent  = ds;
+
+  const locWrap = document.getElementById('m-loc-wrap');
+  if (ev.loc) { document.getElementById('m-loc').textContent = ev.loc; locWrap.style.display='flex'; }
+  else { locWrap.style.display = 'none'; }
+
+  const statusEl = document.getElementById('m-status');
+  if (isPast) { statusEl.textContent = '✓ Tamamlandı'; statusEl.className = 'modal-status-badge past'; }
+  else { statusEl.textContent = '🟢 Yaklaşan'; statusEl.className = 'modal-status-badge upcoming'; }
+
+  document.getElementById('m-desc').textContent = ev.desc || '';
+  document.getElementById('event-modal').classList.add('open');
+  document.querySelector('#event-modal .modal-scroll').scrollTop = 0;
+  document.body.style.overflow = 'hidden';
+}
+function closeModal() { document.getElementById('event-modal').classList.remove('open'); document.body.style.overflow=''; }
+function closeModalOutside(e) { if(e.target===document.getElementById('event-modal')) closeModal(); }
+
+// ── AYARLAR ──
+function applySettings() {
+  if (sett.wa) {
+    ['wa-btn-hero','wa-link','footer-wa','drawer-wa'].forEach(id=>{const el=document.getElementById(id);if(el)el.href=sett.wa;});
+  }
+  if (sett.email) {
+    const el=document.getElementById('email-link'),es=document.getElementById('email-sub-text'),sp=document.getElementById('sponsor-email');
+    if(el)el.href='mailto:'+sett.email; if(es)es.textContent=sett.email; if(sp)sp.href='mailto:'+sett.email;
+  }
+}
+
+// ── HERO BAŞLIK: DEĞİŞEN METİN (ışıltılı çip + 3D flip) ──
+function initHeroRotator() {
+  const words = ['Kalbi', 'Nabzı', 'Sesi', 'Rengi', 'Enerjisi', 'Adresi'];
+  const rotator = document.getElementById('htd-rotator');
+  const wordEl = document.getElementById('htd-word');
+  const measureEl = document.getElementById('htd-measure');
+  if (!rotator || !wordEl || !measureEl) return;
+
+  const WIDTH_BUFFER = 2; // sadece px yuvarlama farkları için minik güvenlik payı
+  let i = 0;
+
+  function syncMeasureFont() {
+    const wordStyles = getComputedStyle(wordEl);
+    ['fontFamily', 'fontWeight', 'fontSize', 'letterSpacing'].forEach(prop => {
+      measureEl.style[prop] = wordStyles[prop];
+    });
   }
 
-  document.getElementById('modal-cat').textContent = (CAT_EMOJI[ev.cat]||'') + ' ' + ev.cat;
-  document.getElementById('modal-title').textContent = ev.title;
-  document.getElementById('modal-date').textContent = ds;
+  function measure(text) {
+    syncMeasureFont();
+    measureEl.textContent = text;
+    return Math.ceil(measureEl.getBoundingClientRect().width) + WIDTH_BUFFER;
+  }
 
-  const locWrap = document.getElementById('modal-loc-wrap');
-  if(ev.loc){ document.getElementById('modal-loc').textContent=ev.loc; locWrap.style.display='flex'; }
-  else { locWrap.style.display='none'; }
+  function applyWidth(text) {
+    rotator.style.width = measure(text) + 'px';
+  }
 
-  const statusEl = document.getElementById('modal-status');
-  statusEl.textContent = isPast ? '✓ Tamamlandı' : '🟢 Yaklaşan';
+  function start() {
+    syncMeasureFont();
+    applyWidth(words[i]);
 
-  document.getElementById('modal-desc').textContent = ev.desc || '';
-  document.getElementById('ev-modal').classList.add('open');
-  document.querySelector('#ev-modal .modal-scroll').scrollTop = 0;
-  document.body.style.overflow='hidden';
+    const ROTATE_MS = 2600;
+    const TRANSITION_MS = 480;
+
+    setInterval(() => {
+      const nextIndex = (i + 1) % words.length;
+
+      // çıkış animasyonu ve genişlik geçişini aynı anda başlat
+      wordEl.classList.add('htd-out');
+      applyWidth(words[nextIndex]);
+
+      setTimeout(() => {
+        i = nextIndex;
+        wordEl.textContent = words[i];
+        wordEl.classList.remove('htd-out');
+        wordEl.classList.add('htd-in');
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            wordEl.classList.remove('htd-in');
+          });
+        });
+      }, TRANSITION_MS);
+    }, ROTATE_MS);
+  }
+
+  // yazı tipleri tam yüklenmeden ölçüm yapılırsa genişlik yanlış hesaplanıp
+  // kelime kırpılabiliyor — bu yüzden fontlar hazır olana kadar bekleniyor
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(start).catch(start);
+  } else {
+    start();
+  }
+
+  // ekstra güvenlik: sayfa tamamen yüklendiğinde ve pencere yeniden
+  // boyutlandığında mevcut kelimenin genişliğini yeniden hesapla
+  window.addEventListener('load', () => applyWidth(words[i]));
+  let resizeTimer;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => applyWidth(words[i]), 150);
+  });
 }
-function closeModal(){ document.getElementById('ev-modal').classList.remove('open'); document.body.style.overflow=''; }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initHeroRotator);
+} else {
+  initHeroRotator();
+}
 
-// ── LOADER CANVAS ──
-(function(){
-  const c=document.getElementById('ld-canvas');if(!c)return;
-  const ctx=c.getContext('2d');
-  c.width=window.innerWidth;c.height=window.innerHeight;
-  const pts=Array.from({length:60},()=>({x:Math.random()*c.width,y:Math.random()*c.height,vx:(Math.random()-.5)*.4,vy:(Math.random()-.5)*.4}));
-  function draw(){ctx.clearRect(0,0,c.width,c.height);pts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.x<0||p.x>c.width)p.vx*=-1;if(p.y<0||p.y>c.height)p.vy*=-1;});pts.forEach((a,i)=>pts.slice(i+1).forEach(b=>{const d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){ctx.strokeStyle=`rgba(45,221,212,${.15*(1-d/120)})`;ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(a.x,a.y);ctx.lineTo(b.x,b.y);ctx.stroke();}}));pts.forEach(p=>{ctx.fillStyle='rgba(45,221,212,.45)';ctx.beginPath();ctx.arc(p.x,p.y,1.5,0,Math.PI*2);ctx.fill();});requestAnimationFrame(draw);}
-  draw();
-})();
+// kk-data.js'den gelen metin verilerini uygula
+function applyIndexTexts() {
+  // Hero buton metinleri
+  const btn1 = document.querySelector('.hero-btns a.btn-primary');
+  const btn2 = document.querySelector('.hero-btns a.btn-outline');
+  if (btn1 && window._kkMetin && window._kkMetin.heroBtn1) btn1.childNodes[0].textContent = window._kkMetin.heroBtn1;
+  if (btn2 && window._kkMetin && window._kkMetin.heroBtn2) {
+    // SVG'yi koruyarak sadece metin kısmını değiştir
+    const svg = btn2.querySelector('svg');
+    btn2.textContent = window._kkMetin.heroBtn2;
+    if (svg) btn2.prepend(svg);
+  }
+  // Etkinlikler bölüm başlığı
+  const evTitle = document.querySelector('#events .section-h');
+  if (evTitle && window._kkMetin && window._kkMetin.evTitle) evTitle.textContent = window._kkMetin.evTitle;
+  // Footer alt metni
+  const footerSub = document.getElementById('footer-sub-el');
+  if (footerSub && window._kkMetin && window._kkMetin.footerSub) footerSub.textContent = window._kkMetin.footerSub;}
+window.applyIndexTexts = applyIndexTexts;
+
+
 </script>
-<script src="../main.js" defer></script>
-<script type="module" src="../kk-data.js"></script>
+<script src="main.js" defer></script>
+<script type="module" src="kk-data.js"></script>
 </body>
 </html>
