@@ -65,10 +65,37 @@
 .modal-scroll{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;flex:1 1 auto;min-height:0}
 #ev-modal.open .modal-box{transform:scale(1) translateY(0)}
 .modal-hero{position:relative;width:100%;aspect-ratio:4/5;max-height:70vh;background:linear-gradient(135deg,#0c1b24,#08121a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
-.modal-hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:none}
+.modal-hero-media{position:absolute;inset:0;z-index:1;display:flex;align-items:center;justify-content:center}
+.modal-hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:block}
 .modal-hero-emoji{font-size:5rem;z-index:1;filter:drop-shadow(0 0 30px rgba(45,216,240,.3));display:flex;align-items:center;justify-content:center}
-.modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--dark) 100%);z-index:2}
+.modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--dark) 100%);z-index:2;pointer-events:none}
 .modal-hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(45,216,240,.12) 0%,transparent 65%);z-index:0}
+/* GALERİ MOZAİĞİ — modal içindeki çoklu fotoğraf görünümü */
+.modal-gallery-grid{position:absolute;inset:0;display:grid;grid-template-columns:2fr 1fr;grid-template-rows:1fr 1fr;gap:3px}
+.modal-gallery-grid.two{grid-template-columns:1fr 1fr;grid-template-rows:1fr}
+.mg-tile{position:relative;overflow:hidden;cursor:pointer;background:#0c1b24}
+.mg-tile.mg-main{grid-row:1/3}
+.modal-gallery-grid.two .mg-tile{grid-row:auto}
+.mg-tile img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s cubic-bezier(.2,.7,.3,1)}
+.mg-tile:hover img{transform:scale(1.06)}
+.mg-more-badge{position:absolute;inset:0;background:rgba(6,11,15,.74);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:1.35rem;letter-spacing:-.02em}
+/* LIGHTBOX — fotoğraflar arası gezinme */
+.lightbox{display:none;position:fixed;inset:0;z-index:900;background:rgba(4,7,9,.95);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);align-items:center;justify-content:center;padding:24px}
+.lightbox.open{display:flex}
+.lightbox-img{max-width:92vw;max-height:86vh;object-fit:contain;border-radius:14px;box-shadow:0 50px 120px rgba(0,0,0,.7),0 0 0 1px rgba(45,216,240,.1);user-select:none}
+.lightbox-close{position:absolute;top:20px;right:20px;z-index:2;width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:1.05rem;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background .2s,border-color .2s}
+.lightbox-close:hover{background:rgba(239,68,68,.22);border-color:rgba(239,68,68,.35)}
+.lightbox-nav{position:absolute;top:50%;transform:translateY(-50%);z-index:2;width:48px;height:48px;border-radius:50%;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:#fff;font-size:1.5rem;line-height:1;padding-bottom:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;backdrop-filter:blur(8px);transition:background .2s,border-color .2s,transform .2s}
+.lightbox-nav:hover{background:rgba(45,216,240,.2);border-color:var(--cl)}
+.lightbox-prev{left:18px}
+.lightbox-next{right:18px}
+.lightbox-counter{position:absolute;bottom:22px;left:50%;transform:translateX(-50%);z-index:2;color:rgba(255,255,255,.75);font-size:.76rem;font-weight:700;letter-spacing:.06em;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.1);padding:6px 16px;border-radius:100px}
+@media(max-width:600px){
+  .lightbox-nav{width:40px;height:40px;font-size:1.2rem;padding-bottom:3px}
+  .lightbox-prev{left:8px}
+  .lightbox-next{right:8px}
+  .lightbox{padding:12px}
+}
 .modal-close-btn{position:absolute;top:16px;right:16px;z-index:10;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;backdrop-filter:blur(8px)}
 .modal-close-btn:hover{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.3);color:#fff}
 .modal-content{padding:0 30px 30px}
@@ -103,6 +130,14 @@
 #ev-modal .modal-scroll{overflow-y:scroll!important;overflow-x:hidden!important}
 #ev-modal .modal-content{overflow-wrap:break-word!important;word-break:break-word!important}
 #ev-modal .modal-desc-text{white-space:pre-line!important;overflow-wrap:break-word!important;word-break:break-word!important}
+
+/* MODAL — küçük ekran (bu sayfanın yukarıdaki .modal-box/.modal-content/.modal-info-grid
+   kuralları style.css'teki mobil küçültmeyi eziyordu, burada tekrar uyguluyoruz) */
+@media(max-width:520px){
+  .modal-box{border-radius:20px}
+  .modal-content{padding:0 18px 24px}
+  .modal-info-grid{grid-template-columns:1fr}
+}
 
 @media(max-width:960px){
   .page-hero{padding:85px 18px 56px}
@@ -256,8 +291,7 @@
     <div class="modal-scroll">
     <div class="modal-hero">
       <div class="modal-hero-glow"></div>
-      <img id="modal-img" class="modal-hero-img" alt="">
-      <div class="modal-hero-emoji" id="modal-emoji"></div>
+      <div class="modal-hero-media" id="modal-hero-media"></div>
       <div class="modal-hero-overlay"></div>
     </div>
     <div class="modal-content">
@@ -282,6 +316,15 @@
     </div>
     </div>
   </div>
+</div>
+
+<!-- LIGHTBOX — galeri fotoğrafları arasında gezinme -->
+<div id="lightbox" class="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+  <img id="lightbox-img" class="lightbox-img" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+  <div class="lightbox-counter" id="lightbox-counter"></div>
 </div>
 
 <!-- FOOTER -->
@@ -447,6 +490,113 @@ async function initEvents(){
 }
 initEvents();
 
+// ── FOTOĞRAF LİSTESİ (kapak + galeri) ──
+function getEventImages(ev){
+  const imgs = [];
+  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) imgs.push({ url: ev.img, pos: ev.imgPosModal || ev.imgPos || '50% 50%' });
+  if (Array.isArray(ev.gallery)) {
+    ev.gallery.forEach(g => {
+      const url = typeof g === 'string' ? g : (g && g.url);
+      if (url) imgs.push({ url, pos: (g && g.pos) || '50% 50%' });
+    });
+  }
+  return imgs;
+}
+
+// Modal hero alanına tek fotoğraf / mozaik galeri / emoji üretir
+function renderHeroMedia(ev){
+  const wrap = document.getElementById('modal-hero-media');
+  const imgs = getEventImages(ev);
+  wrap.innerHTML = '';
+
+  if (!imgs.length) {
+    const em = document.createElement('div');
+    em.className = 'modal-hero-emoji';
+    em.textContent = ev.emoji || CAT_EMOJI[ev.cat] || '📌';
+    wrap.appendChild(em);
+    return;
+  }
+
+  if (imgs.length === 1) {
+    const img = document.createElement('img');
+    img.className = 'modal-hero-img';
+    img.src = imgs[0].url;
+    img.style.objectPosition = imgs[0].pos;
+    img.style.cursor = 'zoom-in';
+    img.onclick = () => openLightbox(imgs.map(i=>i.url), 0);
+    wrap.appendChild(img);
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'modal-gallery-grid' + (imgs.length === 2 ? ' two' : '');
+  const maxTiles = imgs.length === 2 ? 2 : 3;
+  const shown = imgs.slice(0, maxTiles);
+  const extra = imgs.length - maxTiles;
+  const urls = imgs.map(i => i.url);
+
+  shown.forEach((item, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'mg-tile' + (i === 0 && maxTiles === 3 ? ' mg-main' : '');
+    const img = document.createElement('img');
+    img.src = item.url;
+    img.style.objectPosition = item.pos;
+    tile.appendChild(img);
+    if (i === shown.length - 1 && extra > 0) {
+      const badge = document.createElement('div');
+      badge.className = 'mg-more-badge';
+      badge.textContent = '+' + extra;
+      tile.appendChild(badge);
+    }
+    tile.onclick = () => openLightbox(urls, i);
+    grid.appendChild(tile);
+  });
+  wrap.appendChild(grid);
+}
+
+// ── LIGHTBOX ──
+let lbImages = [];
+let lbIndex = 0;
+function openLightbox(imgs, idx){
+  lbImages = imgs; lbIndex = idx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+function lightboxNav(dir){
+  if (lbImages.length < 2) return;
+  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+  updateLightbox();
+}
+function updateLightbox(){
+  document.getElementById('lightbox-img').src = lbImages[lbIndex];
+  const counter = document.getElementById('lightbox-counter');
+  const multi = lbImages.length > 1;
+  counter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+  counter.style.display = multi ? 'block' : 'none';
+  document.querySelectorAll('.lightbox-nav').forEach(b => b.style.display = multi ? 'flex' : 'none');
+}
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+});
+// Telefonda parmakla kaydırarak fotoğraflar arası gezinme
+(function(){
+  const lb = document.getElementById('lightbox');
+  let touchStartX = null;
+  lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', e => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) lightboxNav(dx > 0 ? -1 : 1);
+    touchStartX = null;
+  }, {passive:true});
+})();
+
 // ── MODAL ──
 function openModal(id){
   const ev = EVENTS.find(e=>e.id===id); if(!ev)return;
@@ -454,14 +604,7 @@ function openModal(id){
   const isPast = new Date(ev.date) < now;
   const ds = formatDate(ev.date);
 
-  const imgEl = document.getElementById('modal-img');
-  const emojiEl = document.getElementById('modal-emoji');
-  if(ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)){
-    imgEl.src=ev.img; imgEl.style.objectPosition = ev.imgPos || '50% 50%'; imgEl.style.display='block'; emojiEl.style.display='none';
-  } else {
-    imgEl.style.display='none'; emojiEl.style.display='flex';
-    emojiEl.textContent = ev.emoji || CAT_EMOJI[ev.cat] || '📌';
-  }
+  renderHeroMedia(ev);
 
   document.getElementById('modal-cat').textContent = (CAT_EMOJI[ev.cat]||'') + ' ' + ev.cat;
   document.getElementById('modal-title').textContent = ev.title;
@@ -480,7 +623,7 @@ function openModal(id){
   document.body.style.overflow='hidden';
 }
 function closeModal(){ document.getElementById('ev-modal').classList.remove('open'); document.body.style.overflow=''; }
-document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape' && !document.getElementById('lightbox').classList.contains('open')) closeModal(); });
 
 // ── LOADER CANVAS ──
 (function(){

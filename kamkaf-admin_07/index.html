@@ -477,6 +477,19 @@ img { max-width: 100%; display: block; }
 .crop-wrap { position:relative; width:100%; max-width:360px; overflow:hidden; border-radius:var(--r-sm); border:1px solid var(--edge); background:var(--glass2); margin-top:6px; touch-action:none; display:none; }
 .crop-wrap.has-img { display:block; }
 .crop-wrap img { display:block; width:100%; height:auto; user-select:none; -webkit-user-drag:none; pointer-events:none; }
+.gallery-grid { display:flex; flex-wrap:wrap; gap:10px; margin-top:8px; }
+.gallery-thumb { position:relative; width:86px; height:86px; border-radius:var(--r-sm); overflow:hidden; border:1px solid var(--edge); background:var(--glass2); flex-shrink:0; }
+.gallery-thumb img { width:100%; height:100%; object-fit:cover; display:block; }
+.gallery-thumb .gt-hint { position:absolute; top:4px; left:4px; width:18px; height:18px; border-radius:50%; background:rgba(0,0,0,.6); color:#fff; font-size:.6rem; display:flex; align-items:center; justify-content:center; pointer-events:none; opacity:0; transition:opacity .15s; }
+.gallery-thumb:hover .gt-hint { opacity:1; }
+.gallery-thumb .gt-remove { position:absolute; top:4px; right:4px; width:20px; height:20px; border-radius:50%; background:rgba(0,0,0,.7); color:#fff; border:none; font-size:.68rem; cursor:pointer; display:flex; align-items:center; justify-content:center; line-height:1; padding:0; }
+.gallery-thumb .gt-remove:hover { background:var(--danger); }
+.gallery-thumb .gt-move { position:absolute; bottom:4px; left:4px; right:4px; display:flex; justify-content:space-between; opacity:0; transition:opacity .15s; }
+.gallery-thumb:hover .gt-move { opacity:1; }
+.gallery-thumb .gt-move button { background:rgba(0,0,0,.7); color:#fff; border:none; border-radius:4px; width:22px; height:18px; font-size:.65rem; cursor:pointer; padding:0; }
+.gallery-thumb .gt-move button:disabled { opacity:.3; cursor:default; }
+.gallery-empty-hint { font-size:.72rem; color:var(--muted); padding:6px 2px; }
+.gallery-count { font-size:.66rem; color:var(--sub); font-weight:600; margin-left:6px; }
 .crop-frame { position:absolute; border:2px solid var(--teal); box-shadow:0 0 0 9999px rgba(0,0,0,.6); cursor:grab; }
 .crop-frame:active { cursor:grabbing; }
 /* ══════════════════════════════════════
@@ -1199,6 +1212,17 @@ img { max-width: 100%; display: block; }
         <input type="hidden" id="ev-imgpos-modal" value="50% 50%">
         <div class="fg-hint">Bu çerçeve, karta tıklanınca açılan büyük görünümdeki kırpma alanını belirler. Oranı, sitedeki büyük görselin gerçek en-boy oranına yakın seçin.</div>
       </div>
+      <div class="fg" style="grid-column:1/-1">
+        <label>Galeri — Ek Fotoğraflar <span class="gallery-count" id="ev-gallery-count"></span></label>
+        <div class="gallery-grid" id="ev-gallery-grid"></div>
+        <div class="img-row" style="margin-top:10px">
+          <input id="ev-gallery-url" type="url" placeholder="https://… (ek fotoğraf linki)" onkeydown="if(event.key==='Enter'){event.preventDefault();addEvGalleryUrl();}">
+          <button type="button" class="btn btn-sm" onclick="addEvGalleryUrl()">🔗 Ekle</button>
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('ev-gallery-file').click()">📁 Dosya Ekle</button>
+          <input id="ev-gallery-file" type="file" accept="image/*" multiple style="display:none" onchange="addEvGalleryFiles(this)">
+        </div>
+        <div class="fg-hint">İlk fotoğraf (yukarıdaki "Fotoğraf" alanı) kapak olarak kullanılır. Buraya eklediğin fotoğraflar galeriye eklenir ve kartta "+N" olarak görünür. Fotoğrafın üzerini sürükleyerek kırpma noktasını ayarlayabilir, ✕ ile silebilir, ◀ ▶ ile sırasını değiştirebilirsin. Telefondan da galeri/kamera seçeneğiyle ekleyebilirsin. En fazla 6 fotoğraf.</div>
+      </div>
     </div>
     <div class="toggle-row">
       <label class="sw"><input type="checkbox" id="ev-featured"><span class="sw-track"></span></label>
@@ -1210,6 +1234,25 @@ img { max-width: 100%; display: block; }
     <div class="modal-foot">
       <button class="btn btn-ghost" onclick="closeEvModal()">İptal</button>
       <button class="btn btn-p" onclick="saveEvent()">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════ MODAL: GALERİ FOTOĞRAFI KIRP ════ -->
+<div class="modal-bg" id="gallery-crop-modal">
+  <div class="modal" style="max-width:420px">
+    <div class="modal-accent"></div>
+    <div class="modal-title">✂️ Fotoğrafı Kırp</div>
+    <button class="modal-close" onclick="closeGalleryCropModal()">✕</button>
+    <div class="crop-wrap" id="gc-crop-wrap" style="max-width:100%">
+      <img id="gc-crop-img" alt="">
+      <div class="crop-frame" id="gc-crop-frame"></div>
+    </div>
+    <input type="hidden" id="gc-imgpos" value="50% 50%">
+    <div class="fg-hint">Işıklı çerçeveyi sürükle — galeri küçük resminde o alan görünecek.</div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeGalleryCropModal()">İptal</button>
+      <button class="btn btn-p" onclick="applyGalleryCrop()">Uygula</button>
     </div>
   </div>
 </div>
@@ -1754,6 +1797,8 @@ window.openEvModal = function() {
   document.getElementById('ev-img-preview').style.display = 'none';
   evCardCrop.setCropImage('', '50% 50%');
   evModalCrop.setCropImage('', '50% 50%');
+  evGallery = [];
+  renderEvGallery();
   document.getElementById('ev-modal-title').textContent = '◷ Etkinlik Ekle';
   document.getElementById('ev-modal').classList.add('on');
 };
@@ -1776,6 +1821,10 @@ window.editEvent = async function(id) {
     if (e.img) { prev.src = e.img; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
     evCardCrop.setCropImage(e.img || '', e.imgPos || '50% 50%');
     evModalCrop.setCropImage(e.img || '', e.imgPosModal || e.imgPos || '50% 50%');
+    evGallery = Array.isArray(e.gallery)
+      ? e.gallery.map(it => typeof it === 'string' ? { url: it, pos: '50% 50%' } : { url: it.url, pos: it.pos || '50% 50%' })
+      : [];
+    renderEvGallery();
     document.getElementById('ev-modal-title').textContent = '◷ Etkinliği Düzenle';
     document.getElementById('ev-modal').classList.add('on');
   } catch(e) { toast('Yüklenemedi: ' + e.message, 'err'); }
@@ -1795,6 +1844,7 @@ window.saveEvent = async function() {
     imgPos:      document.getElementById('ev-imgpos').value.trim() || '50% 50%',
     imgPosModal: document.getElementById('ev-imgpos-modal').value.trim() || '50% 50%',
     featured:    document.getElementById('ev-featured').checked,
+    gallery:     evGallery.slice(),
   };
   try {
     if (editId) { await updateDoc(doc(db, 'kk_events', editId), data); addLog('Etkinlik güncellendi: ' + title, 'ok'); toast('Etkinlik güncellendi!', 'ok'); }
@@ -2544,12 +2594,130 @@ function makeCropTool(wrapId, frameId, imgId, posInputId, initialRatio){
 window.evCardCrop  = makeCropTool('ev-crop-wrap',       'ev-crop-frame',       'ev-crop-img',       'ev-imgpos',       16/9);
 window.evModalCrop = makeCropTool('ev-crop-wrap-modal', 'ev-crop-frame-modal', 'ev-crop-img-modal', 'ev-imgpos-modal', 1.6);
 window.memberCrop  = makeCropTool('m-crop-wrap',        'm-crop-frame',        'm-crop-img',        'm-imgpos',        1);
+window.galleryCrop = makeCropTool('gc-crop-wrap',       'gc-crop-frame',       'gc-crop-img',       'gc-imgpos',       1);
 
 window.previewImg = function(inputId, previewId) {
   const url = document.getElementById(inputId)?.value.trim();
   const prev = document.getElementById(previewId);
   if (!prev) return;
   if (url) { prev.src = url; prev.style.display = 'block'; } else { prev.style.display = 'none'; }
+};
+
+/* ══════════════════════════════════════
+   ETKİNLİK GALERİSİ — ÇOKLU FOTOĞRAF
+══════════════════════════════════════ */
+window.evGallery = [];
+const EV_GALLERY_MAX = 6;
+
+function renderEvGallery() {
+  const grid = document.getElementById('ev-gallery-grid');
+  const countEl = document.getElementById('ev-gallery-count');
+  if (!grid) return;
+  if (countEl) countEl.textContent = evGallery.length ? `(${evGallery.length}/${EV_GALLERY_MAX})` : '';
+  if (!evGallery.length) { grid.innerHTML = '<div class="gallery-empty-hint">Henüz ek fotoğraf yok.</div>'; return; }
+  grid.innerHTML = evGallery.map((item, i) => `
+    <div class="gallery-thumb">
+      <img src="${esc(item.url)}" alt="" style="object-position:${esc(item.pos || '50% 50%')}; cursor:pointer" onclick="openGalleryCropModal(${i})" title="Kırpmak için tıkla">
+      <div class="gt-hint">✎</div>
+      <button type="button" class="gt-remove" onclick="event.stopPropagation(); removeEvGalleryPhoto(${i})" title="Sil">✕</button>
+      <div class="gt-move">
+        <button type="button" onclick="event.stopPropagation(); moveEvGalleryPhoto(${i},-1)" ${i === 0 ? 'disabled' : ''} title="Sola taşı">◀</button>
+        <button type="button" onclick="event.stopPropagation(); moveEvGalleryPhoto(${i},1)" ${i === evGallery.length - 1 ? 'disabled' : ''} title="Sağa taşı">▶</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+/* Galeri fotoğrafına tıklanınca büyük, çerçeveli kırpma penceresi açılır (ana fotoğraftaki kırpma aracıyla aynı mantık) */
+window.currentGalleryCropIndex = null;
+window.openGalleryCropModal = function(i) {
+  currentGalleryCropIndex = i;
+  const item = evGallery[i];
+  if (!item) return;
+  galleryCrop.setCropImage(item.url, item.pos || '50% 50%');
+  document.getElementById('gallery-crop-modal').classList.add('on');
+};
+window.closeGalleryCropModal = function() {
+  document.getElementById('gallery-crop-modal').classList.remove('on');
+  currentGalleryCropIndex = null;
+};
+window.applyGalleryCrop = function() {
+  if (currentGalleryCropIndex === null) return;
+  const pos = document.getElementById('gc-imgpos').value.trim() || '50% 50%';
+  evGallery[currentGalleryCropIndex].pos = pos;
+  renderEvGallery();
+  closeGalleryCropModal();
+};
+
+window.addEvGalleryUrl = function() {
+  const input = document.getElementById('ev-gallery-url');
+  const url = input.value.trim();
+  if (!url) return;
+  if (evGallery.length >= EV_GALLERY_MAX) { toast(`En fazla ${EV_GALLERY_MAX} fotoğraf ekleyebilirsin.`, 'err'); return; }
+  evGallery.push({ url, pos: '50% 50%' });
+  input.value = '';
+  renderEvGallery();
+};
+
+window.addEvGalleryFiles = function(fileInput) {
+  const files = Array.from(fileInput.files || []);
+  fileInput.value = '';
+  if (!files.length) return;
+  files.forEach(file => {
+    if (evGallery.length >= EV_GALLERY_MAX) { toast(`En fazla ${EV_GALLERY_MAX} fotoğraf ekleyebilirsin.`, 'err'); return; }
+    if (!file.type.startsWith('image/')) { toast('Sadece görsel dosyaları eklenebilir.', 'err'); return; }
+    compressAndUploadForGallery(file);
+  });
+};
+
+function compressAndUploadForGallery(file, maxDim = 1280, quality = 0.82) {
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const img = new Image();
+    img.onload = () => {
+      let { width, height } = img;
+      if (width > maxDim || height > maxDim) {
+        if (width > height) { height = Math.round(height * (maxDim / width)); width = maxDim; }
+        else { width = Math.round(width * (maxDim / height)); height = maxDim; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width; canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      const keepTransparency = /^image\/(png|webp|gif)$/.test(file.type);
+      if (!keepTransparency) { ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, width, height); }
+      ctx.drawImage(img, 0, 0, width, height);
+      const outType = keepTransparency ? 'image/png' : 'image/jpeg';
+      canvas.toBlob(async (blob) => {
+        if (!blob) { toast('Görsel işlenemedi, başka bir dosya dene.', 'err'); return; }
+        toast('Fotoğraf yükleniyor…', 'ok');
+        try {
+          const url = await uploadToCloudinary(blob);
+          if (evGallery.length >= EV_GALLERY_MAX) { toast(`En fazla ${EV_GALLERY_MAX} fotoğraf ekleyebilirsin.`, 'err'); return; }
+          evGallery.push({ url, pos: '50% 50%' });
+          renderEvGallery();
+          toast('Fotoğraf eklendi ✓', 'ok');
+        } catch (err) {
+          toast('Yükleme başarısız: ' + err.message, 'err');
+        }
+      }, outType, keepTransparency ? undefined : quality);
+    };
+    img.onerror = () => toast('Görsel okunamadı, başka bir dosya dene.', 'err');
+    img.src = e.target.result;
+  };
+  reader.onerror = () => toast('Dosya okunamadı.', 'err');
+  reader.readAsDataURL(file);
+}
+
+window.removeEvGalleryPhoto = function(i) {
+  evGallery.splice(i, 1);
+  renderEvGallery();
+};
+
+window.moveEvGalleryPhoto = function(i, dir) {
+  const j = i + dir;
+  if (j < 0 || j >= evGallery.length) return;
+  [evGallery[i], evGallery[j]] = [evGallery[j], evGallery[i]];
+  renderEvGallery();
 };
 
 /* ── Dosyadan fotoğraf seçilince sıkıştırıp Cloudinary'e yükle, dönen URL'i ilgili input'a yaz ── */

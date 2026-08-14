@@ -61,7 +61,7 @@
 .ev-modal-hero{position:relative;width:100%;aspect-ratio:4/5;max-height:70vh;background:linear-gradient(135deg,#0c1b24,#08121a);display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .ev-modal-hero-img{width:100%;height:100%;object-fit:cover;object-position:center;display:none}
 .ev-modal-hero-emoji{font-size:5rem;z-index:1;filter:drop-shadow(0 0 30px rgba(45,216,240,.3))}
-.ev-modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--dark) 100%);z-index:2}
+.ev-modal-hero-overlay{position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--dark) 100%);z-index:2;pointer-events:none}
 .ev-modal-hero-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(45,216,240,.12) 0%,transparent 65%);z-index:0}
 .ev-modal-close{position:absolute;top:16px;right:16px;z-index:10;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.1);color:rgba(255,255,255,.7);width:36px;height:36px;border-radius:50%;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s,color .2s;backdrop-filter:blur(8px)}
 .ev-modal-close:hover{background:rgba(239,68,68,.2);border-color:rgba(239,68,68,.3);color:#fff}
@@ -102,6 +102,13 @@
 #ev-modal-bg .ev-modal-scroll{overflow-y:scroll!important;overflow-x:hidden!important}
 #ev-modal-bg .ev-modal-content{overflow-wrap:break-word!important;word-break:break-word!important}
 #ev-modal-bg .ev-modal-desc{white-space:pre-line!important;overflow-wrap:break-word!important;word-break:break-word!important}
+
+/* MODAL — küçük ekran (index.html ve etkinlikler.html'deki karşılığıyla aynı) */
+@media(max-width:520px){
+  .ev-modal{border-radius:20px}
+  .ev-modal-content{padding:0 18px 24px}
+  .ev-modal-info-grid{grid-template-columns:1fr}
+}
 
 
 </style>
@@ -257,8 +264,7 @@
     <div class="ev-modal-scroll">
     <div class="ev-modal-hero">
       <div class="ev-modal-hero-glow"></div>
-      <img id="m-hero-img" class="ev-modal-hero-img" alt="">
-      <div class="ev-modal-hero-emoji" id="m-emoji"></div>
+      <div class="modal-hero-media" id="modal-hero-media"></div>
       <div class="ev-modal-hero-overlay"></div>
     </div>
     <div class="ev-modal-content">
@@ -283,6 +289,15 @@
     </div>
     </div>
   </div>
+</div>
+
+<!-- LIGHTBOX — galeri fotoğrafları arasında gezinme -->
+<div id="lightbox" class="lightbox" onclick="if(event.target===this)closeLightbox()">
+  <button class="lightbox-close" onclick="closeLightbox()">✕</button>
+  <button class="lightbox-nav lightbox-prev" onclick="lightboxNav(-1)">‹</button>
+  <img id="lightbox-img" class="lightbox-img" alt="">
+  <button class="lightbox-nav lightbox-next" onclick="lightboxNav(1)">›</button>
+  <div class="lightbox-counter" id="lightbox-counter"></div>
 </div>
 
 <!-- SEÇİCİ PANELİ (şifreli) 
@@ -412,23 +427,122 @@ function loadActivities(eventsFromFirebase) {
 
 window.loadActivities = loadActivities;
 
+// ── FOTOĞRAF LİSTESİ (kapak + galeri) ──
+function getEventImages(ev){
+  const imgs = [];
+  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) imgs.push({ url: ev.img, pos: ev.imgPosModal || ev.imgPos || '50% 50%' });
+  if (Array.isArray(ev.gallery)) {
+    ev.gallery.forEach(g => {
+      const url = typeof g === 'string' ? g : (g && g.url);
+      if (url) imgs.push({ url, pos: (g && g.pos) || '50% 50%' });
+    });
+  }
+  return imgs;
+}
+
+// Modal hero alanına tek fotoğraf / mozaik galeri / emoji üretir
+function renderHeroMedia(ev){
+  const wrap = document.getElementById('modal-hero-media');
+  const imgs = getEventImages(ev);
+  wrap.innerHTML = '';
+
+  if (!imgs.length) {
+    const em = document.createElement('div');
+    em.className = 'ev-modal-hero-emoji';
+    em.textContent = ev.emoji || EMOJI_MAP[ev.cat] || '📌';
+    wrap.appendChild(em);
+    return;
+  }
+
+  if (imgs.length === 1) {
+    const img = document.createElement('img');
+    img.className = 'ev-modal-hero-img';
+    img.style.display = 'block';
+    img.src = imgs[0].url;
+    img.style.objectPosition = imgs[0].pos;
+    img.style.cursor = 'zoom-in';
+    img.onclick = () => openLightbox(imgs.map(i=>i.url), 0);
+    wrap.appendChild(img);
+    return;
+  }
+
+  const grid = document.createElement('div');
+  grid.className = 'modal-gallery-grid' + (imgs.length === 2 ? ' two' : '');
+  const maxTiles = imgs.length === 2 ? 2 : 3;
+  const shown = imgs.slice(0, maxTiles);
+  const extra = imgs.length - maxTiles;
+  const urls = imgs.map(i => i.url);
+
+  shown.forEach((item, i) => {
+    const tile = document.createElement('div');
+    tile.className = 'mg-tile' + (i === 0 && maxTiles === 3 ? ' mg-main' : '');
+    const img = document.createElement('img');
+    img.src = item.url;
+    img.style.objectPosition = item.pos;
+    tile.appendChild(img);
+    if (i === shown.length - 1 && extra > 0) {
+      const badge = document.createElement('div');
+      badge.className = 'mg-more-badge';
+      badge.textContent = '+' + extra;
+      tile.appendChild(badge);
+    }
+    tile.onclick = () => openLightbox(urls, i);
+    grid.appendChild(tile);
+  });
+  wrap.appendChild(grid);
+}
+
+// ── LIGHTBOX ──
+let lbImages = [];
+let lbIndex = 0;
+function openLightbox(imgs, idx){
+  lbImages = imgs; lbIndex = idx;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox(){
+  document.getElementById('lightbox').classList.remove('open');
+}
+function lightboxNav(dir){
+  if (lbImages.length < 2) return;
+  lbIndex = (lbIndex + dir + lbImages.length) % lbImages.length;
+  updateLightbox();
+}
+function updateLightbox(){
+  document.getElementById('lightbox-img').src = lbImages[lbIndex];
+  const counter = document.getElementById('lightbox-counter');
+  const multi = lbImages.length > 1;
+  counter.textContent = (lbIndex + 1) + ' / ' + lbImages.length;
+  counter.style.display = multi ? 'block' : 'none';
+  document.querySelectorAll('.lightbox-nav').forEach(b => b.style.display = multi ? 'flex' : 'none');
+}
+document.addEventListener('keydown', e => {
+  if (!document.getElementById('lightbox').classList.contains('open')) return;
+  if (e.key === 'Escape') closeLightbox();
+  if (e.key === 'ArrowLeft') lightboxNav(-1);
+  if (e.key === 'ArrowRight') lightboxNav(1);
+});
+// Telefonda parmakla kaydırarak fotoğraflar arası gezinme
+(function(){
+  const lb = document.getElementById('lightbox');
+  let touchStartX = null;
+  lb.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, {passive:true});
+  lb.addEventListener('touchend', e => {
+    if (touchStartX === null) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(dx) > 40) lightboxNav(dx > 0 ? -1 : 1);
+    touchStartX = null;
+  }, {passive:true});
+})();
+
 function openEvModal(ev, allEvents) {
   document.getElementById('ev-modal-bg').querySelector('.ev-modal-scroll').scrollTop = 0;
   const now = new Date();
   const isPast = new Date(ev.date) <= now;
   const ds = new Date(ev.date).toLocaleDateString('tr-TR',{day:'numeric',month:'long',year:'numeric'});
- 
-  const heroImg = document.getElementById('m-hero-img');
-  const heroEmoji = document.getElementById('m-emoji');
-  if (ev.img && /^(data:image\/|https?:\/\/)/.test(ev.img)) {
-    heroImg.src = ev.img; heroImg.style.objectPosition = ev.imgPos || '50% 50%'; heroImg.style.display = 'block';
-    heroEmoji.style.display = 'none';
-  } else {
-    heroImg.style.display = 'none';
-    heroEmoji.style.display = 'flex';
-    heroEmoji.textContent = EMOJI_MAP[ev.cat] || '📌';
-  }
- 
+
+  renderHeroMedia(ev);
+
   document.getElementById('m-cat').textContent = (EMOJI_MAP[ev.cat]||'') + ' ' + ev.cat;
   document.getElementById('m-title').textContent = ev.title;
   document.getElementById('m-date').textContent = ds;

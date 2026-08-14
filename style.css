@@ -389,8 +389,7 @@ footer {
 /* ════════════════════════════════════════════════════════════
    ETKİNLİK KARTI — "BİLET" TASARIMI
    (index + etkinlikler + hakkımızda sayfalarında ortak)
-   Görsel ile bilgi bloğu arasında kopma çizgisi (perforasyon) ve
-   iki yanında bilet deliği izlenimi veren tek imza öge burada.
+   Görsel ile bilgi bloğu arasında kopma çizgisi (perforasyon).
    Mobilde kart yatay bilete (sol: görsel, sağ: bilgi) döner —
    bkz. RESPONSIVE bölümündeki max-width:700px kuralı.
    ════════════════════════════════════════════════════════════ */
@@ -439,13 +438,6 @@ footer {
   position: relative;
   border-top: 1.5px dashed rgba(255,255,255,.16);
 }
-/* "bilet deliği" — kartın kenarından ısırılmış gibi görünen iki daire */
-.ev-body::before, .ev-body::after {
-  content: ''; position: absolute; top: -9px; width: 18px; height: 18px;
-  border-radius: 50%; background: var(--black); z-index: 1;
-}
-.ev-body::before { left: -9px; }
-.ev-body::after { right: -9px; }
 
 .ev-cat-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
 .ev-badge, .ev-cat-badge {
@@ -508,8 +500,38 @@ footer {
 }
 .modal-hero-img { width:100%; height:100%; object-fit:cover; object-position:center; display:none; }
 .modal-hero-emoji { font-size: 5rem; z-index: 1; filter: drop-shadow(0 0 30px rgba(45,216,240,.3)); }
-.modal-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--dark) 100%); z-index: 2; }
+.modal-hero-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, transparent 40%, var(--dark) 100%); z-index: 2; pointer-events: none; }
 .modal-hero-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at center, rgba(45,216,240,.12) 0%, transparent 65%); z-index: 0; }
+
+/* ETKİNLİK KARTI GALERİSİ — modal-hero içinde tek foto/mozaik/emoji üretmek için ortak sarmalayıcı.
+   index.html, hakkimizda.html ve etkinlikler.html üçü de bunu kullanır. */
+.modal-hero-media { position:absolute; inset:0; z-index:1; display:flex; align-items:center; justify-content:center; }
+/* GALERİ MOZAİĞİ — modal içinde birden fazla fotoğraf varsa gösterilen mozaik */
+.modal-gallery-grid { position:absolute; inset:0; display:grid; grid-template-columns:2fr 1fr; grid-template-rows:1fr 1fr; gap:3px; }
+.modal-gallery-grid.two { grid-template-columns:1fr 1fr; grid-template-rows:1fr; }
+.mg-tile { position:relative; overflow:hidden; cursor:pointer; background:#0c1b24; }
+.mg-tile.mg-main { grid-row:1/3; }
+.modal-gallery-grid.two .mg-tile { grid-row:auto; }
+.mg-tile img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s cubic-bezier(.2,.7,.3,1); }
+.mg-tile:hover img { transform:scale(1.06); }
+.mg-more-badge { position:absolute; inset:0; background:rgba(6,11,15,.74); display:flex; align-items:center; justify-content:center; color:#fff; font-weight:800; font-size:1.35rem; letter-spacing:-.02em; }
+/* LIGHTBOX — galeri fotoğrafları arasında büyütülmüş gezinme */
+.lightbox { display:none; position:fixed; inset:0; z-index:900; background:rgba(4,7,9,.95); backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px); align-items:center; justify-content:center; padding:24px; }
+.lightbox.open { display:flex; }
+.lightbox-img { max-width:92vw; max-height:86vh; object-fit:contain; border-radius:14px; box-shadow:0 50px 120px rgba(0,0,0,.7),0 0 0 1px rgba(45,216,240,.1); user-select:none; }
+.lightbox-close { position:absolute; top:20px; right:20px; z-index:2; width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:#fff; font-size:1.05rem; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); transition:background .2s,border-color .2s; }
+.lightbox-close:hover { background:rgba(239,68,68,.22); border-color:rgba(239,68,68,.35); }
+.lightbox-nav { position:absolute; top:50%; transform:translateY(-50%); z-index:2; width:48px; height:48px; border-radius:50%; background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.14); color:#fff; font-size:1.5rem; line-height:1; padding-bottom:4px; cursor:pointer; display:flex; align-items:center; justify-content:center; backdrop-filter:blur(8px); transition:background .2s,border-color .2s,transform .2s; }
+.lightbox-nav:hover { background:rgba(45,216,240,.2); border-color:var(--cl); }
+.lightbox-prev { left:18px; }
+.lightbox-next { right:18px; }
+.lightbox-counter { position:absolute; bottom:22px; left:50%; transform:translateX(-50%); z-index:2; color:rgba(255,255,255,.75); font-size:.76rem; font-weight:700; letter-spacing:.06em; background:rgba(0,0,0,.45); border:1px solid rgba(255,255,255,.1); padding:6px 16px; border-radius:100px; }
+@media(max-width:600px){
+  .lightbox-nav{width:40px;height:40px;font-size:1.2rem;padding-bottom:3px}
+  .lightbox-prev{left:8px}
+  .lightbox-next{right:8px}
+  .lightbox{padding:12px}
+}
 
 .modal-x {
   position: absolute; top: 16px; right: 16px; z-index: 10;
@@ -731,9 +753,6 @@ margin-bottom: 6px; white-space: normal;}
     padding: 13px 16px 12px; justify-content: center;
     border-top: none; border-left: 1.5px dashed rgba(255,255,255,.16);
   }
-  .ev-body::before, .ev-body::after { left: -9px; right: auto; }
-  .ev-body::before { top: -9px; }
-  .ev-body::after { top: auto; bottom: -9px; }
   .ev-cat-row { margin-bottom: 6px; }
   .ev-title { font-size: .87rem; margin-bottom: 6px; -webkit-line-clamp: 2; }
   .ev-desc { display: none; }
