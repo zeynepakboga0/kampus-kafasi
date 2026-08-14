@@ -484,7 +484,7 @@ footer {
    ════════════════════════════════════════════════════════════ */
 .ev-gallery {
   display: grid; grid-template-columns: 1fr; gap: 3px;
-  width: 100%; aspect-ratio: 4/5; max-height: 70vh;
+  width: 100%; aspect-ratio: 16/9; max-height: 380px;
   background: linear-gradient(135deg,#0c1b24,#08121a);
   position: relative; overflow: hidden; flex-shrink: 0;
 }
@@ -563,7 +563,7 @@ footer {
 @keyframes modalIn { from{opacity:0;transform:scale(.88) translateY(20px)} to{opacity:1;transform:scale(1) translateY(0)} }
 
 .modal-hero {
-  position: relative; width: 100%; aspect-ratio: 4/5; max-height: 70vh;
+  position: relative; width: 100%; aspect-ratio: 16/9; max-height: 380px;
   background: linear-gradient(135deg,#0c1b24,#08121a);
   display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden;
 }
@@ -839,6 +839,29 @@ margin-bottom: 6px; white-space: normal;}
   .loader-title { font-size: 2.4rem; line-height: 1.1; text-align: center; }
   @keyframes divExpand { to { width: 130px; } }
   .loader-sub { font-size: .62rem; letter-spacing: .14em; text-align: center; padding: 0 10px; }
+}
+
+/* ── ETKİNLİK DETAY MODALI — mobilde daha orantılı/kısa görünüm ──
+   Fotoğraf alanı (.modal-hero) sabit bir "en/boy" yerine ekran
+   genişliğine göre ölçeklenen, üst sınırlı bir yükseklik alır;
+   böylece kart mobilde tüm ekranı kaplamaz, daha kısa ve orantılı
+   bir "önizleme kartı" gibi açılır. */
+@media (max-width: 700px) {
+  #event-modal, #ev-modal { align-items: flex-start; padding: 22px 16px; padding-top: 46px; }
+  .modal-box { border-radius: 22px; max-height: 84vh; }
+  .modal-hero { aspect-ratio: unset; height: 34vw; min-height: 130px; max-height: 190px; }
+  .modal-hero-emoji { font-size: 2.6rem; }
+  .modal-x, .modal-close-btn { width: 32px; height: 32px; top: 10px; right: 10px; font-size: .88rem; }
+  .ev-upcoming-bar, .ev-upcoming-badge, .ev-photo-count { top: 10px; }
+  .modal-content { padding: 0 18px 20px; }
+  .modal-tag-row { padding-top: 14px; margin-bottom: 10px; }
+  .modal-title { font-size: 1.12rem; margin-bottom: 14px; }
+  .modal-info-grid { padding: 12px 14px; gap: 8px; margin-bottom: 16px; border-radius: 14px; }
+  .modal-info-label { font-size: .58rem; }
+  .modal-info-value { font-size: .82rem; }
+  .modal-divider { margin-bottom: 16px; }
+  .modal-desc-label { margin-bottom: 6px; }
+  .modal-desc, .modal-desc-text { font-size: .84rem; line-height: 1.7; margin-bottom: 16px; }
 }
 
 @media (max-width: 520px) {
