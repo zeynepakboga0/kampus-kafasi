@@ -1047,6 +1047,49 @@ margin-bottom: 6px; white-space: normal;}
 .events-header { display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:14px; }
 .events-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px; }
 .events-cta { margin-top:44px;text-align:center; }
+
+/* ── ANA SAYFA ETKİNLİK ŞERİDİ: sonsuz kayan otomatik carousel ──
+   image-auto-slider referansındaki mantık: track iki katına çıkarılır,
+   %-50 translateX ile kesintisiz döngü sağlanır, kenarlar mask ile solar. */
+.events-scroll-wrap {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  mask: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+  -webkit-mask: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+#events .events-track {
+  display: flex;
+  gap: 24px;
+  width: max-content;
+}
+#events .events-track.events-track-animate {
+  animation: events-auto-scroll 24s linear infinite;
+}
+/* Şeride dokunulunca (hover/dokunma) kayma durur, kart okunabilir olur */
+#events .events-track.events-track-animate:hover,
+#events .events-track.events-track-animate:focus-within {
+  animation-play-state: paused;
+}
+#events .events-track .event-card {
+  flex: 0 0 300px;
+  width: 300px;
+  transition: transform .35s cubic-bezier(.34,1.2,.64,1), filter .3s ease;
+}
+#events .events-track .event-card:hover {
+  transform: translateY(-6px);
+}
+@keyframes events-auto-scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+@media (max-width: 640px) {
+  #events .events-track .event-card { flex-basis: 240px; width: 240px; }
+  #events .events-track.events-track-animate { animation-duration: 17s; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #events .events-track.events-track-animate { animation: none; }
+}
 .btn-events-page { display:inline-flex;align-items:center;gap:10px;background:linear-gradient(135deg,var(--cl),var(--cd));color:var(--black);padding:14px 32px;border-radius:100px;font-weight:700;font-size:.95rem;box-shadow:0 6px 28px rgba(45,216,240,.3);transition:transform .2s,box-shadow .2s; }
 .btn-events-page:hover { transform:translateY(-2px);box-shadow:0 12px 36px rgba(45,216,240,.45); }
 .btn-events-page svg { transition:transform .2s; }

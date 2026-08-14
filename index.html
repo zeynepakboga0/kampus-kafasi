@@ -163,7 +163,9 @@
         <h2 class="section-h" style="color:var(--white)">Etkinlikler</h2>
       </div>
     </div>
-    <div class="events-grid" id="events-grid"></div>
+    <div class="events-scroll-wrap reveal">
+      <div class="events-track" id="events-grid"></div>
+    </div>
     <div class="events-cta reveal">
       <a href="etkinlikler/" class="btn-events-page">
         Tüm Etkinlikleri Gör
@@ -342,19 +344,26 @@ events = [];
 // ── ETKİNLİK KARTI (event-card.js içindeki ortak kkBuildEventCard kullanılıyor) ──
 const EMOJI = window.KK_CAT_EMOJI;
 
-function buildEventCard(ev, isPast, delay) {
+function buildEventCard(ev, isPast, isClone) {
   const card = window.kkBuildEventCard(ev, {
     isPast,
     onClick: (e) => openModal(e.id)
   });
-  card.classList.add('reveal');
-  card.style.transitionDelay = delay + 's';
+  // Yıldız rozeti gizle
+  const featuredBadge = card.querySelector('.ev-featured-badge');
+  if (featuredBadge) featuredBadge.remove();
+  // Kopya kartlar (sonsuz döngü için) ekran okuyuculara ve klavyeye kapatılır
+  if (isClone) {
+    card.setAttribute('aria-hidden', 'true');
+    card.setAttribute('tabindex', '-1');
+  }
   return card;
 }
 
 function renderEvents() {
   const g = document.getElementById('events-grid');
   g.textContent = '';
+  g.classList.remove('events-track-animate');
   if (!events.length) {
     const msg = document.createElement('div');
     msg.className = 'no-events-msg';
@@ -365,25 +374,22 @@ function renderEvents() {
   const now = new Date();
   const featured = events.filter(e => e.featured);
   const preview = featured.length
-    ? featured.slice(0,6)
-    : [...events].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,6);
-  preview.forEach((ev, i) => {
+    ? featured.slice(0,10)
+    : [...events].sort((a,b) => new Date(b.date)-new Date(a.date)).slice(0,10);
+
+  preview.forEach(ev => {
     const isPast = new Date(ev.date) < now;
-    const card = buildEventCard(ev, isPast, i*0.07);
-    // Yıldız rozeti gizle
-    const featuredBadge = card.querySelector('.ev-featured-badge');
-    if (featuredBadge) featuredBadge.remove();
-    g.appendChild(card);
-    card.addEventListener('mouseenter', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = 'translateY(-6px)';
-    });
-    card.addEventListener('mouseleave', () => {
-      card.style.transition = 'transform .35s cubic-bezier(.34,1.2,.64,1)';
-      card.style.transform = '';
-    });
-    if (typeof revealObs !== 'undefined') revealObs.observe(card);
+    g.appendChild(buildEventCard(ev, isPast, false));
   });
+
+  // Kesintisiz kayma efekti için kartları bir kez daha (kopya olarak) ekliyoruz
+  if (preview.length > 1) {
+    preview.forEach(ev => {
+      const isPast = new Date(ev.date) < now;
+      g.appendChild(buildEventCard(ev, isPast, true));
+    });
+    g.classList.add('events-track-animate');
+  }
 }
 
 // ── FOTOĞRAF LİSTESİ (kapak + galeri) ──
