@@ -24,7 +24,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // repo adı ("kampus-kafasi") olduğu için kod bunu yanlışlıkla bir alt
   // sayfa sanıyor ve ana sayfaya özel metinler (Biz Kimiz paragrafları
   // gibi) hiç uygulanmıyordu.
-  const KNOWN_PAGES = ['hakkimizda', 'ekip', 'etkinlikler', 'iletisim', 'sponsorluk'];
+  const KNOWN_PAGES = ['hakkimizda', 'ekip', 'etkinlikler', 'iletisim', 'sponsorluk', 'oyun'];
   const segments = location.pathname.split('/').filter(Boolean); // boş parçaları at
   const lastSeg = segments.pop() || '';
   let page;

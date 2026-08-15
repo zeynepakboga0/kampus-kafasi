@@ -1,1 +1,3 @@
 User-agent: *
+Disallow: /kamkaf-admin_07/
+Sitemap: https://kampuskafasi.com/sitemap.xml

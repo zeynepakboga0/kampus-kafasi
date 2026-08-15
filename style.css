@@ -69,7 +69,12 @@ button { font-family: 'Outfit', sans-serif; }
 }
 @keyframes glowPulse { 0%,100%{transform:scale(1);opacity:.6} 50%{transform:scale(1.15);opacity:1} }
 
-.loader-content { position: relative; display: flex; flex-direction: column; align-items: center; gap: 24px; }
+.loader-stage { position: relative; width: 100%; min-height: 240px; display: flex; align-items: center; justify-content: center; }
+
+.loader-content {
+  position: relative;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 24px;
+}
 .loader-logo-wrap { position: relative; width: 88px; height: 88px; }
 .loader-img {
   width: 88px; height: 88px; border-radius: 20px; object-fit: cover;
@@ -298,7 +303,7 @@ footer {
 /* ════════════════════════════════════════════════════════════
    PAYLAŞILAN BÖLÜM STİLLERİ
    ════════════════════════════════════════════════════════════ */
-.section-wrap { max-width: 1100px; margin: 0 auto; }
+.section-wrap { max-width: 1400px; margin: 0 auto; }
 .section-lbl {
   display: inline-flex; align-items: center; gap: 8px;
   font-size: .7rem; font-weight: 700; text-transform: uppercase;
@@ -353,7 +358,7 @@ footer {
     linear-gradient(90deg, rgba(45,216,240,1) 1px, transparent 1px);
   background-size: 55px 55px;
 }
-.page-hero-inner { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; text-align: left; }
+.page-hero-inner { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; text-align: left; }
 
 .page-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
@@ -828,6 +833,23 @@ margin-bottom: 6px; white-space: normal;}
   .ev-meta { margin-bottom: 0; gap: 10px; }
   .ev-read-more { padding-top: 8px; font-size: .72rem; }
 
+  /* ── ANA SAYFA ETKİNLİK ŞERİDİ — mobilde de PC'deki gibi dikey/ferah kart ──
+     Yukarıdaki yatay bilet düzeni ana sayfadaki kayan şeritte kartları
+     sıkıştırıyordu; burada aynı satır/genişlikte kalsın ama görsel üstte,
+     bilgi altta olacak şekilde (PC'deki küçük kart görünümü gibi) geri alıyoruz. */
+  #events .events-track .event-card { flex-direction: column; align-items: stretch; }
+  #events .events-track .ev-thumb { aspect-ratio: 16/10; width: 100%; font-size: 2.6rem; }
+  #events .events-track .ev-upcoming-bar, #events .events-track .ev-upcoming-badge { top: 12px; left: 12px; font-size: .6rem; padding: 5px 11px 5px 9px; }
+  #events .events-track .ev-body {
+    padding: 18px 18px 16px; justify-content: flex-start;
+    border-top: 1.5px dashed rgba(255,255,255,.16); border-left: none;
+  }
+  #events .events-track .ev-cat-row { margin-bottom: 10px; }
+  #events .events-track .ev-title { font-size: .92rem; margin-bottom: 8px; -webkit-line-clamp: 2; }
+  #events .events-track .ev-desc { display: -webkit-box; }
+  #events .events-track .ev-meta { margin-bottom: 12px; gap: 12px; }
+  #events .events-track .ev-read-more { padding-top: 14px; font-size: .78rem; }
+
   /* ── LOADER — mobil ── */
   .loader-content { gap: 18px; padding: 0 24px; max-width: 100%; }
   .loader-glow { width: 260px; height: 260px; }
@@ -903,7 +925,7 @@ margin-bottom: 6px; white-space: normal;}
 .blob3 { width:240px;height:240px;background:rgba(45,216,240,.06);top:40%;left:30%;animation-delay:-5s; }
 @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(20px,-30px) scale(1.05)} 66%{transform:translate(-15px,20px) scale(.96)} }
 .hero-grid-bg { position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px; }
-.hero-inner { position:relative;z-index:1;max-width:1100px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 430px;gap:48px;align-items:center; }
+.hero-inner { position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 430px;gap:48px;align-items:center; }
 .hero-eyebrow { display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:22px;opacity:0;animation:fadeUp .7s .2s ease forwards; }
 .hero-dot { width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0; }
 .hero-title { font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(3.2rem,8vw,6.5rem);line-height:1.05;margin-bottom:22px;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .35s ease forwards;padding-bottom:.1em; }
@@ -1011,7 +1033,7 @@ margin-bottom: 6px; white-space: normal;}
 }
 .hero-sub { font-size:1rem;color:rgba(255,255,255,.45);font-weight:300;max-width:480px;line-height:1.8;margin-bottom:36px;opacity:0;animation:fadeUp .7s .5s ease forwards; }
 .hero-btns { display:flex;gap:12px;flex-wrap:wrap;opacity:0;animation:fadeUp .7s .65s ease forwards; }
-.hero-stats { display:flex;margin-top:48px;opacity:0;animation:fadeUp .7s .8s ease forwards;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);max-width:460px; }
+.hero-stats { display:flex;margin-top:28px;opacity:0;animation:fadeUp .7s .8s ease forwards;border:1px solid var(--bd);border-radius:14px;overflow:hidden;background:rgba(255,255,255,.02);max-width:460px; }
 .stat-item { flex:1; min-width:0; padding:16px 6px;text-align:center;border-right:1px solid var(--bd); }
 .stat-item:last-child { border-right:none; }
 .stat-num { font-size:clamp(1.1rem,3.5vw,2rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap; }
@@ -1053,10 +1075,12 @@ margin-bottom: 6px; white-space: normal;}
    %-50 translateX ile kesintisiz döngü sağlanır, kenarlar mask ile solar. */
 .events-scroll-wrap {
   position: relative;
-  width: 100%;
+  width: 100vw;
+  left: 50%;
+  margin-left: -50vw;
   overflow: hidden;
-  mask: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
-  -webkit-mask: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+  mask: linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%);
+  -webkit-mask: linear-gradient(90deg, transparent 0%, black 4%, black 96%, transparent 100%);
 }
 #events .events-track {
   display: flex;
@@ -1064,7 +1088,7 @@ margin-bottom: 6px; white-space: normal;}
   width: max-content;
 }
 #events .events-track.events-track-animate {
-  animation: events-auto-scroll 24s linear infinite;
+  animation: events-auto-scroll 14s linear infinite;
 }
 /* Şeride dokunulunca (hover/dokunma) kayma durur, kart okunabilir olur */
 #events .events-track.events-track-animate:hover,
