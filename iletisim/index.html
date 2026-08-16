@@ -28,7 +28,7 @@
 .page-hero{padding:90px 32px 40px;position:relative;overflow:hidden}
 .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
 .page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
-.page-hero-inner{position:relative;z-index:1;max-width:1400px;margin:0 auto;text-align:left}
+.page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
 .page-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:18px;opacity:0;animation:fadeUp .7s .3s ease forwards}
 .page-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
@@ -37,7 +37,7 @@
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* SECTIONS */
-.section-wrap{max-width:1400px;margin:0 auto}
+.section-wrap{max-width:1100px;margin:0 auto}
 .section-lbl{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:8px}
 .section-lbl::before{content:'';display:block;width:14px;height:1.5px;background:var(--cl)}
 .section-h{font-size:clamp(1.55rem,3.2vw,2.2rem);font-weight:800;line-height:1.15;margin-bottom:6px}
@@ -107,7 +107,7 @@
 .fs-icon{font-size:2.4rem;margin-bottom:4px}
 .fs-title{font-size:1.05rem;font-weight:800;color:var(--white)}
 .fs-text{font-size:.84rem;color:rgba(255,255,255,.42);line-height:1.65;max-width:260px}
-.fs-again{background:none;border:1px solid rgba(45,216,240,.25);color:var (--cl);border-radius:100px;padding:9px 22px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:6px;transition:background .2s}
+.fs-again{background:none;border:1px solid rgba(45,216,240,.25);color:var(--cl);border-radius:100px;padding:9px 22px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;margin-top:6px;transition:background .2s}
 .fs-again:hover{background:rgba(45,216,240,.07)}
 
 /* SSS (FAQ) */
@@ -185,18 +185,18 @@
 
 /* FOOTER */
 footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 32px 32px}
-.footer-inner{max-width:1400px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:48px;margin-bottom:40px}
 .footer-brand .fl{font-family:'Dancing Script',cursive;font-size:1.5rem;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:10px}
 .footer-brand p{font-size:.83rem;color:rgba(255,255,255,.3);line-height:1.7}
 .footer-col h5{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cl);margin-bottom:16px}
 .footer-col a{display:block;font-size:.85rem;color:rgba(255,255,255,.4);margin-bottom:9px;transition:color .2s}
 .footer-col a:hover{color:var(--cl)}
-.footer-bottom{max-width:1400px;margin:0 auto;padding-top:24px;border-top:1px solid var(--bd);text-align:center;font-size:.75rem;color:rgba(255,255,255,.2)}zzz
+.footer-bottom{max-width:1100px;margin:0 auto;padding-top:24px;border-top:1px solid var(--bd);text-align:center;font-size:.75rem;color:rgba(255,255,255,.2)}
 
 /* RESPONSIVE */
 @media(max-width:960px){
   .contact-grid{grid-template-columns:repeat(2,1fr);gap:12px}
-  .form-layout{grid-template-columns:1fr;gap:24px}
+  .form-layout{grid-template-columns:1fr!important;gap:24px}
   .footer-inner{grid-template-columns:1fr;gap:28px}
   #nav{padding:0 18px}.nav-links{display:none}
   #contact-info,#contact-form-section,#faq{padding:40px 18px}

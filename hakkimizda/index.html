@@ -26,6 +26,7 @@
 .page-hero{background:rgba(7,9,11,.95)}
 /* BİZ KİMİZ */
 #intro{padding:56px 32px;background:rgba(7,9,11,.82)}
+.intro-wrap{max-width:80%}
 .intro-text p{font-size:.98rem;color:rgba(255,255,255,.53);line-height:1.9;margin-bottom:16px;word-break:break-word;overflow-wrap:anywhere;white-space:normal;max-width:100%}
 .intro-text p:last-child{margin-bottom:0}
 
@@ -45,9 +46,12 @@
 /* FAALİYETLER */
 #activities{padding:56px 32px;background:rgba(10,15,21,.82)}
 .activities-intro{max-width:560px;margin:8px 0 32px;font-size:.9rem;color:rgba(255,255,255,.4);line-height:1.75}
-.activities-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-.activity-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;transition:transform .35s cubic-bezier(.34,1.2,.64,1),box-shadow .35s,border-color .35s,opacity .42s;cursor:pointer;position:relative;display:flex;flex-direction:column}
+.activities-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,280px));gap:14px;perspective:1400px}
+.activity-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .35s,border-color .35s,opacity .42s;cursor:pointer;position:relative;display:flex;flex-direction:column;transform-style:preserve-3d;will-change:transform}
 .activity-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(45,216,240,.15);border-color:rgba(45,216,240,.3)}
+/* İmleci takip eden ışıltı — coverflow kartlarının parlaklığından esinlenildi */
+.activity-card::before{content:'';position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(45,216,240,.16),transparent 62%);opacity:0;transition:opacity .4s ease}
+.activity-card.tilting::before{opacity:1}
 .ac-enter{transform:translateY(14px)}
 .ac-cover{aspect-ratio:3/2;background:linear-gradient(135deg,rgba(45,216,240,.07),rgba(13,110,106,.09));display:flex;align-items:center;justify-content:center;font-size:2.8rem;flex-shrink:0;overflow:hidden;position:relative}
 .ac-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,9,11,.6) 100%);pointer-events:none}
@@ -99,14 +103,11 @@
 /* RESPONSIVE — sadece bu sayfaya özel */
 @media(max-width:960px){
   .vm-grid{grid-template-columns:1fr;gap:12px}
-  .activities-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .activities-grid{grid-template-columns:1fr;gap:12px}
   .activities-cta{flex-direction:column;text-align:center;padding:26px 20px}
   #intro,#vision-mission,#activities{padding:40px 18px}
   .page-hero{padding:85px 18px 56px}
 
-}
-@media(max-width:520px){
-  .activities-grid{grid-template-columns:1fr}
 }
 
 /* MODAL SCROLL FİX */
@@ -128,6 +129,7 @@
    üst sınırlı bir yükseklik alır; kart mobilde tüm ekranı kaplamaz ve
    ekranın üst kısmında, ortalanmış şekilde açılır. */
 @media(max-width:700px){
+  .intro-wrap{max-width:100%}
   #ev-modal-bg{align-items:flex-start!important;padding:22px 16px!important;padding-top:46px!important}
   .ev-modal{border-radius:22px}
   #ev-modal-bg .ev-modal{max-height:84vh!important}
@@ -227,7 +229,7 @@
 <!-- BİZ KİMİZ -->
 <section id="intro">
   <div class="section-wrap">
-    <div style="max-width:80%" class="reveal">
+    <div class="intro-wrap reveal">
       <span class="section-lbl">Biz Kimiz</span>
       <h2 class="section-h" style="color:var(--white);margin-bottom:18px">Kampüs Kafası ile Tanış</h2>
       <div class="intro-text">
@@ -421,6 +423,33 @@ function closeDrawer() {
 // ── ETKİNLİK VERİSİ ──
 const EMOJI_MAP = window.KK_CAT_EMOJI;
 
+// Coverflow'dan esinlenen 3D tilt — sadece fareli/masaüstü cihazlarda, mobilde devre dışı
+const KK_SUPPORTS_TILT = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
+function attachCoverflowTilt(card) {
+  if (!KK_SUPPORTS_TILT) return;
+  const MAX_DEG = 8;
+  let raf = null;
+  card.addEventListener('pointermove', (e) => {
+    const rect = card.getBoundingClientRect();
+    const px = (e.clientX - rect.left) / rect.width;
+    const py = (e.clientY - rect.top) / rect.height;
+    const rx = (0.5 - py) * MAX_DEG * 2;
+    const ry = (px - 0.5) * MAX_DEG * 2;
+    if (raf) cancelAnimationFrame(raf);
+    raf = requestAnimationFrame(() => {
+      card.style.transform = `translateY(-4px) scale(1.025) rotateX(${rx}deg) rotateY(${ry}deg)`;
+      card.style.setProperty('--mx', (px * 100) + '%');
+      card.style.setProperty('--my', (py * 100) + '%');
+    });
+  });
+  card.addEventListener('pointerenter', () => card.classList.add('tilting'));
+  card.addEventListener('pointerleave', () => {
+    card.classList.remove('tilting');
+    if (raf) cancelAnimationFrame(raf);
+    card.style.transform = '';
+  });
+}
+
 function escHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -450,8 +479,9 @@ function loadActivities(eventsFromFirebase) {
       onClick: () => openEvModal(ev, events)
     });
     card.style.opacity = '0';
-    card.style.transition = `opacity .42s ${i*0.06}s ease`;
+    card.style.transition = `opacity .42s ${i*0.06}s ease, transform .5s cubic-bezier(.22,1,.36,1), box-shadow .35s ease, border-color .35s ease`;
     card.classList.add('ac-enter');
+    attachCoverflowTilt(card);
     grid.appendChild(card);
   });
 

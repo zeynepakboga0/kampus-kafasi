@@ -1,0 +1,91 @@
+<!-- 
+  ÇEREZ ONAY BANNER'I + GOOGLE ANALYTICS ENTEGRASYONU
+  ============================================================
+  Bu kodu index.html, hakkimizda/index.html, ekip/index.html,
+  etkinlikler/index.html, iletisim/index.html, sponsorluk/index.html 
+  dosyalarının HEPSİNE eklemeniz gerekiyor (banner her sayfada 
+  görünmeli, sadece ana sayfada değil).
+
+  NEREYE EKLENİR: Her sayfada </body> etiketinin hemen ÜSTÜNE yapıştırın.
+
+  YAPMANIZ GEREKEN TEK ŞEY: Aşağıdaki "G-XXXXXXXXXX" yazan İKİ yeri 
+  kendi Google Analytics Ölçüm Kimliğiniz (Measurement ID) ile değiştirin.
+  Bunu şuradan alırsınız: analytics.google.com → Yönetici → Veri Akışları 
+  → Web akışınız → "Ölçüm Kimliği" (G- ile başlar)
+  ============================================================
+-->
+
+<!-- Çerez Onay Banner'ı -->
+<div id="kk-cookie-banner" style="display:none; position:fixed; bottom:0; left:0; right:0; z-index:9999; background:#0c1b24; color:#fff; padding:18px 20px; box-shadow:0 -2px 20px rgba(0,0,0,.3); font-family:inherit;">
+  <div style="max-width:1000px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:16px;">
+    <p style="margin:0; font-size:14px; line-height:1.5; flex:1; min-width:240px;">
+      Sitemizde, ziyaretçi istatistiklerini ölçmek amacıyla Google Analytics çerezleri kullanıyoruz.
+      Detaylı bilgi için <a href="/cerez-politikasi/" style="color:#2DDDD4; text-decoration:underline;">Çerez Politikamızı</a> inceleyebilirsiniz.
+    </p>
+    <div style="display:flex; gap:10px; flex-shrink:0;">
+      <button id="kk-cookie-reject" style="padding:9px 18px; border-radius:8px; border:1px solid #444; background:transparent; color:#fff; cursor:pointer; font-size:14px;">Reddet</button>
+      <button id="kk-cookie-accept" style="padding:9px 18px; border-radius:8px; border:none; background:#2DDDD4; color:#0c1b24; font-weight:600; cursor:pointer; font-size:14px;">Kabul Et</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  'use strict';
+
+  var CONSENT_KEY = 'kk_cookie_consent'; // localStorage anahtarı
+  var GA_MEASUREMENT_ID = 'G-XXXXXXXXXX'; // <-- BURAYA KENDİ ÖLÇÜM KİMLİĞİNİZİ YAZIN
+
+  function loadGoogleAnalytics() {
+    if (window._gaLoaded) return; // aynı sayfada iki kez yüklenmesin
+    window._gaLoaded = true;
+
+    var script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA_MEASUREMENT_ID;
+    document.head.appendChild(script);
+
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){ window.dataLayer.push(arguments); }
+    window.gtag = gtag;
+    gtag('js', new Date());
+    gtag('config', GA_MEASUREMENT_ID, { anonymize_ip: true });
+  }
+
+  function getConsent() {
+    try { return localStorage.getItem(CONSENT_KEY); } catch (e) { return null; }
+  }
+  function setConsent(value) {
+    try { localStorage.setItem(CONSENT_KEY, value); } catch (e) {}
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var banner = document.getElementById('kk-cookie-banner');
+    var acceptBtn = document.getElementById('kk-cookie-accept');
+    var rejectBtn = document.getElementById('kk-cookie-reject');
+    var consent = getConsent();
+
+    if (consent === 'accepted') {
+      loadGoogleAnalytics();
+    } else if (consent === null) {
+      // Daha önce bir tercih belirtilmemiş -> banner'ı göster
+      if (banner) banner.style.display = 'block';
+    }
+    // consent === 'rejected' ise: hiçbir şey yapma, GA yüklenmez
+
+    if (acceptBtn) {
+      acceptBtn.addEventListener('click', function() {
+        setConsent('accepted');
+        if (banner) banner.style.display = 'none';
+        loadGoogleAnalytics();
+      });
+    }
+    if (rejectBtn) {
+      rejectBtn.addEventListener('click', function() {
+        setConsent('rejected');
+        if (banner) banner.style.display = 'none';
+      });
+    }
+  });
+})();
+</script>
