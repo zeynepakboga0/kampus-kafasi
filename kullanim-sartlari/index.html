@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../style.css">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Kullanım Şartları — Kampüs Kafası</title>
+<meta name="description" content="Kampüs Kafası Kullanım Şartları. Siteyi ve topluluk kanallarını kullanırken uyulması gereken kurallar.">
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="Kullanım Şartları — Kampüs Kafası">
+<meta property="og:description" content="Kampüs Kafası Kullanım Şartları. Siteyi ve topluluk kanallarını kullanırken uyulması gereken kurallar.">
+<meta property="og:image" content="https://kampuskafasi.com/logo.jpg">
+<meta property="og:url" content="https://kampuskafasi.com/kullanim-sartlari/">
+<meta property="og:locale" content="tr_TR">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kullanım Şartları — Kampüs Kafası">
+<meta name="twitter:description" content="Kampüs Kafası Kullanım Şartları. Siteyi ve topluluk kanallarını kullanırken uyulması gereken kurallar.">
+<meta name="twitter:image" content="https://kampuskafasi.com/logo.jpg">
+
+<meta name="robots" content="index, follow">
+
+<link rel="icon" type="image/jpeg" href="../logo.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* PAGE HERO (diğer alt sayfalarla aynı kalıp) */
+.page-hero{padding:90px 32px 40px;position:relative;overflow:hidden;background:rgba(7,9,11,.95)}
+.page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
+.page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
+.page-hero-inner{position:relative;z-index:1;max-width:1400px;margin:0 auto;text-align:left}
+.page-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:18px;opacity:0;animation:fadeUp .7s .3s ease forwards}
+.page-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
+.page-title{font-family:'Dancing Script',cursive;font-size:clamp(2.4rem,5.5vw,4.2rem);font-weight:700;line-height:1.2;margin-bottom:14px;padding-bottom:6px;overflow:visible;background:linear-gradient(135deg,var(--cl) 0%,#fff 50%,var(--cl) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .45s ease forwards,shimmerAnim 3s 1.5s linear infinite;text-align:left}
+.page-subtitle{font-size:.95rem;color:rgba(255,255,255,.4);font-weight:400;max-width:560px;line-height:1.75;opacity:0;animation:fadeUp .7s .6s ease forwards}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shimmerAnim{to{background-position:200% center}}
+
+/* LEGAL CONTENT */
+.legal-wrap{max-width:820px;margin:0 auto 0 40px;padding:20px 32px 90px}
+.legal-updated{font-size:.8rem;color:var(--muted);margin-bottom:36px;padding-bottom:20px;border-bottom:1px solid var(--bd)}
+.legal-content h2{font-size:1.15rem;font-weight:800;color:var(--white);margin:38px 0 14px;padding-top:6px}
+.legal-content h2:first-child{margin-top:0}
+.legal-content p{font-size:.9rem;line-height:1.85;color:rgba(255,255,255,.62);margin-bottom:14px}
+.legal-content ul{margin:0 0 16px;padding-left:20px}
+.legal-content li{font-size:.9rem;line-height:1.85;color:rgba(255,255,255,.62);margin-bottom:6px}
+.legal-content strong{color:rgba(255,255,255,.88);font-weight:700}
+.legal-content a{color:var(--cl);text-decoration:underline;text-underline-offset:2px}
+.legal-content blockquote{margin:18px 0;padding:16px 18px;border-left:2px solid var(--cl);background:rgba(45,216,240,.05);border-radius:0 10px 10px 0}
+.legal-content blockquote p{margin-bottom:0;color:rgba(255,255,255,.7)}
+.legal-content table{width:100%;border-collapse:collapse;margin:16px 0 22px;font-size:.82rem}
+.legal-content th{text-align:left;color:var(--cl);font-weight:700;padding:10px 12px;border-bottom:1px solid var(--bd);white-space:nowrap}
+.legal-content td{padding:10px 12px;border-bottom:1px solid var(--bd);color:rgba(255,255,255,.62)}
+.legal-content hr{border:none;border-top:1px solid var(--bd);margin:32px 0}
+.legal-content em{color:rgba(255,255,255,.45);font-size:.85rem}
+</style>
+</head>
+<body>
+
+<!-- LOADER -->
+<div id="loader">
+  <canvas id="ld-canvas"></canvas>
+  <div class="loader-bg-grid"></div>
+  <div class="loader-glow"></div>
+  <div class="loader-content">
+    <div class="loader-logo-wrap">
+      <img src="../logo.jpg" class="loader-img" alt="" onerror="this.style.display='none'">
+      <div class="loader-img-ring"></div><div class="loader-img-ring2"></div><div class="loader-img-ring3"></div>
+    </div>
+    <div class="loader-text-wrap">
+      <div class="loader-title">Kampüs Kafası</div>
+      <div class="loader-divider"></div>
+      <div class="loader-sub">Kullanım Şartları</div>
+      <div class="loader-dots"><div class="loader-dot"></div><div class="loader-dot"></div><div class="loader-dot"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="../" class="nav-logo"><img src="../logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</a>
+  <ul class="nav-links">
+    <li><a href="../">Ana Sayfa</a></li>
+    <li><a href="../hakkimizda/">Hakkımızda</a></li>
+    <li><a href="../etkinlikler/">Etkinlikler</a></li>
+    <li><a href="../ekip/">Ekip</a></li>
+    <li><a href="../iletisim/">İletişim</a></li>
+    <li><a href="../sponsorluk/">Sponsorluk</a></li>
+  </ul>
+  <div class="nav-right">
+    <button class="hamburger" id="hamburger" onclick="toggleDrawer()"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- DRAWER -->
+<div id="drawer-overlay" onclick="closeDrawer()"></div>
+<aside id="drawer">
+  <div class="drawer-top">
+    <div class="drawer-logo"><img src="../logo.jpg" alt="" onerror="this.style.display='none'">Kampüs Kafası</div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <nav class="drawer-links">
+    <a href="../" class="drawer-link" onclick="closeDrawer()">Ana Sayfa</a>
+    <a href="../hakkimizda/" class="drawer-link" onclick="closeDrawer()">Hakkımızda</a>
+    <a href="../etkinlikler/" class="drawer-link" onclick="closeDrawer()">Etkinlikler</a>
+    <a href="../ekip/" class="drawer-link" onclick="closeDrawer()">Ekip</a>
+    <a href="../iletisim/" class="drawer-link" onclick="closeDrawer()">İletişim</a>
+    <a href="../sponsorluk/" class="drawer-link" onclick="closeDrawer()">Sponsorluk & İş Birliği</a>
+  </nav>
+  <div class="drawer-bottom">
+    <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="drawer-ig">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+      @kampuskafasii
+    </a>
+    <a href="#" id="drawer-wa" class="drawer-ig" style="background:linear-gradient(135deg,#25d366,#128c7e);margin-top:8px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+      WhatsApp Grubuna Katıl
+    </a>
+</div>
+</aside>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="page-hero-grid"></div>
+  <div class="page-hero-inner">
+    <div class="page-eyebrow"><span class="page-dot"></span><span>Yasal · Kampüs Kafası</span></div>
+    <h1 class="page-title">Kullanım Şartları</h1>
+    <div class="page-subtitle">Siteyi ve topluluk kanallarını kullanırken uyulması gereken kurallar.</div>
+  </div>
+</div>
+
+<!-- LEGAL CONTENT -->
+<div class="legal-wrap">
+  <div class="legal-content">
+<p class="legal-updated">Son Güncelleme Tarihi: [tarih girin]</p>
+<h2>1. Genel</h2>
+<p>Bu Kullanım Şartları, kampuskafasi.com internet sitesini ("Site") ve Kampüs Kafası'na ait WhatsApp grubu, Instagram, LinkedIn ve TikTok hesaplarını ("Kanallar") kullanan herkes için geçerlidir. Site'yi ve Kanalları kullanarak bu şartları kabul etmiş sayılırsınız.</p>
+<h2>2. Kampüs Kafası Nedir?</h2>
+<p>Kampüs Kafası, Akdeniz Üniversitesi'nde okuyan öğrenciler tarafından gönüllü olarak kurulmuş, bağımsız bir öğrenci topluluğudur. Kampüs Kafası; Gençlik ve Spor Bakanlığı (GSB), Akdeniz Üniversitesi Sağlık Kültür ve Spor Daire Başkanlığı (SKS), Akdeniz Üniversitesi rektörlüğü veya bunlara bağlı hiçbir birimin resmi bir parçası, temsilcisi veya bağlı kuruluşu değildir. Zaman zaman bu kurumlarla ortak faaliyet yürütülmüş olması, aramızda resmi bir bağlılık ilişkisi olduğu anlamına gelmez.</p>
+<h2>3. Sitenin ve Kanalların Amacı</h2>
+<p>Site ve Kanallar; Kampüs Kafası'nın düzenlediği etkinlik, gezi ve sosyal aktivitelerin duyurulması, topluluk üyeleri arasında iletişimin sağlanması ve topluluğun tanıtılması amacıyla işletilmektedir. Site üzerinden herhangi bir ticari satış veya ücretli hizmet sunulmamaktadır.</p>
+<h2>4. Kullanıcı Yükümlülükleri</h2>
+<p>Site'yi ve özellikle WhatsApp grubunu kullanırken:</p>
+<ul>
+<li>Diğer kullanıcılara karşı saygılı ve nazik bir iletişim dili kullanmayı,</li>
+<li>Hakaret, ayrımcılık, taciz, nefret söylemi veya yasa dışı içerik paylaşmamayı,</li>
+<li>Kampüs Kafası yönetiminin onayı olmadan grup içinde ticari reklam, tanıtım, anket veya toplu mesaj (spam) paylaşmamayı,</li>
+<li>Başka kullanıcıların kişisel verilerini (telefon numarası, fotoğraf vb.) izinsiz paylaşmamayı,</li>
+<li>Grup/Kanal kurallarına ve Kampüs Kafası yönetiminin makul yönlendirmelerine uymayı</li>
+</ul>
+<p>kabul etmiş sayılırsınız. Bu kurallara aykırı davranan kullanıcılar, Kampüs Kafası yönetimi tarafından herhangi bir gerekçe belirtme zorunluluğu olmaksızın gruptan/Kanaldan çıkarılabilir.</p>
+<h2>5. Etkinlik ve Gezilere Katılım — Sorumluluk Sınırı</h2>
+<p>Kampüs Kafası tarafından duyurulan etkinlik, gezi ve sosyal aktivitelere katılım tamamen <strong>gönüllülük esasına dayanır</strong>. Bu etkinliklere katılım kararı ve katılım sırasında meydana gelebilecek her türlü risk (kaza, yaralanma, maddi/manevi kayıp dahil ancak bunlarla sınırlı olmamak üzere), aksi açıkça yazılı olarak belirtilmedikçe, <strong>katılımcının kendi sorumluluğundadır</strong>. Kampüs Kafası, gönüllü bir öğrenci topluluğu olup, bu etkinlikler için sigorta veya benzeri bir güvence sağlamamaktadır; katılımcıların bu hususu göz önünde bulundurarak katılım kararı vermesi önemle rica olunur.</p>
+<p>Etkinliklerde üçüncü taraf mekan, işletme veya hizmet sağlayıcılarla çalışılması halinde, ilgili mekan/işletmenin kendi kural ve sorumlulukları da ayrıca geçerlidir.</p>
+<h2>6. Fikri Mülkiyet</h2>
+<p>Site'de yer alan logo, isim, görsel tasarım, metin içerikleri ve benzeri unsurlar Kampüs Kafası'na aittir. Bu içerikler, Kampüs Kafası'nın önceden yazılı izni olmaksızın ticari amaçla kopyalanamaz, çoğaltılamaz veya dağıtılamaz. Etkinliklerde çekilen ve ekip/etkinlik sayfalarında paylaşılan fotoğraflar, tanıtım ve arşiv amacıyla kullanılabilir.</p>
+<h2>7. Üçüncü Taraf Bağlantılar ve Analitik</h2>
+<p>Site, Instagram, WhatsApp, LinkedIn, TikTok gibi üçüncü taraf platformlara yönlendiren bağlantılar içerebilir. Bu platformların içerikleri, kullanım koşulları ve gizlilik uygulamaları Kampüs Kafası'nın kontrolü dışındadır ve bu platformlar kendi kullanım şartlarına tabidir.</p>
+<p>Site, ziyaretçi istatistiklerini ölçmek amacıyla, açık rızanıza bağlı olarak <strong>Google Analytics</strong> kullanmaktadır. Bu konuda detaylı bilgi için <strong>Çerez Politikası</strong>'nı inceleyebilirsiniz.</p>
+<h2>8. İletişim Formu / E-posta ile İletişim</h2>
+<p>İletişim formu, e-posta veya benzer kanallar aracılığıyla bize gönderdiğiniz bilgilerin doğruluğundan siz sorumlusunuz. Kampüs Kafası, gönderilen taleplere makul süre içinde yanıt vermeye çalışır; ancak topluluğun gönüllülük esasına dayalı işleyişi nedeniyle belirli bir yanıt süresi konusunda garanti verilmemektedir.</p>
+<h2>9. Sorumluluk Reddi</h2>
+<p>Site içeriği "olduğu gibi" sunulmaktadır. Kampüs Kafası, Site'nin kesintisiz veya hatasız çalışacağını garanti etmez. Site'nin kullanımından doğabilecek doğrudan veya dolaylı zararlardan, yasaların izin verdiği azami ölçüde, Kampüs Kafası sorumlu tutulamaz.</p>
+<h2>10. Değişiklik Hakkı</h2>
+<p>Kampüs Kafası, bu Kullanım Şartları'nı dilediği zaman güncelleme hakkını saklı tutar. Güncel şartlar her zaman bu sayfada yayınlanır.</p>
+<h2>11. Uygulanacak Hukuk ve Yetkili Mahkeme</h2>
+<p>Bu Kullanım Şartları, Türkiye Cumhuriyeti kanunlarına tabidir. İşbu şartlardan doğabilecek her türlü uyuşmazlığın çözümünde <strong>Antalya Mahkemeleri ve İcra Daireleri</strong> yetkilidir.</p>
+<h2>12. İletişim</h2>
+<p>Sorularınız için <strong>iletisim@kampuskafasi.com</strong> adresinden bize ulaşabilirsiniz.</p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="fl">Kampüs Kafası · Antalya</div>
+      <p>Akdeniz Üniversitesi öğrenci topluluğu<br>17.000+ üye · Antalya</p>
+    </div>
+    <div class="footer-col">
+      <h5>Navigasyon</h5>
+      <a href="../">Ana Sayfa</a>
+      <a href="../hakkimizda/">Hakkımızda</a>
+      <a href="../etkinlikler/">Etkinlikler</a>
+      <a href="../ekip/">Ekip</a>
+      <a href="../iletisim/">İletişim</a>
+    </div>
+    <div class="footer-col">
+      <h5>Sosyal Medya</h5>
+      <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">Instagram</a>
+      <a href="#" id="footer-wa">WhatsApp</a>
+      <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a href="https://www.tiktok.com/@kampuskafasi" target="_blank" rel="noopener noreferrer">TikTok</a>
+    </div>
+    <div class="footer-col">
+      <h5>Yasal</h5>
+      <a href="../kvkk/">KVKK Aydınlatma Metni</a>
+      <a href="../gizlilik-politikasi/">Gizlilik Politikası</a>
+      <a href="../cerez-politikasi/">Çerez Politikası</a>
+      <a href="../kullanim-sartlari/">Kullanım Şartları</a>
+    </div>
+  </div>
+  <div class="footer-bottom"><p>© 2026 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
+</footer>
+
+<script src="../main.js" defer></script>
+<script type="module" src="../kk-data.js"></script>
+</body>
+</html>

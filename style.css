@@ -275,9 +275,9 @@ footer {
   padding: 60px 32px 32px;
 }
 .footer-inner {
-  max-width: 1100px; margin: 0 auto;
-  display: grid; grid-template-columns: 1.4fr 1fr 1fr;
-  gap: 48px; margin-bottom: 40px;
+  max-width: 1200px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.3fr .85fr .85fr .85fr;
+  gap: 40px; margin-bottom: 40px;
 }
 .footer-brand .fl {
   font-family: 'Dancing Script', cursive; font-size: 1.5rem;
@@ -294,7 +294,7 @@ footer {
 .footer-col a { display: block; font-size: .85rem; color: rgba(255,255,255,.4); margin-bottom: 9px; transition: color .2s; }
 .footer-col a:hover { color: var(--cl); }
 .footer-bottom {
-  max-width: 1100px; margin: 0 auto; padding-top: 24px;
+  max-width: 1200px; margin: 0 auto; padding-top: 24px;
   border-top: 1px solid var(--bd);
   text-align: center; font-size: .75rem; color: rgba(255,255,255,.2);
 }
@@ -359,6 +359,17 @@ footer {
   background-size: 55px 55px;
 }
 .page-hero-inner { position: relative; z-index: 1; max-width: 1400px; margin: 0 auto; text-align: left; }
+
+.page-hero-canvas {
+  position: absolute; top: 0; right: 0;
+  width: 56%; height: 100%;
+  pointer-events: none; opacity: .55;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 55%, transparent 100%);
+}
+@media (max-width: 900px) {
+  .page-hero-canvas { display: none; }
+}
 
 .page-eyebrow {
   display: inline-flex; align-items: center; gap: 8px;
@@ -925,7 +936,7 @@ margin-bottom: 6px; white-space: normal;}
 .blob3 { width:240px;height:240px;background:rgba(45,216,240,.06);top:40%;left:30%;animation-delay:-5s; }
 @keyframes blobFloat { 0%,100%{transform:translate(0,0) scale(1)} 33%{transform:translate(20px,-30px) scale(1.05)} 66%{transform:translate(-15px,20px) scale(.96)} }
 .hero-grid-bg { position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px; }
-.hero-inner { position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 430px;gap:48px;align-items:center; }
+.hero-inner { position:relative;z-index:1;max-width:1400px;margin:0 auto;width:100%;display:grid;grid-template-columns:1fr 460px;gap:48px;align-items:center; }
 .hero-eyebrow { display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:22px;opacity:0;animation:fadeUp .7s .2s ease forwards; }
 .hero-dot { width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0; }
 .hero-title { font-family:'Dancing Script',cursive;font-weight:700;font-size:clamp(3.2rem,8vw,6.5rem);line-height:1.05;margin-bottom:22px;background:linear-gradient(135deg,var(--cl),var(--cd));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;opacity:0;animation:fadeUp .7s .35s ease forwards;padding-bottom:.1em; }
@@ -944,6 +955,7 @@ margin-bottom: 6px; white-space: normal;}
   line-height:1.1;
   letter-spacing:-.008em;
   margin-bottom:.26em;
+  white-space:nowrap;
   background:linear-gradient(100deg,rgba(255,255,255,.85) 0%,var(--cl) 50%,rgba(255,255,255,.85) 100%);
   background-size:200% 100%;
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
@@ -1038,7 +1050,7 @@ margin-bottom: 6px; white-space: normal;}
 .stat-item:last-child { border-right:none; }
 .stat-num { font-size:clamp(1.1rem,3.5vw,2rem);font-weight:800;line-height:1;background:linear-gradient(135deg,var(--cl),var(--cm));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;white-space:nowrap; }
 .stat-lbl { font-size:.65rem;color:rgba(255,255,255,.3);font-weight:500;margin-top:3px;letter-spacing:.04em; }
-.hero-visual { opacity:0;animation:fadeUp .7s .55s ease forwards;display:flex;align-items:center;justify-content:center;position:relative;width:430px;height:430px; }
+.hero-visual { opacity:0;animation:fadeUp .7s .55s ease forwards;display:flex;align-items:center;justify-content:center;position:relative;width:460px;height:460px; }
 .logo-glow-bg { position:absolute;inset:-60px;border-radius:50%;background:radial-gradient(circle,rgba(45,221,212,.18),transparent 65%);animation:glowPulse 3.5s ease-in-out infinite;z-index:0; }
 .orbit { position:absolute;border-radius:50%;border:1px solid transparent;pointer-events:none;top:50%;left:50%; }
 .orbit-1 { width:350px;height:350px;margin:-175px 0 0 -175px;border-top-color:rgba(45,221,212,.6);border-right-color:rgba(45,221,212,.6);animation:orbitSpin 6s linear infinite; }
@@ -1067,7 +1079,7 @@ margin-bottom: 6px; white-space: normal;}
    ════════════════════════════════════════════════════════════ */
 #events { background:rgba(7,9,11,.82);padding:56px 32px; }
 .events-header { display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:44px;flex-wrap:wrap;gap:14px; }
-.events-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px; }
+.events-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,280px));gap:20px; }
 .events-cta { margin-top:44px;text-align:center; }
 
 /* ── ANA SAYFA ETKİNLİK ŞERİDİ: sonsuz kayan otomatik carousel ──

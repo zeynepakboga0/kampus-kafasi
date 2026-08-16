@@ -33,7 +33,7 @@
 .ev-section-divider::before,.ev-section-divider::after{content:'';flex:1;height:1px;background:linear-gradient(90deg,transparent,var(--bd),transparent)}
 
 /* EVENTS GRID */
-.events-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.events-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,280px));gap:20px}
 
 /* Kartın kendi tasarımı artık sadece ../style.css içindeki
    "ETKİNLİK KARTI — BİLET TASARIMI" bloğunda tutulur (event-card.js
@@ -125,7 +125,7 @@
 
 /* RESPONSIVE — sadece bu sayfaya özel */
 @media(max-width:960px){
-  .events-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .events-grid{grid-template-columns:repeat(auto-fill,minmax(240px,260px));gap:16px}
   #events-page,#follow-cta{padding-left:18px;padding-right:18px}
 .page-hero{padding:85px 18px 56px}
 }
@@ -382,10 +382,16 @@
       <a href="https://www.linkedin.com/company/kampuskafasi" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a href="https://www.tiktok.com/@kampuskafasi" target="_blank" rel="noopener noreferrer">TikTok</a>
       <a href="#" id="footer-wa">WhatsApp</a>
-      
+    </div>
+    <div class="footer-col">
+      <h5>Yasal</h5>
+      <a href="../kvkk/">KVKK Aydınlatma Metni</a>
+      <a href="../gizlilik-politikasi/">Gizlilik Politikası</a>
+      <a href="../cerez-politikasi/">Çerez Politikası</a>
+      <a href="../kullanim-sartlari/">Kullanım Şartları</a>
     </div>
   </div>
-  <div class="footer-bottom"><p>© 2025 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
+  <div class="footer-bottom"><p>© 2026 Kampüs Kafası · Tüm hakları saklıdır.</p></div>
 </footer>
 
 <script src="../event-card.js"></script>
