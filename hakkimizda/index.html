@@ -461,7 +461,7 @@ function loadActivities(eventsFromFirebase) {
   const toShow = events
     .filter(e => new Date(e.date) <= now)
     .sort((a,b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 3);
+    .slice(0, 15);
 
   const grid = document.getElementById('activities-grid');
   grid.innerHTML = '';
