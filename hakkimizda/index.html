@@ -22,6 +22,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../style.css">
+<script src="../cookie-consent.js" defer></script>
 <style>
 .page-hero{background:rgba(7,9,11,.95)}
 /* BİZ KİMİZ */
@@ -33,11 +34,14 @@
 /* VİZYON / MİSYON */
 #vision-mission{padding:56px 32px;background:rgba(7,9,11,.82)}
 .vm-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:32px}
-.vm-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px;transition:border-color .3s,box-shadow .25s;position:relative;overflow:visible}
-.vm-card::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
-.vm-card:hover{box-shadow:0 14px 40px rgba(0,0,0,.4);border-color:rgba(45,216,240,.2)}
-.vm-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(45,216,240,.1)}
-.vm-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.16);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.vm-card{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px;transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .35s,box-shadow .35s;position:relative;overflow:visible;will-change:transform}
+.vm-card::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none;opacity:0;transition:opacity .35s}
+.vm-card:hover{transform:translateY(-8px);box-shadow:0 20px 40px rgba(0,0,0,.4);border-color:rgba(45,221,212,.45)}
+.vm-card:hover::before{opacity:1}
+.vm-head{display:flex;align-items:center;gap:10px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(45,216,240,.1);transition:border-color .35s}
+.vm-card:hover .vm-head{border-bottom-color:rgba(45,221,212,.28)}
+.vm-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.16);display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;transition:border-color .35s,transform .35s cubic-bezier(.22,1,.36,1)}
+.vm-card:hover .vm-icon{border-color:rgba(45,221,212,.5);transform:scale(1.06)}
 .vm-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:2px}
 .vm-title{font-size:.92rem;font-weight:800;color:var(--white)}
 .vm-text{color:rgba(255,255,255,.48);line-height:1.72;font-size:.85rem;margin-bottom:8px;word-break:break-word;overflow-wrap:anywhere;white-space:normal;max-width:100%}
@@ -46,19 +50,13 @@
 /* FAALİYETLER */
 #activities{padding:56px 32px;background:rgba(10,15,21,.82)}
 .activities-intro{max-width:560px;margin:8px 0 32px;font-size:.9rem;color:rgba(255,255,255,.4);line-height:1.75}
-.activities-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,280px));gap:14px;perspective:1400px}
-.activity-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;transition:transform .5s cubic-bezier(.22,1,.36,1),box-shadow .35s,border-color .35s,opacity .42s;cursor:pointer;position:relative;display:flex;flex-direction:column;transform-style:preserve-3d;will-change:transform}
-.activity-card:hover{box-shadow:0 28px 70px rgba(0,0,0,.5),0 0 0 1px rgba(45,216,240,.15);border-color:rgba(45,216,240,.3)}
-/* İmleci takip eden ışıltı — coverflow kartlarının parlaklığından esinlenildi */
-.activity-card::before{content:'';position:absolute;inset:0;z-index:6;pointer-events:none;background:radial-gradient(240px circle at var(--mx,50%) var(--my,50%),rgba(45,216,240,.16),transparent 62%);opacity:0;transition:opacity .4s ease}
-.activity-card.tilting::before{opacity:1}
-.ac-enter{transform:translateY(14px)}
+.activities-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.activity-card{background:var(--card);border:1px solid var(--bd);border-radius:18px;overflow:hidden;transition:border-color .35s,box-shadow .35s;cursor:pointer;position:relative;display:flex;flex-direction:column}
+.activity-card:hover{box-shadow:0 14px 40px rgba(0,0,0,.4);border-color:rgba(45,216,240,.3)}
 .ac-cover{aspect-ratio:3/2;background:linear-gradient(135deg,rgba(45,216,240,.07),rgba(13,110,106,.09));display:flex;align-items:center;justify-content:center;font-size:2.8rem;flex-shrink:0;overflow:hidden;position:relative}
 .ac-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 50%,rgba(7,9,11,.6) 100%);pointer-events:none}
-.ac-cover img{width:100%;height:100%;object-fit:cover;transition:transform .5s ease}
-.activity-card:hover .ac-cover img{transform:scale(1.06)}
-.ac-cover-emoji{display:flex;align-items:center;justify-content:center;width:100%;height:100%;transition:transform .35s}
-.activity-card:hover .ac-cover-emoji{transform:scale(1.1)}
+.ac-cover img{width:100%;height:100%;object-fit:cover}
+.ac-cover-emoji{display:flex;align-items:center;justify-content:center;width:100%;height:100%}
 .ac-body{padding:16px 18px;display:flex;flex-direction:column;flex:1}
 .ac-meta{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
 .ac-cat{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.11em;color:var(--cl);background:rgba(45,216,240,.08);border:1px solid rgba(45,216,240,.18);padding:3px 9px;border-radius:100px}
@@ -423,33 +421,6 @@ function closeDrawer() {
 // ── ETKİNLİK VERİSİ ──
 const EMOJI_MAP = window.KK_CAT_EMOJI;
 
-// Coverflow'dan esinlenen 3D tilt — sadece fareli/masaüstü cihazlarda, mobilde devre dışı
-const KK_SUPPORTS_TILT = window.matchMedia('(hover:hover) and (pointer:fine)').matches;
-function attachCoverflowTilt(card) {
-  if (!KK_SUPPORTS_TILT) return;
-  const MAX_DEG = 8;
-  let raf = null;
-  card.addEventListener('pointermove', (e) => {
-    const rect = card.getBoundingClientRect();
-    const px = (e.clientX - rect.left) / rect.width;
-    const py = (e.clientY - rect.top) / rect.height;
-    const rx = (0.5 - py) * MAX_DEG * 2;
-    const ry = (px - 0.5) * MAX_DEG * 2;
-    if (raf) cancelAnimationFrame(raf);
-    raf = requestAnimationFrame(() => {
-      card.style.transform = `translateY(-4px) scale(1.025) rotateX(${rx}deg) rotateY(${ry}deg)`;
-      card.style.setProperty('--mx', (px * 100) + '%');
-      card.style.setProperty('--my', (py * 100) + '%');
-    });
-  });
-  card.addEventListener('pointerenter', () => card.classList.add('tilting'));
-  card.addEventListener('pointerleave', () => {
-    card.classList.remove('tilting');
-    if (raf) cancelAnimationFrame(raf);
-    card.style.transform = '';
-  });
-}
-
 function escHtml(str) {
   if (!str) return '';
   return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
@@ -461,7 +432,7 @@ function loadActivities(eventsFromFirebase) {
   const toShow = events
     .filter(e => new Date(e.date) <= now)
     .sort((a,b) => new Date(b.date) - new Date(a.date))
-    .slice(0, 15);
+    .slice(0, 4);
 
   const grid = document.getElementById('activities-grid');
   grid.innerHTML = '';
@@ -471,30 +442,15 @@ function loadActivities(eventsFromFirebase) {
     return;
   }
 
-  toShow.forEach((ev, i) => {
+  toShow.forEach((ev) => {
     // Kart artık event-card.js > kkBuildEventCard() ile üretiliyor (diğer sayfalarla birebir aynı görünüm)
     const card = window.kkBuildEventCard(ev, {
       isPast: true,
       dateOpts: {day:'numeric',month:'short',year:'numeric'},
       onClick: () => openEvModal(ev, events)
     });
-    card.style.opacity = '0';
-    card.style.transition = `opacity .42s ${i*0.06}s ease, transform .5s cubic-bezier(.22,1,.36,1), box-shadow .35s ease, border-color .35s ease`;
-    card.classList.add('ac-enter');
-    attachCoverflowTilt(card);
     grid.appendChild(card);
   });
-
-  const obs = new IntersectionObserver(entries => {
-    entries.forEach(e => {
-      if (e.isIntersecting) {
-        e.target.style.opacity = '1';
-        e.target.classList.remove('ac-enter');
-        e.target.classList.add('visible');
-      }
-    });
-  }, {threshold:0.08});
-  document.querySelectorAll('#activities-grid .ac-enter').forEach(el => obs.observe(el));
 }
 
 window.loadActivities = loadActivities;
@@ -634,18 +590,7 @@ function closeEvModal() {
   document.body.style.overflow = '';
 }
  
-// vm-card hover
-document.querySelectorAll('.vm-card').forEach(card => {
-  card.addEventListener('mousemove', e => {
-    const r=card.getBoundingClientRect();
-    const x=(e.clientX-r.left)/r.width-.5, y=(e.clientY-r.top)/r.height-.5;
-    card.style.transform=`translateY(-6px) perspective(600px) rotateY(${x*8}deg) rotateX(${-y*8}deg)`;
-    card.style.background=`radial-gradient(260px circle at ${e.clientX-r.left}px ${e.clientY-r.top}px,rgba(45,221,212,.06),transparent 55%),var(--card)`;
-  });
-  card.addEventListener('mouseleave', () => { card.style.transform=''; card.style.background=''; });
-});
- 
- 
+
 (function(){
   const c=document.getElementById('ld-canvas');if(!c)return;
   const ctx=c.getContext('2d');

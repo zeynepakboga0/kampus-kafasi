@@ -14,6 +14,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   let spData = {};
   let ekipData = null;
   let eventsList = [];
+  let groupsList = [];
 
   // Temiz URL yapısı (ör: /hakkimizda/) ile eski dosya adı yapısını (ör: /hakkimizda.html)
   // birlikte destekler. Klasör adını veya dosya adını bulup ".html" ekleyerek
@@ -24,7 +25,7 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
   // repo adı ("kampus-kafasi") olduğu için kod bunu yanlışlıkla bir alt
   // sayfa sanıyor ve ana sayfaya özel metinler (Biz Kimiz paragrafları
   // gibi) hiç uygulanmıyordu.
-  const KNOWN_PAGES = ['hakkimizda', 'ekip', 'etkinlikler', 'iletisim', 'sponsorluk', 'oyun'];
+  const KNOWN_PAGES = ['hakkimizda', 'ekip', 'etkinlikler', 'iletisim', 'sponsorluk', 'oyun', 'gruplar'];
   const segments = location.pathname.split('/').filter(Boolean); // boş parçaları at
   const lastSeg = segments.pop() || '';
   let page;
@@ -69,6 +70,36 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
         <p class="bc-bio">${esc(m.bio || '')}</p>
       </div>
     `).join('');
+  }
+
+  // WhatsApp grup ikonu — tüm grup kartlarında kullanılıyor
+  const WA_ICON = '<svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
+
+  function renderGruplarPage(list) {
+    const container = document.getElementById('gruplar-container');
+    if (!container) return;
+    if (!list || !list.length) {
+      container.innerHTML = '<div class="gr-empty">Henüz grup eklenmedi. Çok yakında burada olacak!</div>';
+      return;
+    }
+    container.innerHTML = list.map(g => `
+      <a href="${esc(g.link || '#')}" target="_blank" rel="noopener noreferrer" class="group-card reveal">
+        <div class="gc-icon">${WA_ICON}</div>
+        <div class="gc-text">
+          <h3 class="gc-name">${esc(g.name)}</h3>
+          ${g.desc ? `<p class="gc-desc">${esc(g.desc)}</p>` : ''}
+        </div>
+        <div class="gc-arrow">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+        </div>
+      </a>
+    `).join('');
+    // Basit görünürlük animasyonu (diğer sayfalardaki .reveal düzenine uyumlu)
+    requestAnimationFrame(() => {
+      container.querySelectorAll('.reveal').forEach((el, i) => {
+        setTimeout(() => el.classList.add('visible'), i * 60);
+      });
+    });
   }
 
   async function applySponsorPage() {
@@ -181,28 +212,27 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
     querySnapshot.forEach((doc) => {
       eventsList.push({ id: doc.id, ...doc.data() });
     });
+
+    // WhatsApp gruplarını çek (Koleksiyondan)
+    const gruplarSnap = await getDocs(collection(db, "kk_wa_groups"));
+    gruplarSnap.forEach((doc) => {
+      groupsList.push({ id: doc.id, ...doc.data() });
+    });
+    groupsList.sort((a, b) => (a.order || 99) - (b.order || 99));
   } catch (error) {
     console.error("Firebase'den veri çekilirken hata oluştu: ", error);
   }
 
   /* ── 1. GLOBAL: WA / Email / Instagram linklerini uygula ── */
-  function applyGlobalSettings() {
-    if (sett.ig) {
-      document.querySelectorAll('a[href*="instagram.com"]').forEach(el => {
-        if(!el.classList.contains('no-overwrite')) el.href = sett.ig;
-      });
-    }
-    if (sett.wa) {
-      document.querySelectorAll('a[href*="wa.me"], a[href*="api.whatsapp.com"]').forEach(el => {
-        el.href = sett.wa;
-      });
-      const footerWa = document.getElementById('footer-wa');
-      if (footerWa) footerWa.href = sett.wa;
-      const spWa = document.getElementById('sp-wa-link');
-      if (spWa) spWa.href = sett.wa;
-      const drawerWa = document.getElementById('drawer-wa');
-      if (drawerWa) drawerWa.href = sett.wa;
-    }
+ if (sett.ig) {
+  document.querySelectorAll('a[href*="instagram.com"]').forEach(el => {
+    if(!el.classList.contains('no-overwrite')) el.href = 'https://www.instagram.com/' + sett.ig.replace(/^@/, '');
+  });
+}
+    // NOT: footer-wa / drawer-wa / sp-wa-link / wa-link / wa-btn-hero artık
+    // sett.wa'ya değil, dosyanın en altındaki kesin atamayla /gruplar/
+    // sayfasına yönlendiriliyor (bkz. IIFE sonu). sett.wa hâlâ admin panelde
+    // saklanıyor ama bu butonlar için kullanılmıyor.
     if (sett.email) {
       document.querySelectorAll('a[href^="mailto:"]').forEach(el => {
         el.href = 'mailto:' + sett.email;
@@ -220,7 +250,6 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
         if (!el.classList.contains('no-overwrite')) el.href = sett.tiktok;
       });
     }
-  }
 
   // INDEX sayfasındaki özel alanlar
   if (page === 'index.html' || page === '') {
@@ -268,20 +297,57 @@ import { doc, getDoc, collection, getDocs } from "https://www.gstatic.com/fireba
     applyIletisimHero();
   }
 
-  // Global tetikleyiciler
-  applyGlobalSettings();
+  // GRUPLAR sayfası
+  if (page === 'gruplar.html') {
+    renderGruplarPage(groupsList);
+  }
 
-  // main.js'e verileri aktar ve UI'ı başlat
+    // main.js'e verileri aktar ve UI'ı başlat
   window.events = eventsList;
   if (typeof window.sett !== 'undefined') {
     Object.assign(window.sett, sett);
   }
   window._kkMetin = metin;
-  if (typeof window.veriBaslat === 'function') {
-    window.veriBaslat();
+
+  /* ── "WhatsApp'a Katıl" butonlarını TEK bir gruba değil, ──
+     tüm grupların listelendiği /gruplar/ sayfasına yönlendir.
+     ÖNEMLİ: Bu fonksiyon, aşağıdaki veriBaslat()/applyIndexTexts()
+     çağrılarından SONRA da tekrar çalıştırılıyor. Çünkü o fonksiyonlar
+     (özellikle applySettings/applyIndexTexts) sett.wa değerini kullanarak
+     bu butonların href'ini eski WhatsApp linkiyle tekrar yazabiliyordu.
+     Önce çağırmak tek başına yetmiyordu çünkü sonradan üzerine yazılıyordu;
+     bu yüzden en son bu fonksiyon çalışıp "son sözü" söylüyor. */
+  const gruplarHref = assetPrefix + 'gruplar/';
+  function fixWaLinks() {
+    ['wa-btn-hero', 'wa-link', 'footer-wa', 'drawer-wa', 'sp-wa-link', 'wa-cta-btn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) {
+        el.href = gruplarHref;
+      }
+    });
   }
-  if (typeof window.applyIndexTexts === 'function') {
-    window.applyIndexTexts();
+
+  // 1) Erken çalıştır: veriBaslat/applyIndexTexts hata verirse bile linkler düzeltilmiş olsun
+  fixWaLinks();
+
+  try {
+    if (typeof window.veriBaslat === 'function') {
+      window.veriBaslat();
+    }
+  } catch (error) {
+    console.error("veriBaslat() çalışırken hata oluştu: ", error);
   }
+
+  try {
+    if (typeof window.applyIndexTexts === 'function') {
+      window.applyIndexTexts();
+    }
+  } catch (error) {
+    console.error("applyIndexTexts() çalışırken hata oluştu: ", error);
+  }
+
+  // 2) Geç çalıştır: yukarıdaki fonksiyonlar href'i eski sett.wa değeriyle
+  //    tekrar yazmış olsa bile, en son burada tekrar /gruplar/ sayfasına döndür.
+  fixWaLinks();
 
 })();

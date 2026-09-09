@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../style.css">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<script src="../cookie-consent.js" defer></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com https://www.google-analytics.com; frame-src https://docs.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com https://www.google-analytics.com https://analytics.google.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>KVKK Aydınlatma Metni — Kampüs Kafası</title>
@@ -57,6 +58,24 @@
 .legal-content td{padding:10px 12px;border-bottom:1px solid var(--bd);color:rgba(255,255,255,.62)}
 .legal-content hr{border:none;border-top:1px solid var(--bd);margin:32px 0}
 .legal-content em{color:rgba(255,255,255,.45);font-size:.85rem}
+
+@media (max-width:768px){
+  .page-hero-inner,
+  .page-eyebrow,
+  .page-title,
+  .page-subtitle,
+  .legal-content,
+  .legal-content h2,
+  .legal-content p,
+  .legal-content ul,
+  .legal-content li,
+  .legal-content blockquote,
+  .legal-content blockquote p,
+  .legal-updated{
+    text-align:left !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -170,7 +189,7 @@
 <h2>4. Kişisel Verilerin Toplanma Yöntemi</h2>
 <p>Kişisel verileriniz; Site üzerindeki iletişim formu/e-posta bağlantısı, WhatsApp grup daveti, sosyal medya hesaplarımız (Instagram, LinkedIn, TikTok) üzerinden bizimle kurduğunuz iletişim ve Site'nin teknik altyapısı (barındırma/veritabanı hizmeti) aracılığıyla elektronik ortamda otomatik veya kısmen otomatik yollarla toplanmaktadır.</p>
 <h2>5. Kişisel Verilerin Aktarılması</h2>
-<p>Site, verilerin saklanması ve işlenmesi için <strong>Google Firebase</strong> altyapısını kullanmaktadır. Bu kapsamda kişisel verileriniz, hizmet sağlayıcımız olan Google LLC'nin sunucularında (yurt içi ve/veya yurt dışında bulunabilir) barındırılmaktadır. Ayrıca Site'de, ziyaretçi istatistiklerini ölçmek amacıyla açık rızanıza bağlı olarak <strong>Google Analytics</strong> kullanılmakta olup, bu kapsamda toplanan veriler Google LLC'nin (Amerika Birleşik Devletleri merkezli) sunucularında işlenmektedir. WhatsApp grubuna katılım tercih ettiğiniz durumda, ilgili veriler WhatsApp'ın (Meta Platforms Inc.) kendi gizlilik politikası kapsamında da işlenir.</p>
+<p>Site, verilerin saklanması ve işlenmesi için <strong>Google Firebase</strong> altyapısını kullanmaktadır. Bu kapsamda kişisel verileriniz, hizmet sağlayıcımız olan Google LLC'nin sunucularında (yurt içi ve/veya yurt dışında bulunabilir) barındırılmaktadır. Ayrıca Site'de, ziyaretçi istatistiklerini ölçmek amacıyla açık rızanıza bağlı olarak <strong>Google Analytics</strong> kullanılmakta olup, bu kapsamda toplanan veriler Google LLC'nin (Amerika Birleşik Devletleri merkezli) sunucularında işlenmektedir. İletişim formu talepleriniz <strong>Google Forms</strong> aracılığıyla, sitede kullanılan görseller ise <strong>Cloudinary</strong> altyapısı aracılığıyla işlenmekte olup, bu hizmetlere ait sunucular yurt dışında (Amerika Birleşik Devletleri merkezli) bulunabilir. Site, <strong>GitHub Pages</strong> altyapısı üzerinden yayınlanmakta olup bu barındırma hizmeti kapsamında da standart teknik günlük verileri yurt dışında işlenebilir. WhatsApp grubuna katılım tercih ettiğiniz durumda, ilgili veriler WhatsApp'ın (Meta Platforms Inc.) kendi gizlilik politikası kapsamında da işlenir.</p>
 <p>Kişisel verileriniz; yasal zorunluluk halleri dışında, yukarıda belirtilen hizmet sağlayıcılar dışında üçüncü kişilerle <strong>paylaşılmamakta, satılmamakta veya kiralanmamaktadır</strong>.</p>
 <h2>6. Kişisel Verilerin Saklanma Süresi</h2>
 <p>Kişisel verileriniz, işlenme amacının gerektirdiği süre boyunca veya ilgili mevzuatın öngördüğü süre kadar saklanır. Örneğin; WhatsApp grubu üzerinden paylaşılan bilgiler siz gruptan ayrılana kadar, iletişim formu/e-posta yoluyla iletilen talepler ise talebin sonuçlandırılmasından itibaren makul bir süre boyunca, ekip sayfasında yayınlanan bilgiler ise ilgili kişinin ekip üyeliği devam ettiği sürece saklanır. Saklama süresinin sona ermesi veya işlenme amacının ortadan kalkması halinde kişisel verileriniz KVKK'nın 7. maddesi uyarınca silinir, yok edilir veya anonim hale getirilir.</p>

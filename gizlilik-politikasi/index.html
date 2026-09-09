@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../style.css">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<script src="../cookie-consent.js" defer></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com https://www.google-analytics.com; frame-src https://docs.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com https://www.google-analytics.com https://analytics.google.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Gizlilik Politikası — Kampüs Kafası</title>
@@ -57,6 +58,24 @@
 .legal-content td{padding:10px 12px;border-bottom:1px solid var(--bd);color:rgba(255,255,255,.62)}
 .legal-content hr{border:none;border-top:1px solid var(--bd);margin:32px 0}
 .legal-content em{color:rgba(255,255,255,.45);font-size:.85rem}
+
+@media (max-width:768px){
+  .page-hero-inner,
+  .page-eyebrow,
+  .page-title,
+  .page-subtitle,
+  .legal-content,
+  .legal-content h2,
+  .legal-content p,
+  .legal-content ul,
+  .legal-content li,
+  .legal-content blockquote,
+  .legal-content blockquote p,
+  .legal-updated{
+    text-align:left !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -143,9 +162,9 @@
 <p>Kampüs Kafası, Akdeniz Üniversitesi'nde okuyan öğrenciler tarafından gönüllü olarak kurulmuş, bağımsız bir öğrenci topluluğudur.</p>
 <p><strong>Önemli:</strong> Kampüs Kafası; Gençlik ve Spor Bakanlığı (GSB), Akdeniz Üniversitesi Sağlık Kültür ve Spor Daire Başkanlığı (SKS), Akdeniz Üniversitesi rektörlüğü veya bunlara bağlı hiçbir birimin resmi bir parçası, temsilcisi veya bağlı kuruluşu <strong>değildir</strong>. Bu kurumlarla zaman zaman ortak etkinlik veya proje yürütülmüş olması, aramızda resmi bir bağlılık ilişkisi olduğu anlamına gelmez. Kampüs Kafası, bu kurumlardan bağımsız şekilde, kendi kararlarıyla faaliyet göstermektedir.</p>
 <h2>3. Hangi Bilgileri Topluyoruz?</h2>
-<p><strong>a) Sağladığınız Bilgiler:</strong> İletişim formu, e-posta veya sosyal medya üzerinden bize ulaştığınızda paylaştığınız ad, e-posta adresi, mesaj içeriği gibi bilgiler.</p>
+<p><strong>a) Sağladığınız Bilgiler:</strong> İletişim formu, e-posta veya sosyal medya üzerinden bize ulaştığınızda paylaştığınız ad, e-posta adresi, mesaj içeriği gibi bilgiler. İletişim formumuz Google Forms altyapısı üzerinden çalışmaktadır; form aracılığıyla girdiğiniz bilgiler Google LLC'nin sunucularında da işlenir ve Google'ın kendi gizlilik politikasına tabidir.</p>
 <p><strong>b) WhatsApp Grubu:</strong> WhatsApp grubumuza katılmayı tercih ederseniz, telefon numaranız ve WhatsApp profil bilgileriniz grup içindeki diğer üyeler tarafından görülebilir hale gelir. Bu süreç WhatsApp'ın kendi altyapısı üzerinden yürütüldüğünden, WhatsApp'ın (Meta) kendi gizlilik politikası da geçerlidir.</p>
-<p><strong>c) Otomatik Toplanan Teknik Veriler:</strong> Site'yi ziyaret ettiğinizde, barındırma altyapımız (Cloudflare) ve içerik/veritabanı altyapımız (Google Firebase) tarafından IP adresi, tarayıcı türü, ziyaret zamanı gibi standart teknik günlük (log) verileri otomatik olarak toplanabilir. Bu veriler, sitenin güvenliğini sağlamak ve teknik sorunları tespit etmek amacıyla kullanılır.</p>
+<p><strong>c) Otomatik Toplanan Teknik Veriler:</strong> Site'yi ziyaret ettiğinizde, barındırma/güvenlik altyapımız (Cloudflare), sitenin yayınlandığı sunucu altyapısı (GitHub Pages) ve içerik/veritabanı altyapımız (Google Firebase) tarafından IP adresi, tarayıcı türü, ziyaret zamanı gibi standart teknik günlük (log) verileri otomatik olarak toplanabilir. Ayrıca sitede kullanılan görseller Cloudinary altyapısı üzerinden sunulmaktadır; görsellerin yüklenmesi sırasında da benzer standart teknik günlük verileri oluşabilir. Bu veriler, sitenin güvenliğini sağlamak ve teknik sorunları tespit etmek amacıyla kullanılır.</p>
 <p><strong>d) İstatistiksel Kullanım Verileri:</strong> Site'de, ziyaretçi istatistiklerini ölçmek amacıyla <strong>Google Analytics</strong> kullanılmaktadır. Bu kapsamda; hangi sayfaları ziyaret ettiğiniz, sitede ne kadar süre geçirdiğiniz, kullandığınız cihaz/tarayıcı türü ve yaklaşık (şehir düzeyinde) konumunuz gibi veriler, açık rızanıza bağlı olarak toplanabilir. Bu verilerin toplanması, Site'ye girişte karşınıza çıkan çerez onay bildirimi üzerinden <strong>onayınıza tabidir</strong>; onay vermemeniz halinde bu veriler toplanmaz. Detaylı bilgi için <strong>Çerez Politikası</strong>'nı inceleyebilirsiniz.</p>
 <p><strong>e) Ekip Sayfası Verileri:</strong> Ekip sayfamızda yer alan yönetim kurulu/ekip üyelerinin adı, fotoğrafı ve kısa biyografisi, ilgili kişilerin kendi rızasıyla ve bilgisi dahilinde yayınlanmaktadır.</p>
 <h2>4. Çerezler (Cookies)</h2>
@@ -156,6 +175,9 @@
 <li><strong>Google Analytics</strong> — ziyaretçi istatistiklerinin ölçülmesi için (yalnızca açık rızanızla)</li>
 <li><strong>Google Firebase / Firestore</strong> — verilerin (etkinlikler, ekip bilgileri, ayarlar) güvenli şekilde saklanması için</li>
 <li><strong>Google Fonts</strong> — sitede kullanılan yazı tiplerinin sağlanması için</li>
+<li><strong>Google Forms</strong> — iletişim formu taleplerinin alınması için</li>
+<li><strong>Cloudinary</strong> — sitede kullanılan görsellerin barındırılması ve sunulması için</li>
+<li><strong>GitHub Pages</strong> — Site'nin yayınlandığı barındırma/sunucu altyapısı için</li>
 <li><strong>WhatsApp (Meta Platforms Inc.)</strong> — topluluk iletişimi için</li>
 <li><strong>Instagram, LinkedIn, TikTok</strong> — sosyal medya hesaplarımıza yönlendirme için</li>
 </ul>

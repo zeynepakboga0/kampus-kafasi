@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../style.css">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<script src="../cookie-consent.js" defer></script>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com https://www.google-analytics.com; frame-src https://docs.google.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com https://www.google-analytics.com https://analytics.google.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Çerez Politikası — Kampüs Kafası</title>
@@ -57,6 +58,23 @@
 .legal-content td{padding:10px 12px;border-bottom:1px solid var(--bd);color:rgba(255,255,255,.62)}
 .legal-content hr{border:none;border-top:1px solid var(--bd);margin:32px 0}
 .legal-content em{color:rgba(255,255,255,.45);font-size:.85rem}
+
+@media (max-width:768px){
+  .page-hero-inner,
+  .page-eyebrow,
+  .page-title,
+  .page-subtitle,
+  .legal-content,
+  .legal-content h2,
+  .legal-content p,
+  .legal-content ul,
+  .legal-content li,
+  .legal-content blockquote,
+  .legal-content blockquote p,
+  .legal-updated{
+    text-align:left !important;
+  }
+}
 </style>
 </head>
 <body>
@@ -180,7 +198,9 @@
 <li><strong>Google Analytics</strong> — ziyaretçi istatistiklerinin ölçülmesi için (yukarıda detaylandırılmıştır, açık rızanıza tabidir)</li>
 <li><strong>Google Fonts</strong> — sitede kullanılan yazı tiplerinin yüklenmesi sırasında, Google'ın standart sunucu günlükleri (IP adresi, istek zamanı vb.) oluşabilir.</li>
 <li><strong>Google Firebase / Firestore</strong> — sitenin içerik ve veri altyapısı olarak kullanılır; bu hizmetin işleyişi sırasında Google'ın kendi teknik günlükleri oluşabilir.</li>
-<li><strong>Barındırma/CDN altyapısı (Cloudflare)</strong> — sitenin güvenli ve hızlı sunulması için ziyaretçi IP adresi gibi standart sunucu günlüğü verileri otomatik olarak tutulabilir.</li>
+<li><strong>Barındırma/CDN altyapısı (Cloudflare, GitHub Pages)</strong> — sitenin güvenli ve hızlı sunulması için ziyaretçi IP adresi gibi standart sunucu günlüğü verileri otomatik olarak tutulabilir.</li>
+<li><strong>Cloudinary</strong> — sitedeki görsellerin sunulması için kullanılır; görsel yüklemeleri sırasında standart sunucu günlükleri oluşabilir.</li>
+<li><strong>Google Forms</strong> — iletişim formu bu altyapı üzerinden çalışır; form üzerinden gönderilen bilgiler Google'ın kendi sunucularında işlenir ve Google'ın kendi çerez/gizlilik politikalarına tabidir.</li>
 </ul>
 <p>Bu hizmetlerin çerez ve veri toplama uygulamaları, ilgili şirketlerin kendi gizlilik politikalarına tabidir ve Kampüs Kafası'nın doğrudan kontrolünde değildir.</p>
 <h2>4. Sosyal Medya Bağlantıları</h2>

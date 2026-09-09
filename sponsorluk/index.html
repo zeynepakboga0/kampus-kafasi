@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../style.css"> 
+<script src="../cookie-consent.js" defer></script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -57,7 +58,7 @@
 
 /* NEDEN BİZ */
 #sp-why{padding:56px 32px;background:rgba(7,9,11,.82)}
-.sp-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;max-width:780px;grid-auto-rows:1fr}
+.sp-why-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:28px;grid-auto-rows:1fr}
 .sp-why-item{display:flex;align-items:flex-start;gap:12px;padding:16px 18px;border-left:2px solid rgba(45,216,240,.3);background:rgba(255,255,255,.02);border-radius:0 10px 10px 0;transition:border-color .2s,background .2s;box-sizing:border-box;height:100%;word-wrap:break-word;overflow-wrap:break-word}
 .sp-why-item:hover{border-left-color:var(--cl);background:rgba(45,216,240,.04)}
 .sp-why-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);flex-shrink:0;margin-top:6px}
@@ -104,18 +105,23 @@
 
 /* İLETİŞİM */
 #sp-contact{padding:56px 32px;background:rgba(7,9,11,.82)}
-.sp-contact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:32px}
-.sp-cc{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:24px 20px;transition:border-color .3s,box-shadow .25s,transform .25s;position:relative;overflow:hidden;cursor:default}
-.sp-cc::before{content:'';position:absolute;inset:0;border-radius:16px;background:radial-gradient(circle at top left,rgba(45,216,240,.04),transparent 55%);pointer-events:none}
-.sp-cc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cl),transparent);opacity:0;transition:opacity .3s}
-.sp-cc:hover{box-shadow:0 14px 40px rgba(0,0,0,.4);border-color:rgba(45,216,240,.22);transform:translateY(-3px)}
-.sp-cc:hover::after{opacity:.55}
-.sp-cc-icon{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,rgba(45,216,240,.13),rgba(13,110,106,.17));border:1px solid rgba(45,216,240,.16);display:flex;align-items:center;justify-content:center;margin-bottom:14px;flex-shrink:0;color:var(--cl)}
-.sp-cc-label{font-size:.62rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:4px}
-.sp-cc-value{font-size:.9rem;font-weight:600;color:var(--white);line-height:1.4;margin-bottom:4px;word-break:break-word}
-.sp-cc-value a{color:var(--white);transition:color .2s}
-.sp-cc-value a:hover{color:var(--cl)}
-.sp-cc-sub{font-size:.76rem;color:rgba(255,255,255,.32);line-height:1.5}
+.sp-contact-head{text-align:center;max-width:640px;margin:0 auto}
+.sp-contact-title{font-family:'Dancing Script',cursive;font-size:clamp(2rem,4vw,3rem);font-weight:700;background:linear-gradient(135deg,var(--cl) 0%,#fff 50%,var(--cl) 100%);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;animation:shimmerAnim 3s linear infinite;margin-bottom:10px}
+.sp-contact-sub{font-size:.93rem;color:rgba(255,255,255,.4);line-height:1.75;margin:0 auto}
+.sp-contact-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:36px}
+.sp-cc{display:flex;align-items:center;gap:20px;background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:28px 26px;transition:transform .28s,border-color .28s,box-shadow .28s;text-decoration:none;color:var(--white);flex:1 1 320px;max-width:400px}
+.sp-cc:hover{transform:translateY(-4px);box-shadow:0 16px 48px rgba(0,0,0,.4)}
+.sp-cc.mail:hover{border-color:rgba(234,67,53,.4)}
+.sp-cc.ig:hover{border-color:rgba(225,48,108,.4)}
+.sp-cc-icon{width:54px;height:54px;border-radius:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.sp-cc.mail .sp-cc-icon{background:linear-gradient(135deg,rgba(234,67,53,.15),rgba(234,67,53,.06));border:1px solid rgba(234,67,53,.25);color:#ea8478}
+.sp-cc.ig .sp-cc-icon{background:linear-gradient(135deg,rgba(225,48,108,.15),rgba(131,58,180,.15));border:1px solid rgba(225,48,108,.25);color:#e8659a}
+.sp-cc-body{min-width:0;text-align:left}
+.sp-cc-label{font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;margin-bottom:3px}
+.sp-cc-value{font-size:1.05rem;font-weight:800;margin-bottom:3px}
+.sp-cc.mail .sp-cc-label,.sp-cc.mail .sp-cc-value{color:#ea4335}
+.sp-cc.ig .sp-cc-label,.sp-cc.ig .sp-cc-value{color:#e1306c}
+.sp-cc-sub{font-size:.79rem;color:rgba(255,255,255,.35);line-height:1.5}
 
 /* FOOTER */
 footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 32px 32px}
@@ -132,7 +138,8 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   .sp-options-grid{grid-template-columns:1fr;gap:14px}
   .sp-steps{max-width:100%}
   .sp-stats-grid{width:100%}
-  .sp-contact-grid{grid-template-columns:1fr}
+  .sp-contact-grid{flex-direction:column;align-items:stretch}
+  .sp-cc{max-width:none;flex:none;width:100%;padding:22px 20px}
   .footer-inner{grid-template-columns:1fr;gap:28px}
   #nav{padding:0 18px}.nav-links{display:none}
   #sp-why,#sp-options,#sp-process,#sp-cta,#sp-contact{padding:40px 18px}
@@ -397,36 +404,31 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 <!-- İLETİŞİM -->
 <section id="sp-contact">
   <div class="section-wrap">
-    <div class="reveal">
-      <span class="section-lbl">İletişim</span>
-      <h2 class="section-h sp-cta-title" style="color:var(--white)">Bize Ulaşın</h2>
-      <p class="sp-cta-text" style="font-size:.92rem;color:rgba(255,255,255,.4);line-height:1.8;margin-top:10px;max-width:500px">Sponsorluk teklifleriniz ve sorularınız için aşağıdaki kanallardan bizimle iletişime geçebilirsiniz.</p>
+    <div class="reveal sp-contact-head">
+      <h2 class="sp-contact-title sp-cta-title">Bizimle İletişime Geçin</h2>
+      <p class="sp-contact-sub sp-cta-text">Sponsorluk teklifleriniz ve sorularınız için aşağıdaki kanallardan bizimle iletişime geçebilirsiniz.</p>
     </div>
     <div class="sp-contact-grid">
-      <div class="sp-cc reveal">
+      <a href="mailto:iletisim@kampuskafasi.com" class="sp-cc mail reveal">
         <div class="sp-cc-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,13 22,4"/></svg>
         </div>
-        <div class="sp-cc-label">E-Posta</div>
-        <div class="sp-cc-value"><a href="mailto:iletisim@kampuskafasi.com" id="contact-email-val">iletisim@kampuskafasi.com</a></div>
-        <div class="sp-cc-sub">Sponsorluk teklifleri için tercih edilen kanal</div>
-      </div>
-      <div class="sp-cc reveal">
+        <div class="sp-cc-body">
+          <div class="sp-cc-label">E-Posta</div>
+          <div class="sp-cc-value" id="contact-email-val">iletisim@kampuskafasi.com</div>
+          <div class="sp-cc-sub">Sponsorluk teklifleri için tercih edilen kanal</div>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer" class="sp-cc ig reveal">
         <div class="sp-cc-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
         </div>
-        <div class="sp-cc-label">Instagram</div>
-        <div class="sp-cc-value"><a href="https://www.instagram.com/kampuskafasii/" target="_blank" rel="noopener noreferrer">@kampuskafasii</a></div>
-        <div class="sp-cc-sub">DM ile hızlı iletişim için</div>
-      </div>
-      <div class="sp-cc reveal">
-        <div class="sp-cc-icon">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <div class="sp-cc-body">
+          <div class="sp-cc-label">Instagram</div>
+          <div class="sp-cc-value">@kampuskafasii</div>
+          <div class="sp-cc-sub">DM ile hızlı iletişim için</div>
         </div>
-        <div class="sp-cc-label">WhatsApp</div>
-        <div class="sp-cc-value"><a href="#" id="sp-wa-link">Mesaj Gönder</a></div>
-        <div class="sp-cc-sub">Hızlı görüşme için WhatsApp'tan ulaşın</div>
-      </div>
+      </a>
     </div>
   </div>
 </section>
@@ -444,6 +446,7 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
       <a href="../hakkimizda/">Hakkımızda</a>
       <a href="../etkinlikler/">Etkinlikler</a>
       <a href="../ekip/">Ekip</a>
+      <a href="../sponsorluk/">Sponsorluk</a>
       <a href="../iletisim/">İletişim</a>
     </div>
     <div class="footer-col">

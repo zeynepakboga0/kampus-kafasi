@@ -690,6 +690,7 @@ img { max-width: 100%; display: block; }
       <div class="sb-item on" onclick="goSec('dashboard')"><span class="sb-ico">▦</span>Dashboard</div>
       <div class="sb-item" onclick="goSec('etkinlikler')"><span class="sb-ico">◷</span>Etkinlikler</div>
       <div class="sb-item" onclick="goSec('ekip')"><span class="sb-ico">⊙</span>Ekip</div>
+      <div class="sb-item" onclick="goSec('gruplar')"><span class="sb-ico">💬</span>Gruplar</div>
 
       <div class="sb-section">İçerik</div>
       <div class="sb-item" onclick="goSec('metinler')"><span class="sb-ico">⊞</span>Sayfa Metinleri</div>
@@ -732,6 +733,7 @@ img { max-width: 100%; display: block; }
       <div class="mbd-item on" onclick="goSec('dashboard');closeMobDrawer()"><span class="mbd-ico">▦</span>Dashboard</div>
       <div class="mbd-item" onclick="goSec('etkinlikler');closeMobDrawer()"><span class="mbd-ico">◷</span>Etkinlikler</div>
       <div class="mbd-item" onclick="goSec('ekip');closeMobDrawer()"><span class="mbd-ico">⊙</span>Ekip</div>
+      <div class="mbd-item" onclick="goSec('gruplar');closeMobDrawer()"><span class="mbd-ico">💬</span>Gruplar</div>
       <div class="mbd-section">İçerik</div>
       <div class="mbd-item" onclick="goSec('metinler');closeMobDrawer()"><span class="mbd-ico">⊞</span>Sayfa Metinleri</div>
       <div class="mbd-item" onclick="goSec('sponsorluk');closeMobDrawer()"><span class="mbd-ico">◈</span>Sponsorluk</div>
@@ -780,6 +782,7 @@ img { max-width: 100%; display: block; }
           <div class="qa-grid" style="flex-direction:column">
             <div class="qa-item" onclick="goSec('etkinlikler');openEvModal()">➕ Yeni Etkinlik</div>
             <div class="qa-item" onclick="goSec('ekip');openMemberModal('board')">👤 Ekip Üyesi Ekle</div>
+            <div class="qa-item" onclick="goSec('gruplar');openGroupModal()">💬 Grup Ekle</div>
             <div class="qa-item" onclick="goSec('iletisim');openFaqModal()">❓ SSS Düzenle</div>
             <div class="qa-item" onclick="goSec('metinler')">✏️ Metinleri Güncelle</div>
             <div class="qa-item" onclick="goSec('ayarlar')">🔢 Sayaçları Güncelle</div>
@@ -859,6 +862,30 @@ img { max-width: 100%; display: block; }
         <div class="info-box info" style="margin-bottom:14px"><span>ℹ️</span><span>"Sıra Numarası" alanı, ekip sayfasındaki kart sırasını belirler. Düşük numara önce gösterilir.</span></div>
         <div id="admins-list"></div>
       </div>
+    </div>
+
+    <!-- ── GRUPLAR ── -->
+    <div class="sec" id="sec-gruplar">
+      <div class="pg-head">
+        <div class="pg-head-left">
+          <div class="pg-eyebrow">Topluluk</div>
+          <div class="pg-title">WhatsApp Grupları</div>
+          <div class="pg-sub">Sitedeki "WhatsApp'a Katıl" butonları artık tüm bu grupların listelendiği sayfaya yönlendiriyor.</div>
+        </div>
+        <div class="pg-head-right">
+          <div class="search-wrap">
+            <span class="s-ico">🔍</span>
+            <input class="search-inp" type="text" id="gruplar-search" placeholder="Grup ara…" oninput="filterGruplar()">
+          </div>
+        </div>
+      </div>
+      <div class="sec-hdr">
+        <div style="font-size:.85rem;font-weight:700;color:var(--text)">Gruplar</div>
+        <button class="btn btn-p btn-sm" onclick="openGroupModal()">+ Grup Ekle</button>
+        <button class="btn-reset" onclick="askReset('gruplar')">🗑 Tümünü Sıfırla</button>
+      </div>
+      <div class="info-box info" style="margin-bottom:14px"><span>ℹ️</span><span>"Sıra Numarası" alanı, gruplar sayfasındaki kart sırasını belirler. Düşük numara önce gösterilir.</span></div>
+      <div id="gruplar-list"></div>
     </div>
 
     <!-- ── İLETİŞİM & SSS ── -->
@@ -1319,6 +1346,38 @@ img { max-width: 100%; display: block; }
   </div>
 </div>
 
+<!-- ════════ GRUP EKLE/DÜZENLE MODAL ════════ -->
+<div class="modal-bg" id="group-modal">
+  <div class="modal">
+    <div class="modal-accent"></div>
+    <div class="modal-title" id="group-modal-title">💬 Grup Ekle</div>
+    <button class="modal-close" onclick="closeGroupModal()">✕</button>
+    <input type="hidden" id="g-edit-id">
+    <div class="fg">
+      <label>Grup Adı <span class="req">*</span></label>
+      <input id="g-name" type="text" placeholder="Örn: 1. Sınıf Grubu, Tıp Fakültesi, Geziler…">
+    </div>
+    <div class="fg">
+      <label>Açıklama</label>
+      <input id="g-desc" type="text" placeholder="Kısa bir açıklama (opsiyonel)">
+    </div>
+    <div class="fg">
+      <label>WhatsApp Grup Linki <span class="req">*</span></label>
+      <input id="g-link" type="url" placeholder="https://chat.whatsapp.com/…">
+      <div class="fg-hint">WhatsApp grubundaki "Davet bağlantısı" alanından kopyalayabilirsin.</div>
+    </div>
+    <div class="fg">
+      <label>Sıra Numarası</label>
+      <input id="g-order" type="number" min="1" placeholder="1, 2, 3…">
+      <div class="fg-hint">Düşük numara = önce görünür.</div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-ghost" onclick="closeGroupModal()">İptal</button>
+      <button class="btn btn-p" onclick="saveGroup()">Kaydet</button>
+    </div>
+  </div>
+</div>
+
 <!-- ════ MODAL: SSS ════ -->
 <div class="modal-bg" id="faq-modal">
   <div class="modal">
@@ -1619,7 +1678,7 @@ window.goSec = function(name) {
 async function loadAll() {
   await Promise.all([
     loadSettings(), loadCounters(), loadTexts(), loadSpBasic(),
-    loadEvents(), loadTeam(), loadFaqs(), loadWhyItems(), loadOptionItems(), loadSteps(),
+    loadEvents(), loadTeam(), loadGroups(), loadFaqs(), loadWhyItems(), loadOptionItems(), loadSteps(),
   ]);
   renderDashboard();
   renderLog();
@@ -1698,11 +1757,13 @@ window.renderDashboard = function() {
   const adminsEl = document.getElementById('admins-list');
   const adminsCount = adminsEl ? adminsEl.querySelectorAll('.li').length : 0;
   const totalTeamCount = boardCount + adminsCount;
+  const groupsCount = _groupsCache.length;
   document.getElementById('dash-grid').innerHTML = `
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">👥</div><div class="stat-val">${parseInt(members).toLocaleString('tr-TR')}+</div><div class="stat-lbl">Topluluk Üyesi</div></div>
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">📅</div><div class="stat-val">${events}</div><div class="stat-lbl">Etkinlik Hedefi</div></div>
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">⏳</div><div class="stat-val">${years}</div><div class="stat-lbl">Deneyim Yılı</div></div>
     <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">🏆</div><div class="stat-val">${totalTeamCount}</div><div class="stat-lbl">Toplam Ekip</div></div>
+    <div class="stat-card"><div class="stat-accent"></div><div class="stat-ico">💬</div><div class="stat-val">${groupsCount}</div><div class="stat-lbl">WhatsApp Grubu</div></div>
   `;
   checkDashLayout();
 };
@@ -1990,6 +2051,108 @@ window.deleteMember = async function(type, id) {
   if (!confirm('Bu üyeyi silmek istediğinizden emin misiniz?')) return;
   try { await deleteDoc(doc(db, 'kk_team_' + type, id)); addLog('Üye silindi (id: ' + id + ')', 'warn'); await loadTeamList(type); toast('Üye silindi.', 'ok'); }
   catch(e) { toast('Silinemedi.', 'err'); }
+};
+
+/* ══════════════════════════════════════
+   GRUPLAR (WhatsApp)
+══════════════════════════════════════ */
+let _groupsCache = [];
+
+async function loadGroups() {
+  const listEl = document.getElementById('gruplar-list');
+  if (!listEl) return;
+  try {
+    const snap = await getDocs(collection(db, 'kk_wa_groups'));
+    const groups = [];
+    snap.forEach(d => groups.push({ id: d.id, ...d.data() }));
+    groups.sort((a,b) => (a.order||99)-(b.order||99));
+    _groupsCache = groups;
+    if (snap.empty) { listEl.innerHTML = `<div class="empty"><div class="empty-ico">💬</div><div class="empty-title">Henüz grup eklenmedi.</div></div>`; return; }
+    renderGroupList(_groupsCache, listEl);
+  } catch(e) { toast('Gruplar yüklenemedi: ' + e.message, 'err'); }
+}
+
+function renderGroupList(groups, listEl) {
+  if (!groups.length) { listEl.innerHTML = `<div class="empty"><div class="empty-ico">💬</div><div class="empty-title">Sonuç bulunamadı.</div></div>`; return; }
+  listEl.innerHTML = '';
+  groups.forEach(g => {
+    const div = document.createElement('div');
+    div.className = 'li';
+    div.innerHTML = `
+      <div class="li-body">
+        <div class="li-title">${esc(g.name)}${g.order?`<span class="badge" style="margin-left:6px;font-size:.58rem">#${g.order}</span>`:''}</div>
+        <div class="li-sub">${g.desc ? esc(g.desc) + ' · ' : ''}${esc(g.link || '')}</div>
+      </div>
+      <div class="li-acts">
+        <button class="btn btn-ghost btn-xs" onclick="editGroup('${g.id}')">Düzenle</button>
+        <button class="btn btn-d btn-xs" onclick="deleteGroup('${g.id}')">Sil</button>
+      </div>
+    `;
+    listEl.appendChild(div);
+  });
+}
+
+window.filterGruplar = function() {
+  const q = (document.getElementById('gruplar-search')?.value || '').toLowerCase();
+  const listEl = document.getElementById('gruplar-list');
+  const filtered = q ? _groupsCache.filter(g => (g.name||'').toLowerCase().includes(q) || (g.desc||'').toLowerCase().includes(q)) : _groupsCache;
+  renderGroupList(filtered, listEl);
+};
+
+window.openGroupModal = function() {
+  ['g-name','g-desc','g-link','g-order','g-edit-id'].forEach(id => { const el = document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('group-modal-title').textContent = '💬 Grup Ekle';
+  document.getElementById('group-modal').classList.add('on');
+};
+window.closeGroupModal = function() { document.getElementById('group-modal').classList.remove('on'); };
+
+window.editGroup = async function(id) {
+  try {
+    const snap = await getDoc(doc(db, 'kk_wa_groups', id));
+    if (!snap.exists()) { toast('Grup bulunamadı.', 'err'); return; }
+    const g = snap.data();
+    document.getElementById('g-edit-id').value = id;
+    document.getElementById('g-name').value    = g.name  || '';
+    document.getElementById('g-desc').value    = g.desc  || '';
+    document.getElementById('g-link').value    = g.link  || '';
+    document.getElementById('g-order').value   = g.order || '';
+    document.getElementById('group-modal-title').textContent = '💬 Grubu Düzenle';
+    document.getElementById('group-modal').classList.add('on');
+  } catch(e) { toast('Yüklenemedi: ' + e.message, 'err'); }
+};
+
+window.saveGroup = async function() {
+  const name   = document.getElementById('g-name').value.trim();
+  const link   = document.getElementById('g-link').value.trim();
+  const editId = document.getElementById('g-edit-id').value;
+  if (!name || !link) { toast('Grup adı ve link zorunludur!', 'err'); return; }
+  const data = {
+    name, link,
+    desc:  document.getElementById('g-desc').value.trim(),
+    order: parseInt(document.getElementById('g-order').value) || 99,
+  };
+  try {
+    if (editId) { await updateDoc(doc(db, 'kk_wa_groups', editId), data); addLog('Grup güncellendi: ' + name, 'ok'); toast('Grup güncellendi!', 'ok'); }
+    else { data.createdAt = serverTimestamp(); await addDoc(collection(db, 'kk_wa_groups'), data); addLog('Yeni grup eklendi: ' + name, 'info'); toast('Grup eklendi!', 'ok'); }
+    closeGroupModal(); await loadGroups(); renderDashboard();
+  } catch(e) { toast('Kaydedilemedi: ' + e.message, 'err'); }
+};
+
+window.deleteGroup = async function(id) {
+  if (!confirm('Bu grubu silmek istediğinizden emin misiniz?')) return;
+  try { await deleteDoc(doc(db, 'kk_wa_groups', id)); addLog('Grup silindi (id: ' + id + ')', 'warn'); await loadGroups(); toast('Grup silindi.', 'ok'); }
+  catch(e) { toast('Silinemedi.', 'err'); }
+};
+
+window.resetGroups = async function(skip) {
+  if (!skip) { askReset('gruplar'); return; }
+  try {
+    const snap = await getDocs(collection(db, 'kk_wa_groups'));
+    await Promise.all(snap.docs.map(d => deleteDoc(doc(db, 'kk_wa_groups', d.id))));
+    addLog('Tüm gruplar sıfırlandı', 'warn');
+    await loadGroups();
+    toast('Tüm gruplar silindi.', 'warn');
+  } catch(e) { toast('Silinemedi: ' + e.message, 'err'); }
 };
 
 /* ══════════════════════════════════════
@@ -2805,6 +2968,7 @@ const RESET_LABELS = {
   'etkinlikler': { title: 'Etkinlikleri Sıfırla', desc: 'Tüm etkinlik kayıtları kalıcı olarak silinecek.' },
   'ekip-board':  { title: 'Yönetim Kurulunu Sıfırla', desc: 'Tüm yönetim kurulu üyeleri kalıcı olarak silinecek.' },
   'ekip-admins': { title: 'Admin Listesini Sıfırla', desc: 'Tüm adminler kalıcı olarak silinecek.' },
+  'gruplar':     { title: 'Grupları Sıfırla', desc: 'Tüm WhatsApp grupları kalıcı olarak silinecek.' },
   'sss':         { title: "SSS'yi Sıfırla", desc: 'Tüm sık sorulan sorular kalıcı olarak silinecek.' },
   'iletisim':    { title: 'İletişim Bilgilerini Sıfırla', desc: 'Adres, e-posta ve sosyal medya linkleri temizlenecek.' },
   'metinler':    { title: 'Sayfa Metinlerini Sıfırla', desc: 'Hero, hakkımızda, vizyon & misyon metinleri temizlenecek.' },
@@ -2837,6 +3001,7 @@ window.runResetConfirm = async function() {
   if (t === 'etkinlikler') await resetEtkinlikler(true);
   else if (t === 'ekip-board')  await resetEkip('board', true);
   else if (t === 'ekip-admins') await resetEkip('admins', true);
+  else if (t === 'gruplar')     await resetGroups(true);
   else if (t === 'sss')         await resetFaqs(true);
   else if (t === 'iletisim')    await resetContact(true);
   else if (t === 'metinler')    await resetMetinler(true);

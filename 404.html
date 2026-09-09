@@ -6,6 +6,7 @@
 <title>404 — Kampüs Kafası</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<script src="/cookie-consent.js" defer></script>
 <style>
 :root {
   --cl: #2DDDD4;
@@ -476,7 +477,6 @@ body::before{
     <!-- GAME OVER -->
     <div id="gameover">
       <div class="go-title" id="go-title">DERSİ KAÇIRDIN!</div>
-      <div class="go-reason" id="go-reason">Bisiklete çarptın!</div>
       <div class="go-score-msg" id="go-score-msg"></div>
       <div class="go-stats">
         <div class="go-stat">
@@ -595,6 +595,11 @@ let gameSpeed = 3.5;
 const SPEED_BASE = 3.5;
 const SPEED_MAX = 13;
 let raf;
+
+// ── Mobil tespiti: performans ve zorluk ayarları buna göre değişir ──
+const isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) || window.innerWidth < 700;
+// Mobilde hız artış oranı biraz daha yüksek (istenen "hız artışı"nı hafif hızlandırır)
+const SPEED_RAMP = isMobile ? 0.0002 : 0.00015;
 const GROUND_OFFSET = 90;
 
 // ── Background zones ──
@@ -653,26 +658,42 @@ function resetPlayer() {
 function getZone() { return BG_ZONES[currentZoneIdx % BG_ZONES.length]; }
 
 // ─── DRAW BACKGROUND ───────────────────────────────────────────
-function drawBackground() {
-  const W = canvas.width, H = canvas.height;
-  const zone = getZone();
+// Gökyüzü/güneş gradyanları eskiden HER KAREDE yeniden oluşturuluyordu
+// (ctx.createLinearGradient/createRadialGradient — pahalı işlemler).
+// Bunlar sadece bölge (zone) veya ekran boyutu değiştiğinde değişir,
+// bu yüzden artık önbelleğe alınıp tekrar kullanılıyor.
+let _bgGradCache = { key: null, sky: null, sunGlow: null };
+function getBgGradients(W, H, zone) {
+  const key = zone.name + '_' + W + '_' + H;
+  if (_bgGradCache.key === key) return _bgGradCache;
 
-  // Sky gradient (zone-specific)
   const sky = ctx.createLinearGradient(0, 0, 0, H * 0.72);
   sky.addColorStop(0, zone.sky[0]);
   sky.addColorStop(0.4, zone.sky[1]);
   sky.addColorStop(0.7, zone.sky[2]);
   sky.addColorStop(1, zone.sky[3]);
-  ctx.fillStyle = sky;
-  ctx.fillRect(0, 0, W, H);
 
-  // Sun / glow
   const sunX = W * zone.sun[0], sunY = H * zone.sun[1];
   const sunGlow = ctx.createRadialGradient(sunX, sunY, 0, sunX, sunY, 160);
   sunGlow.addColorStop(0, 'rgba(255,220,80,.25)');
   sunGlow.addColorStop(0.4, 'rgba(45,221,212,.08)');
   sunGlow.addColorStop(1, 'transparent');
-  ctx.fillStyle = sunGlow;
+
+  _bgGradCache = { key, sky, sunGlow };
+  return _bgGradCache;
+}
+
+function drawBackground() {
+  const W = canvas.width, H = canvas.height;
+  const zone = getZone();
+  const grads = getBgGradients(W, H, zone);
+
+  ctx.fillStyle = grads.sky;
+  ctx.fillRect(0, 0, W, H);
+
+  // Sun / glow
+  const sunX = W * zone.sun[0], sunY = H * zone.sun[1];
+  ctx.fillStyle = grads.sunGlow;
   ctx.fillRect(0, 0, W, H);
 
   ctx.beginPath();
@@ -687,6 +708,16 @@ function drawBackground() {
   drawFgTrees(W, H, bgX3 * 0.85);
 }
 
+let _mtGradCache = { key: null, mg: null };
+function getMountainGradient(H) {
+  const key = H;
+  if (_mtGradCache.key === key) return _mtGradCache.mg;
+  const mg = ctx.createLinearGradient(0, H * 0.3, 0, H * 0.72);
+  mg.addColorStop(0, 'rgba(30,60,100,.6)'); mg.addColorStop(1, 'rgba(20,45,80,.4)');
+  _mtGradCache = { key, mg };
+  return mg;
+}
+
 function drawMountains(W, H, ox) {
   ctx.save();
   const peaks = [
@@ -694,6 +725,7 @@ function drawMountains(W, H, ox) {
     {x:0.3, y:0.50, h:0.14},{x:0.42, y:0.46, h:0.20},{x:0.55, y:0.43, h:0.22},
     {x:0.68, y:0.48, h:0.16},{x:0.80, y:0.45, h:0.19},{x:0.92, y:0.50, h:0.14},{x:1.05, y:0.44, h:0.21},
   ];
+  const mg = getMountainGradient(H);
   for (let pass = 0; pass < 2; pass++) {
     const baseOx = (ox % W) - W * pass;
     ctx.beginPath(); ctx.moveTo(baseOx, H * 0.72);
@@ -704,8 +736,6 @@ function drawMountains(W, H, ox) {
       ctx.lineTo(px + p.h * W * 0.5, H * p.y);
     });
     ctx.lineTo(baseOx + W, H * 0.72); ctx.closePath();
-    const mg = ctx.createLinearGradient(0, H * 0.3, 0, H * 0.72);
-    mg.addColorStop(0, 'rgba(30,60,100,.6)'); mg.addColorStop(1, 'rgba(20,45,80,.4)');
     ctx.fillStyle = mg; ctx.fill();
     ctx.fillStyle = 'rgba(200,230,255,.25)';
     peaks.forEach(p => {
@@ -729,16 +759,16 @@ function drawBuildings(W, H, ox) {
     {x:0.71,  w:0.08, h:0.20, type:'fakulte'},
     {x:0.85,  w:0.07, h:0.14, type:'yakut'},
     {x:0.98,  w:0.10, h:0.17, type:'ceypark'},
-    {x:1.14,  w:0.09, h:0.15, type:'olbia'},
-    {x:1.29,  w:0.10, h:0.17, type:'kyk', label:'MURATPAŞA\nERKEK KYK', gender:'erkek'},
-    {x:1.45,  w:0.09, h:0.18, type:'fakulte'},
-    {x:1.60,  w:0.10, h:0.17, type:'kyk', label:'FALEZ\nKIZ KYK', gender:'kiz'},
-    {x:1.76,  w:0.08, h:0.14, type:'spor'},
-    {x:1.90,  w:0.10, h:0.17, type:'kyk', label:'ŞEHZADE\nKORKUT\nERKEK KYK', gender:'erkek'},
-    {x:2.06,  w:0.09, h:0.16, type:'kutuphane'},
-    {x:2.21,  w:0.10, h:0.17, type:'kyk', label:'ELMALI\nKIZ KYK', gender:'kiz'},
-    {x:2.37,  w:0.08, h:0.15, type:'fakulte'},
-    {x:2.51,  w:0.10, h:0.17, type:'kyk', label:'BEZMİALEM\nKIZ KYK', gender:'kiz'},
+    {x:1.14,  w:0.09, h:0.15, type:'kyk', label:'MURATPAŞA\nERKEK KYK', gender:'erkek'},
+    {x:1.29,  w:0.10, h:0.17, type:'olbia'},
+    {x:1.45,  w:0.09, h:0.18, type:'kyk', label:'BEZMİALEM\nKIZ KYK', gender:'kiz'},
+    {x:1.60,  w:0.10, h:0.17, type:'fakulte'},
+    {x:1.76,  w:0.08, h:0.14, type:'kyk', label:'FALEZ\nKIZ KYK', gender:'kiz'},
+    {x:1.90,  w:0.10, h:0.17, type:'spor'},
+    {x:2.06,  w:0.09, h:0.16, type:'kyk', label:'ŞEHZADE\nKORKUT\nERKEK KYK', gender:'erkek'},
+    {x:2.21,  w:0.10, h:0.17, type:'kutuphane'},
+    {x:2.37,  w:0.08, h:0.15, type:'kyk', label:'ELMALI\nKIZ KYK', gender:'kiz'},
+    {x:2.51,  w:0.10, h:0.17, type:'fakulte'},
   ];
   ctx.save();
   const loopW = W * 2.8;
@@ -845,30 +875,49 @@ function autoWrapLabel(ctx, text, maxWidth, fontSize) {
   return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
 }
 
-function drawBuildingLabel(ctx, rawLines, x, y, w, h) {
-  const BASE_SIZE = 13;
-  const MIN_SIZE  = 10;
-  const usableW   = w - 8;
+// Bina etiketleri (REKTÖRLÜK, KÜTÜPHANE vb.) eskiden HER KAREDE yeniden
+// ölçülüp yeniden çiziliyordu (measureText + font-fit döngüsü + shadowBlur).
+// Bu, özellikle mobilde en büyük kasma sebebiydi. Artık her benzersiz
+// etiket+boyut kombinasyonu SADECE BİR KEZ küçük bir offscreen canvas'a
+// çiziliyor ve sonraki karelerde sadece drawImage ile basılıyor (çok ucuz).
+const _labelCache = {};
+function getLabelSprite(rawLines, w, h) {
+  const key = rawLines.join('|') + '_' + Math.round(w) + '_' + Math.round(h);
+  const cached = _labelCache[key];
+  if (cached) return cached;
 
-  // pre-wrap each provided line if needed
+  const BASE_SIZE = 13, MIN_SIZE = 10, usableW = w - 8;
   const allLines = rawLines.flatMap(ln => {
     ctx.font = `bold ${BASE_SIZE}px Outfit`;
     if (ctx.measureText(ln).width <= usableW) return [ln];
     const words = ln.split(' ');
     if (words.length <= 1) return [ln];
     const mid = Math.ceil(words.length / 2);
-    return [words.slice(0,mid).join(' '), words.slice(mid).join(' ')];
+    return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
   });
-
   const fsz = fitFontSize(ctx, allLines, usableW, BASE_SIZE, MIN_SIZE);
-  ctx.font = `bold ${fsz}px Outfit`;
-  ctx.fillStyle = '#ffffff';
-  ctx.textAlign = 'center';
-  ctx.shadowColor = 'rgba(0,0,0,.7)'; ctx.shadowBlur = 4;
   const lineH = fsz + 2;
-  const startY = y + h - 6 - (allLines.length - 1) * lineH;
-  allLines.forEach((ln, i) => ctx.fillText(ln, x + w / 2, startY + i * lineH));
-  ctx.shadowBlur = 0;
+  const padTop = 6;
+
+  const off = document.createElement('canvas');
+  off.width = Math.max(1, Math.ceil(w));
+  off.height = Math.ceil(allLines.length * lineH + padTop + 4);
+  const octx = off.getContext('2d');
+  octx.font = `bold ${fsz}px Outfit`;
+  octx.fillStyle = '#ffffff';
+  octx.textAlign = 'center';
+  octx.shadowColor = 'rgba(0,0,0,.7)'; octx.shadowBlur = 4;
+  allLines.forEach((ln, i) => octx.fillText(ln, off.width / 2, padTop + fsz + i * lineH));
+  octx.shadowBlur = 0;
+
+  const sprite = { canvas: off, h: off.height };
+  _labelCache[key] = sprite;
+  return sprite;
+}
+
+function drawBuildingLabel(ctx, rawLines, x, y, w, h) {
+  const sprite = getLabelSprite(rawLines, w, h);
+  ctx.drawImage(sprite.canvas, x, y + h - sprite.h);
 }
 
 function drawCarsi(x, y, w, h, label, baseColor, accentColor) {
@@ -896,7 +945,9 @@ function drawMeltemGate(W, H, ox) {
   ctx.save();
 
   if (meltemImg.complete && meltemImg.naturalWidth > 0) {
-    ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 18;
+    // shadowBlur bir görsele uygulandığında mobilde ciddi maliyetli;
+    // masaüstünde bırakıp mobilde kapatıyoruz.
+    if (!isMobile) { ctx.shadowColor = 'rgba(0,0,0,.5)'; ctx.shadowBlur = 18; }
     ctx.drawImage(meltemImg, gx, gy, gw, gh);
     ctx.shadowBlur = 0;
     ctx.fillStyle = 'rgba(10,20,40,.18)'; ctx.fillRect(gx, gy, gw, gh);
@@ -945,13 +996,22 @@ function drawMeltemGate(W, H, ox) {
   ctx.restore();
 }
 
-function drawGround(W, H) {
-  const groundY = H - GROUND_OFFSET;
+let _groundGradCache = { key: null, rg: null };
+function getGroundGradient(groundY, H) {
+  const key = groundY + '_' + H;
+  if (_groundGradCache.key === key) return _groundGradCache.rg;
   const rg = ctx.createLinearGradient(0, groundY, 0, H);
   rg.addColorStop(0, '#1a2535'); rg.addColorStop(0.3, '#141d2a'); rg.addColorStop(1, '#0d1520');
-  ctx.fillStyle = rg; ctx.fillRect(0, groundY, W, H - groundY);
+  _groundGradCache = { key, rg };
+  return rg;
+}
+
+function drawGround(W, H) {
+  const groundY = H - GROUND_OFFSET;
+  ctx.fillStyle = getGroundGradient(groundY, H); ctx.fillRect(0, groundY, W, H - groundY);
   ctx.strokeStyle = 'rgba(45,221,212,.4)'; ctx.lineWidth = 2;
-  ctx.shadowColor = 'rgba(45,221,212,.6)'; ctx.shadowBlur = 8;
+  // Kalın çizgi parıltısı (shadowBlur) mobilde biraz daha maliyetli; mobilde kapatıyoruz.
+  if (!isMobile) { ctx.shadowColor = 'rgba(45,221,212,.6)'; ctx.shadowBlur = 8; }
   ctx.beginPath(); ctx.moveTo(0, groundY); ctx.lineTo(W, groundY); ctx.stroke();
   ctx.shadowBlur = 0;
   const dashW = 40, dashGap = 30, totalW = dashW + dashGap;
@@ -997,14 +1057,30 @@ function drawPalmTree(x, groundY, h) {
   });
 }
 
+// Lamba ışığı gradyanı sabit bir şekil — sadece konumu değişiyor. Radial
+// gradient'i her lamba için her karede yeniden yaratmak yerine bir kere
+// küçük bir sprite'a çizip sonra sadece drawImage ile taşıyoruz.
+let _lampSprite = null;
+function getLampSprite() {
+  if (_lampSprite) return _lampSprite;
+  const size = 50;
+  const off = document.createElement('canvas');
+  off.width = size; off.height = size;
+  const octx = off.getContext('2d');
+  const lg = octx.createRadialGradient(size/2, size/2, 0, size/2, size/2, 25);
+  lg.addColorStop(0, 'rgba(255,240,150,.2)'); lg.addColorStop(1, 'transparent');
+  octx.fillStyle = lg; octx.beginPath(); octx.arc(size/2, size/2, 25, 0, Math.PI * 2); octx.fill();
+  _lampSprite = off;
+  return off;
+}
+
 function drawLamp(x, groundY) {
   ctx.strokeStyle = '#8aabb8'; ctx.lineWidth = 3;
   ctx.beginPath(); ctx.moveTo(x, groundY); ctx.lineTo(x, groundY - 50); ctx.lineTo(x + 14, groundY - 50); ctx.stroke();
   ctx.fillStyle = 'rgba(255,240,150,.9)';
   ctx.beginPath(); ctx.arc(x + 14, groundY - 50, 5, 0, Math.PI * 2); ctx.fill();
-  const lg = ctx.createRadialGradient(x + 14, groundY - 50, 0, x + 14, groundY - 50, 25);
-  lg.addColorStop(0, 'rgba(255,240,150,.2)'); lg.addColorStop(1, 'transparent');
-  ctx.fillStyle = lg; ctx.beginPath(); ctx.arc(x + 14, groundY - 50, 25, 0, Math.PI * 2); ctx.fill();
+  const sprite = getLampSprite();
+  ctx.drawImage(sprite, x + 14 - sprite.width/2, groundY - 50 - sprite.height/2);
 }
 
 // ─── DRAW PLAYER (v4 — tatlı, yuvarlak, temiz chibi) ────────────
@@ -1569,10 +1645,10 @@ function checkCollision(ob) {
 // ─── SCORE MESSAGES ────────────────────────────────────────────
 function getScoreMessage(s) {
   if (s <= 0)   return '😅 Daha başlayamadan bitti...';
-  if (s <= 20)  return '📖 İlk dersten kaldın.';
-  if (s <= 50)  return '🏃 Tam yetişiyordun...';
-  if (s <= 80)  return '🕵️ Hocanın gözüne görünmeden gidiyordun.';
-  if (s <= 150) return '🗺️ Kampüsü ezbere biliyorsun.';
+  if (s <= 15)  return '📖 İlk dersten kaldın.';
+  if (s <= 25)  return '🏃 Tam yetişiyordun...';
+  if (s <= 50)  return '🕵️ Hocanın gözüne görünmeden gidiyordun.';
+  if (s <= 80) return '🗺️ Kampüsü ezbere biliyorsun.';
   return '🏆 Kampüs Efsanesisin!';
 }
 
@@ -1632,7 +1708,7 @@ function gameLoop() {
 
   // Speed increase — sürekli, yumuşak bir eğriyle (basamaklı sıçrama yok)
   // Speed increase — Chrome dinozor oyunundaki gibi çok yavaş, sabit bir artış
-  gameSpeed = Math.min(SPEED_BASE + frame * 0.00015, SPEED_MAX);
+  gameSpeed = Math.min(SPEED_BASE + frame * SPEED_RAMP, SPEED_MAX);
 
   // Update HUD
   document.getElementById('hud-score').textContent = score;
@@ -1748,7 +1824,6 @@ function die(reason) {
     ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill(); ctx.restore();
   });
 
-  document.getElementById('go-reason').textContent = reason;
   document.getElementById('go-score').textContent = score;
   document.getElementById('go-best').textContent = bestScore;
   document.getElementById('go-score-msg').textContent = getScoreMessage(score);

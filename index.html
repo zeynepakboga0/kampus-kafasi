@@ -2,7 +2,7 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://www.gstatic.com https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com https://www.google-analytics.com; frame-src https://docs.google.com; connect-src 'self' https://www.gstatic.com https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com https://www.google-analytics.com https://analytics.google.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Kampüs Kafası — Antalya</title>
@@ -23,6 +23,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
+<script src="cookie-consent.js" defer></script>
 
 
 
@@ -411,8 +412,128 @@ function renderEvents() {
       const isPast = new Date(ev.date) < now;
       g.appendChild(buildEventCard(ev, isPast, true));
     });
-    g.classList.add('events-track-animate');
   }
+
+  // Otomatik kayma + elle sürükleme (çark çevirir gibi) kurulumu
+  initEventsDrag();
+}
+
+// ── ETKİNLİK ŞERİDİ: otomatik kayma + elle sürükleme ──
+// Var olan "kendiliğinden kayan" davranışı JS tabanlı bir döngüyle sürdürür,
+// üstüne kullanıcının şeridi elle (mouse/touch) tutup çevirebilmesini ekler.
+let evDragState = null;
+function initEventsDrag() {
+  const wrap = document.querySelector('.events-scroll-wrap');
+  const track = document.getElementById('events-grid');
+  if (!wrap || !track) return;
+  if (!track.children.length || track.querySelector('.no-events-msg')) return;
+
+  // Önceki kurulum varsa animasyon döngüsünü durdur (yeniden render'da tekrar etmesin)
+  if (evDragState) cancelAnimationFrame(evDragState.rafId);
+
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const st = {
+    singleWidth: 0,
+    pos: 0,
+    speed: 0,            // px/ms
+    isDragging: false,
+    dragStartX: 0,
+    dragStartPos: 0,
+    lastMoveX: 0,
+    lastMoveTime: 0,
+    velocity: 0,          // px/ms
+    dragDistance: 0,
+    hoverPaused: false,
+    lastFrameTime: null,
+    rafId: null
+  };
+  evDragState = st;
+
+  function durationMs() {
+    return window.innerWidth <= 640 ? 17000 : 14000;
+  }
+  function computeWidth() {
+    st.singleWidth = track.scrollWidth / 2 || track.scrollWidth;
+    st.speed = prefersReduced ? 0 : st.singleWidth / durationMs();
+  }
+  function applyTransform() {
+    let p = st.singleWidth ? st.pos % st.singleWidth : st.pos;
+    if (p > 0) p -= st.singleWidth;
+    track.style.transform = `translateX(${p}px)`;
+  }
+  function frame(t) {
+    if (st.lastFrameTime == null) st.lastFrameTime = t;
+    const dt = Math.min(t - st.lastFrameTime, 50);
+    st.lastFrameTime = t;
+    if (!st.isDragging && !st.hoverPaused) {
+      st.pos -= st.speed * dt;
+      applyTransform();
+    }
+    st.rafId = requestAnimationFrame(frame);
+  }
+
+  computeWidth();
+  applyTransform();
+  st.rafId = requestAnimationFrame(frame);
+  window.addEventListener('resize', computeWidth);
+
+  // Fareyle üzerine gelince duraklat (masaüstü, önceki davranışla aynı)
+  wrap.addEventListener('mouseenter', () => { st.hoverPaused = true; });
+  wrap.addEventListener('mouseleave', () => { if (!st.isDragging) st.hoverPaused = false; });
+
+  function onPointerDown(e) {
+    st.isDragging = true;
+    st.hoverPaused = true;
+    st.dragStartX = e.clientX;
+    st.dragStartPos = st.pos;
+    st.lastMoveX = e.clientX;
+    st.lastMoveTime = performance.now();
+    st.velocity = 0;
+    st.dragDistance = 0;
+    track.classList.add('dragging');
+    wrap.classList.add('dragging');
+    try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+  }
+  function onPointerMove(e) {
+    if (!st.isDragging) return;
+    const dx = e.clientX - st.dragStartX;
+    st.dragDistance += Math.abs(e.movementX || 0);
+    st.pos = st.dragStartPos + dx;
+    const now = performance.now();
+    const dt = now - st.lastMoveTime;
+    if (dt > 0) st.velocity = (e.clientX - st.lastMoveX) / dt;
+    st.lastMoveX = e.clientX;
+    st.lastMoveTime = now;
+    applyTransform();
+  }
+  function momentumStep() {
+    if (Math.abs(st.velocity) > 0.02) {
+      st.pos += st.velocity * 16;
+      st.velocity *= 0.94;
+      applyTransform();
+      requestAnimationFrame(momentumStep);
+    } else {
+      st.hoverPaused = wrap.matches(':hover');
+      st.lastFrameTime = null;
+    }
+  }
+  function onPointerUp(e) {
+    if (!st.isDragging) return;
+    st.isDragging = false;
+    track.classList.remove('dragging');
+    wrap.classList.remove('dragging');
+    momentumStep();
+  }
+
+  wrap.addEventListener('pointerdown', onPointerDown);
+  wrap.addEventListener('pointermove', onPointerMove);
+  wrap.addEventListener('pointerup', onPointerUp);
+  wrap.addEventListener('pointercancel', onPointerUp);
+
+  // Sürükleme sonrası kart tıklamasının (modal açma) yanlışlıkla tetiklenmesini engelle
+  wrap.addEventListener('click', (e) => {
+    if (st.dragDistance > 6) { e.stopPropagation(); e.preventDefault(); }
+  }, true);
 }
 
 // ── FOTOĞRAF LİSTESİ (kapak + galeri) ──

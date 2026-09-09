@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../style.css">
+<script src="../cookie-consent.js" defer></script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -66,7 +67,7 @@ body{overflow-x:hidden;width:100%}
 .board-card:hover::before,.admin-card:hover::before{opacity:1}
 .board-card:hover,.admin-card:hover{transform:translateY(-6px);border-color:rgba(45,216,240,.3);box-shadow:0 20px 40px rgba(0,0,0,.35),0 0 0 1px rgba(45,216,240,.1);z-index:5}
 
-.board-card{width:218px;flex-shrink:0;border-radius:20px;padding:26px 20px 22px}
+.board-card{width:218px;flex-shrink:0;border-radius:20px;padding:24px 20px 22px}
 .admin-card{border-radius:18px;padding:22px 18px 20px}
 
 /* Avatar — çerçevesiz. Fotoğrafın kendi içine gömülü "halka/aura" efekti
@@ -82,7 +83,7 @@ body{overflow-x:hidden;width:100%}
    halkanın gerçek kaynağı buydu. Aşağıda ikisini de sıfırlayıp iptal ediyoruz. */
 .board-avatar,.admin-avatar{background:transparent;border-radius:0;box-shadow:none;display:flex;align-items:flex-end;justify-content:center;font-weight:700;color:var(--cl);flex-shrink:0;position:relative;overflow:visible;z-index:1;transition:transform .75s cubic-bezier(.25,.75,.4,1)}
 .board-card:hover .board-avatar,.admin-card:hover .admin-avatar{box-shadow:none;transform:none}
-.board-avatar{width:132px;height:151px;font-size:1.12rem;margin-bottom:13px;--avatar-zoom:1.06}
+.board-avatar{width:124px;height:142px;font-size:1.08rem;margin-bottom:12px;--avatar-zoom:1.06}
 .admin-avatar{width:114px;height:130px;font-size:1rem;margin-bottom:12px;--avatar-zoom:1.06}
 
 /* Sadece ayağın altında gerçekçi, dar, koyu bir zemin gölgesi */
@@ -109,7 +110,7 @@ body{overflow-x:hidden;width:100%}
 /* Hover: nefes alma DURMAZ, devam eder — kırpılmış pencere kartın dışına taşarak büyür */
 @media (prefers-reduced-motion:reduce){.board-frame,.admin-frame{animation:none}}
 @media(max-width:620px){
-  .board-avatar{width:106px;height:121px;font-size:.98rem}
+  .board-avatar{width:104px;height:120px;font-size:.98rem}
   .admin-avatar{width:96px;height:110px;font-size:.9rem}
 }
 @media(max-width:420px){
@@ -150,12 +151,12 @@ body{overflow-x:hidden;width:100%}
 }
 
 /* İsim */
-.board-name{font-size:1rem;font-weight:800;color:var(--white);line-height:1.28;margin-bottom:10px}
-.admin-name{font-size:.93rem;font-weight:700;color:var(--white);line-height:1.28;margin-bottom:9px}
+.board-name{font-size:1.1rem;font-weight:800;color:var(--white);line-height:1.28;margin-bottom:9px}
+.admin-name{font-size:1.02rem;font-weight:800;color:var(--white);line-height:1.28;margin-bottom:9px}
 
 /* Unvan/Görev — pill badge */
 .board-role,.admin-role{display:inline-flex;align-items:center;gap:7px;border-radius:100px;background:rgba(45,216,240,.09);border:1px solid rgba(45,216,240,.2);color:var(--cl);font-weight:700;letter-spacing:.01em;white-space:nowrap}
-.board-role{padding:5px 14px;font-size:.7rem;margin-bottom:10px}
+.board-role{padding:5px 14px;font-size:.7rem;margin-bottom:9px}
 .admin-role{padding:4px 13px;font-size:.66rem;margin-bottom:9px}
 .board-role::before,.admin-role::before{content:'';border-radius:50%;background:var(--cl);flex-shrink:0}
 .board-role::before{width:6px;height:6px}
@@ -163,7 +164,7 @@ body{overflow-x:hidden;width:100%}
 
 /* Bölüm — sade ikincil satır */
 .board-dept,.admin-dept{display:inline-flex;align-items:center;gap:6px;color:rgba(255,255,255,.5);font-weight:500;background:rgba(255,255,255,.035);border:1px solid rgba(255,255,255,.07);border-radius:100px}
-.board-dept{font-size:.71rem;margin-bottom:8px;padding:4px 12px 4px 10px}
+.board-dept{font-size:.71rem;margin-bottom:7px;padding:4px 12px 4px 10px}
 .admin-dept{font-size:.68rem;margin-bottom:7px;padding:3px 11px 3px 9px}
 .board-dept svg,.admin-dept svg{flex-shrink:0;opacity:.8;color:var(--cl)}
 
@@ -174,7 +175,8 @@ body{overflow-x:hidden;width:100%}
 .board-ig:hover,.admin-ig:hover{color:var(--cl);background:rgba(45,216,240,.09);border-color:rgba(45,216,240,.3);transform:translateY(-1px)}
 .board-ig svg,.admin-ig svg{flex-shrink:0}
 
-.admin-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:8px}
+.admin-grid{display:flex;flex-wrap:wrap;justify-content:center;gap:18px;margin-top:8px}
+.admin-grid .admin-card{flex:0 0 calc(25% - 13.5px)}
 
 /* SPONSOR MODAL */
 #sponsor-modal{display:none;position:fixed;inset:0;z-index:400;background:rgba(0,0,0,.85);backdrop-filter:blur(12px);align-items:center;justify-content:center;padding:20px}
@@ -212,7 +214,7 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
 /* RESPONSIVE */
 .board-row.solo .board-card{width:210px;max-width:240px}
 @media(max-width:1080px){
-  .admin-grid{grid-template-columns:repeat(4,1fr)}
+  .admin-grid .admin-card{flex:0 0 calc(25% - 13.5px)}
 }
 @media(max-width:960px){
   #nav{padding:0 18px}.nav-links{display:none}
@@ -221,26 +223,29 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
   footer{padding:48px 18px 32px}
   .footer-inner{grid-template-columns:1fr;gap:28px}
   .sponsor-grid{grid-template-columns:1fr;gap:16px}
-  .board-card{width:172px;padding:20px 15px 17px}
+  .board-card{width:172px;padding:17px 15px 15px}
   .board-row{flex-wrap:wrap}
-  .admin-grid{grid-template-columns:repeat(3,1fr)}
+  .admin-grid .admin-card{flex:0 0 calc(33.333% - 12px)}
 }
 @media(max-width:620px){
   .board-row{flex-wrap:wrap;gap:12px}
   .board-card{flex:0 0 calc(50% - 6px);width:calc(50% - 6px);max-width:none}
   .board-row.solo .board-card{flex:0 0 auto;width:200px}
-  .admin-grid{grid-template-columns:repeat(2,1fr);gap:14px}
+  .admin-grid{gap:14px}
+  .admin-grid .admin-card{flex:0 0 calc(50% - 7px)}
   .sponsor-btns{flex-direction:column;align-items:center}
 }
 @media(max-width:420px){
   .board-row{gap:10px}
   .board-card{flex:0 0 calc(50% - 5px);width:calc(50% - 5px)}
   .board-row.solo .board-card{width:180px;flex:0 0 auto}
-  .admin-grid{grid-template-columns:repeat(2,1fr);gap:12px}
+  .admin-grid{gap:12px}
+  .admin-grid .admin-card{flex:0 0 calc(50% - 6px)}
 }
 @media(max-width:360px){
   .board-card{flex:0 0 calc(50% - 4px);width:calc(50% - 4px)}
-  .admin-grid{grid-template-columns:repeat(2,1fr);gap:10px}
+  .admin-grid{gap:10px}
+  .admin-grid .admin-card{flex:0 0 calc(50% - 5px)}
 }
 
 </style>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="../style.css"> 
+<script src="../cookie-consent.js" defer></script>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://fonts.googleapis.com https://fonts.gstatic.com https://www.gstatic.com https://*.googleapis.com https://*.firebaseapp.com https://*.firebaseio.com; script-src 'self' 'unsafe-inline' https://www.gstatic.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; img-src 'self' https: data: https://firebasestorage.googleapis.com; connect-src 'self' https://*.googleapis.com https://*.firebaseio.com https://firestore.googleapis.com wss://*.firebaseio.com https://identitytoolkit.googleapis.com https://firebasestorage.googleapis.com https://docs.google.com https://docs.google.com:443;">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>İletişim — Kampüs Kafası</title>
@@ -28,7 +29,7 @@
 .page-hero{padding:90px 32px 40px;position:relative;overflow:hidden}
 .page-hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 15% 50%,rgba(45,216,240,.07) 0%,transparent 65%);pointer-events:none}
 .page-hero-grid{position:absolute;inset:0;opacity:.025;background-image:linear-gradient(rgba(45,216,240,1) 1px,transparent 1px),linear-gradient(90deg,rgba(45,216,240,1) 1px,transparent 1px);background-size:55px 55px}
-.page-hero-inner{position:relative;z-index:1;max-width:1100px;margin:0 auto;text-align:left}
+.page-hero-inner{position:relative;z-index:1;max-width:1400px;margin:0 auto;text-align:left}
 .page-eyebrow{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(45,216,240,.3);background:rgba(45,216,240,.06);padding:5px 14px;border-radius:100px;font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--cl);margin-bottom:18px;opacity:0;animation:fadeUp .7s .3s ease forwards}
 .page-dot{width:6px;height:6px;border-radius:50%;background:var(--cl);animation:blink 1.6s infinite;flex-shrink:0}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.25}}
@@ -37,7 +38,7 @@
 @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
 
 /* SECTIONS */
-.section-wrap{max-width:1100px;margin:0 auto}
+.section-wrap{max-width:1400px;margin:0 auto}
 .section-lbl{display:inline-flex;align-items:center;gap:8px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.14em;color:var(--cl);margin-bottom:8px}
 .section-lbl::before{content:'';display:block;width:14px;height:1.5px;background:var(--cl)}
 .section-h{font-size:clamp(1.55rem,3.2vw,2.2rem);font-weight:800;line-height:1.15;margin-bottom:6px}
@@ -94,10 +95,19 @@
 .form-group{display:flex;flex-direction:column;gap:5px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .form-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:rgba(255,255,255,.4)}
-.form-input,.form-textarea{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;color:var(--white);font-size:.88rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;resize:none}
-.form-input:focus,.form-textarea:focus{border-color:rgba(45,216,240,.35);box-shadow:0 0 0 3px rgba(45,216,240,.06)}
+.form-input,.form-textarea,.form-select{width:100%;background:rgba(255,255,255,.04);border:1px solid var(--bd);border-radius:10px;padding:11px 14px;color:var(--white);font-size:.88rem;font-family:'Outfit',sans-serif;outline:none;transition:border-color .2s,box-shadow .2s;resize:none}
+.form-input:focus,.form-textarea:focus,.form-select:focus{border-color:rgba(45,216,240,.35);box-shadow:0 0 0 3px rgba(45,216,240,.06)}
 .form-input::placeholder,.form-textarea::placeholder{color:rgba(255,255,255,.2)}
 .form-textarea{min-height:110px;line-height:1.6}
+.form-select-wrap{position:relative}
+.form-select{appearance:none;-webkit-appearance:none;-moz-appearance:none;cursor:pointer;padding-right:38px}
+.form-select option{background:var(--dark);color:var(--white)}
+.form-select.placeholder-active{color:rgba(255,255,255,.2)}
+.form-select-chevron{position:absolute;top:50%;right:14px;transform:translateY(-50%);pointer-events:none;color:rgba(255,255,255,.35);transition:transform .2s,color .2s}
+.form-select:focus~.form-select-chevron{color:var(--cl)}
+.form-consent{margin-top:16px;text-align:center;font-size:.78rem;color:rgba(255,255,255,.35);line-height:1.6}
+.form-consent a{color:var(--cl);text-decoration:none;font-weight:600}
+.form-consent a:hover{text-decoration:underline}
 .form-submit{background:linear-gradient(135deg,var(--cl),var(--cd));border:none;color:var(--black);border-radius:100px;padding:13px 28px;font-weight:700;font-size:.9rem;cursor:pointer;font-family:'Outfit',sans-serif;width:100%;display:flex;align-items:center;justify-content:center;gap:8px;transition:opacity .2s,transform .2s,box-shadow .2s;box-shadow:0 6px 22px rgba(45,216,240,.22)}
 .form-submit:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 10px 30px rgba(45,216,240,.35)}
 .form-submit svg{transition:transform .2s}
@@ -307,28 +317,43 @@ footer{background:rgba(7,9,11,.95);border-top:1px solid var(--bd);padding:60px 3
             <p style="font-size:.82rem;color:rgba(255,255,255,.35);line-height:1.7">Formu doldur, 48 saat içinde dönüş yapalım.</p>
           </div>
           <div style="display:flex;flex-direction:column;gap:14px;flex:1">
+            <div class="form-group">
+              <label class="form-label">Ad Soyad <span style="color:rgba(255,100,100,.7)">*</span></label>
+              <input type="text" class="form-input" id="f-name" placeholder="Adınız ve soyadınız" autocomplete="name">
+            </div>
             <div class="form-row">
               <div class="form-group">
-                <label class="form-label">İsim Soyisim <span style="color:rgba(255,100,100,.7)">*</span></label>
-                <input type="text" class="form-input" id="f-name" placeholder="Adın Soyadın" autocomplete="name">
+                <label class="form-label">E-posta</label>
+                <input type="email" class="form-input" id="f-email" placeholder="ornek@email.com" autocomplete="email">
               </div>
               <div class="form-group">
-                <label class="form-label">Telefon <span style="color:rgba(255,255,255,.25);font-weight:400;text-transform:none;letter-spacing:0"></span></label>
-                <input type="tel" class="form-input" id="f-phone" placeholder="05xx xxx xx xx" autocomplete="tel">
+                <label class="form-label">Telefon</label>
+                <input type="tel" class="form-input" id="f-phone" placeholder="0(5XX) XXX XX XX" autocomplete="tel">
               </div>
             </div>
             <div class="form-group">
               <label class="form-label">Konu <span style="color:rgba(255,100,100,.7)">*</span></label>
-              <input type="text" class="form-input" id="f-subject" placeholder="Mesajının konusu">
+              <div class="form-select-wrap">
+                <select class="form-input form-select placeholder-active" id="f-subject" onchange="this.classList.toggle('placeholder-active', !this.value)">
+                  <option value="" disabled selected>Konu seçiniz</option>
+                  <option value="Genel Soru">Genel Soru</option>
+                  <option value="İş Birliği">İş Birliği</option>
+                  <option value="Üyelik">Üyelik</option>
+                  <option value="Şikayet / Öneri">Şikayet / Öneri</option>
+                  <option value="Diğer">Diğer</option>
+                </select>
+                <svg class="form-select-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
             </div>
             <div class="form-group" style="flex:1;display:flex;flex-direction:column;">
-              <label class="form-label">Mesaj <span style="color:rgba(255,100,100,.7)">*</span></label>
-              <textarea class="form-textarea" id="f-message" placeholder="Mesajını buraya yaz..." style="flex:1;min-height:130px"></textarea>
+              <label class="form-label">Mesajınız <span style="color:rgba(255,100,100,.7)">*</span></label>
+              <textarea class="form-textarea" id="f-message" placeholder="Mesajınızı buraya yazın..." style="flex:1;min-height:130px"></textarea>
             </div>
             <button class="form-submit" onclick="submitForm()">
               Gönder
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
             </button>
+            <p class="form-consent">Formu göndererek <a href="../gizlilik-politikasi/">Gizlilik Politikası</a>'nı kabul etmiş olursunuz.</p>
           </div>
         </div>
         <div class="form-success" id="form-success">
@@ -513,6 +538,7 @@ window.renderEvents = function() {};
 const GF_ACTION = 'https://docs.google.com/forms/d/e/1FAIpQLSceJ7dWtqv0O71fYn5CEGEjj53yRCn8uIJL2vYwSQSawupU5A/formResponse';
 const GF_FIELDS = {
   name:    'entry.1437378774',
+  email:   'entry.2044263673',
   phone:   'entry.1400683916',
   subject: 'entry.1548822597',
   message: 'entry.1511664703'
@@ -520,6 +546,7 @@ const GF_FIELDS = {
 
 function submitForm() {
   const name    = document.getElementById('f-name').value.trim();
+  const email   = document.getElementById('f-email').value.trim();
   const phone   = document.getElementById('f-phone').value.trim();
   const subject = document.getElementById('f-subject').value.trim();
   const message = document.getElementById('f-message').value.trim();
@@ -539,10 +566,20 @@ function submitForm() {
       setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2500);
     }
   });
+
+  const emailEl = document.getElementById('f-email');
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    hasError = true;
+    emailEl.style.borderColor = 'rgba(255,100,100,.5)';
+    emailEl.style.boxShadow   = '0 0 0 3px rgba(255,80,80,.07)';
+    setTimeout(() => { emailEl.style.borderColor = ''; emailEl.style.boxShadow = ''; }, 2500);
+  }
+
   if (hasError) return;
 
   const body = new URLSearchParams();
   body.append(GF_FIELDS.name,    name);
+  body.append(GF_FIELDS.email,   email);
   body.append(GF_FIELDS.phone,   phone);
   body.append(GF_FIELDS.subject, subject);
   body.append(GF_FIELDS.message, message);
@@ -559,10 +596,12 @@ function submitForm() {
 }
 
 function resetForm() {
-  ['f-name','f-phone','f-subject','f-message'].forEach(id => {
+  ['f-name','f-email','f-phone','f-subject','f-message'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.value = '';
   });
+  const subjectEl = document.getElementById('f-subject');
+  if (subjectEl) subjectEl.classList.add('placeholder-active');
   document.getElementById('form-wrap').style.display = '';
   document.getElementById('form-success').classList.remove('show');
 }
