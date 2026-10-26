@@ -11,10 +11,10 @@
   'use strict';
 
   const STORAGE_KEY = 'kk_cookie_consent'; // localStorage anahtarı
-  const CONSENT_VERSION = 'v1'; // Politika metnini ileride önemli ölçüde değiştirirsen bu değeri artır, banner tekrar gösterilir.
+  const CONSENT_VERSION = 'v2'; // Politika metnini ileride önemli ölçüde değiştirirsen bu değeri artır, banner tekrar gösterilir.
 
   // ↓↓↓ BURAYI DEĞİŞTİR: Google Analytics ölçüm ID'ni buraya yaz (ör. "G-ABC1234XYZ")
-  const GA_MEASUREMENT_ID = 'G-XXXXXXXXXX';
+  const GA_MEASUREMENT_ID = 'G-MW500KSB0M';
 
   function loadGoogleAnalytics() {
     if (!GA_MEASUREMENT_ID || GA_MEASUREMENT_ID === 'G-XXXXXXXXXX') return; // ID girilmediyse hiç yükleme
@@ -142,11 +142,10 @@
     banner.setAttribute('aria-live', 'polite');
     banner.setAttribute('aria-label', 'Çerez onayı');
     banner.innerHTML = `
-      <div id="kk-cookie-inner">
-        <p>
-          Sitemizde deneyimini iyileştirmek için zorunlu çerezler kullanıyoruz. Detaylar için
-          <a href="${policyHref}">Çerez Politikası</a>'nı inceleyebilirsin.
-        </p>
+      <p>
+  Sitemizde zorunlu çerezlerin yanı sıra, ziyaretçi istatistiklerini anlamak için Google Analytics çerezleri kullanıyoruz. Analitik çerezleri yalnızca onay verirsen etkinleştirilir. Detaylar için
+  <a href="${policyHref}">Çerez Politikası</a>'nı inceleyebilirsin.
+</p>
         <div id="kk-cookie-actions">
           <button id="kk-cookie-reject" type="button">Sadece Zorunlu</button>
           <button id="kk-cookie-accept" type="button">Kabul Et</button>
