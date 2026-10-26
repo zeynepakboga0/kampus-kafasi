@@ -490,12 +490,16 @@ function initEventsDrag() {
     st.dragDistance = 0;
     track.classList.add('dragging');
     wrap.classList.add('dragging');
-    try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+    st.captured = false;
   }
   function onPointerMove(e) {
     if (!st.isDragging) return;
     const dx = e.clientX - st.dragStartX;
-    st.dragDistance += Math.abs(e.movementX || 0);
+    st.dragDistance = Math.max(st.dragDistance, Math.abs(dx));
+    if (!st.captured && st.dragDistance > 6) {
+      st.captured = true;
+      try { wrap.setPointerCapture(e.pointerId); } catch (err) {}
+    }
     st.pos = st.dragStartPos + dx;
     const now = performance.now();
     const dt = now - st.lastMoveTime;

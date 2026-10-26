@@ -124,10 +124,18 @@
         border: 1px solid rgba(230, 233, 238, 0.28) !important;
       }
       #kk-cookie-reject:hover { background: rgba(45, 212, 191, 0.08); border-color: rgba(45, 212, 191, 0.5) !important; }
-      @media (max-width: 560px) {
-        #kk-cookie-banner { padding: 16px; }
-        #kk-cookie-actions { width: 100%; }
-        #kk-cookie-actions button { flex: 1; }
+      #kk-cookie-banner { box-sizing: border-box; max-height: 85vh; overflow-y: auto; padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px)); }
+      #kk-cookie-banner *, #kk-cookie-banner *::before, #kk-cookie-banner *::after { box-sizing: border-box; }
+      #kk-cookie-banner p { overflow-wrap: anywhere; }
+      @media (max-width: 700px) {
+        #kk-cookie-banner { padding: 14px 16px calc(14px + env(safe-area-inset-bottom, 0px)); font-size: 13.5px; }
+        #kk-cookie-inner { flex-direction: column; align-items: stretch; gap: 12px; }
+        #kk-cookie-banner p { flex: 0 0 auto; min-width: 0; width: 100%; }
+        #kk-cookie-actions { width: 100%; flex-wrap: nowrap; gap: 8px; }
+        #kk-cookie-actions button { flex: 1 1 0; min-width: 0; white-space: normal; padding: 11px 10px; font-size: 13.5px; line-height: 1.25; }
+      }
+      @media (max-width: 340px) {
+        #kk-cookie-actions { flex-direction: column; }
       }
     `;
     document.head.appendChild(style);
@@ -142,6 +150,7 @@
     banner.setAttribute('aria-live', 'polite');
     banner.setAttribute('aria-label', 'Çerez onayı');
     banner.innerHTML = `
+      <div id="kk-cookie-inner">
       <p>
   Sitemizde zorunlu çerezlerin yanı sıra, ziyaretçi istatistiklerini anlamak için Google Analytics çerezleri kullanıyoruz. Analitik çerezleri yalnızca onay verirsen etkinleştirilir. Detaylar için
   <a href="${policyHref}">Çerez Politikası</a>'nı inceleyebilirsin.
